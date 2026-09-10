@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Syed Muhammad Ayyan Ibrar — AI &amp; Autonomous Systems Engineer</title>
+    <meta name="description" content="Personal portfolio of Syed Muhammad Ayyan Ibrar. AI Engineer specializing in multimodal edge intelligence, autonomous multi-agent systems, and cognitive architectures.">
+
+    <!-- Fonts: Inter with optical sizing & JetBrains Mono for code telemetry -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ecff',
+                            500: '#185ee0',
+                            600: '#1570ef',
+                            700: '#004ee0',
+                            900: '#071738',
+                        },
+                        stone: {
+                            50: '#fcfcfc',
+                            100: '#f6f6f5',
+                            200: '#ececeb',
+                            300: '#dededc',
+                            400: '#a1a19b',
+                            500: '#71716b',
+                            600: '#52524e',
+                            800: '#232326',
+                            900: '#111113',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    letterSpacing: {
+                        tighter: '-0.04em',
+                        tight: '-0.025em',
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 45px -12px rgba(17, 17, 19, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02)',
+                        'soft-hover': '0 28px 60px -14px rgba(17, 17, 19, 0.11), 0 4px 12px rgba(0, 0, 0, 0.04)',
+                        'pill': '0 2px 10px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            background-color: #f6f6f5;
+            color: #111113;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle ambient glow */
+        .ambient-glow {
+            position: absolute;
+            width: 700px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(21, 112, 239, 0.08) 0%, rgba(246, 246, 245, 0) 70%);
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Project Card Hover */
+        .project-card {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
+        }
+        .project-card:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f6f6f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dededc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b8b8b3;
+        }
+    </style>
+</head>
+<body class="bg-[#f6f6f5] text-stone-900 selection:bg-brand-600 selection:text-white relative min-h-screen">
+
+    <!-- ─── TOP NAVIGATION ───────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 px-6 sm:px-12 py-4 pointer-events-none">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            
+            <!-- Identity Pill -->
+            <a href="#" class="pointer-events-auto flex items-center gap-2.5 bg-white/90 backdrop-blur-md border border-stone-200 px-4 py-2 rounded-full shadow-pill hover:border-stone-300 transition-all">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span class="font-semibold text-xs text-stone-900 tracking-tight">Ayyan Ibrar</span>
+                <span class="text-stone-300">/</span>
+                <span class="text-[11px] text-stone-500 font-mono">Portfolio</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="pointer-events-auto hidden md:flex items-center gap-1 bg-white/90 backdrop-blur-md border border-stone-200 p-1.5 rounded-full shadow-pill text-xs font-medium text-stone-600">
+                <a href="#projects" class="px-3.5 py-1.5 rounded-full hover:text-stone-900 hover:bg-stone-100 transition-colors">Projects</a>
+                <a href="#skills" class="px-3.5 py-1.5 rounded-full hover:text-stone-900 hover:bg-stone-100 transition-colors">Skills &amp; Stack</a>
+                <a href="#about" class="px-3.5 py-1.5 rounded-full hover:text-stone-900 hover:bg-stone-100 transition-colors">About</a>
+                <a href="#contact" class="px-3.5 py-1.5 rounded-full hover:text-stone-900 hover:bg-stone-100 transition-colors">Contact</a>
+            </nav>
+
+            <!-- Quick Direct Actions -->
+            <div class="pointer-events-auto flex items-center gap-2.5">
+                <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer" 
+                   class="bg-white/90 backdrop-blur-md border border-stone-200 hover:border-stone-300 text-stone-700 hover:text-stone-900 p-2 rounded-full shadow-pill transition-all" title="GitHub Profile">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/ayyan-ibrar" target="_blank" rel="noopener noreferrer" 
+                   class="bg-white/90 backdrop-blur-md border border-stone-200 hover:border-stone-300 text-stone-700 hover:text-stone-900 p-2 rounded-full shadow-pill transition-all" title="LinkedIn Profile">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="#contact" class="bg-stone-900 hover:bg-brand-600 text-white px-4 py-2 rounded-full text-xs font-semibold shadow-pill transition-all active:scale-95">
+                    Get in touch
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-5xl mx-auto px-6 sm:px-10">
+
+        <!-- ══════════════════════════════════════════════════════════
+             1. HERO SECTION: PORTFOLIO-CENTRIC IDENTITY
+             ══════════════════════════════════════════════════════════ -->
+        <section class="pt-32 sm:pt-40 pb-20 border-b border-stone-200/80 relative">
+            
+            <div class="ambient-glow -top-10 -left-20"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center relative z-10">
+                
+                <!-- Left: Editorial Positioning & Bio (7 cols) -->
+                <div class="md:col-span-7">
+                    
+                    <!-- Availability Tag -->
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-stone-200 text-[11px] font-medium text-stone-600 mb-6 shadow-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>AI Engineer // Available for Opportunities</span>
+                    </div>
+
+                    <!-- Name -->
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter text-stone-900 leading-[1.08] mb-6">
+                        Syed Muhammad <br/>
+                        <span class="text-brand-600">Ayyan Ibrar</span>
+                    </h1>
+
+                    <!-- Professional Summary -->
+                    <p class="text-base sm:text-lg text-stone-600 leading-relaxed mb-8 max-w-xl">
+                        I build <strong class="text-stone-900 font-semibold">on-device multimodal assistants</strong>, game-theoretic multi-agent negotiation engines, and self-reflective cognitive architectures. Focused on engineering high-impact AI systems that operate with deterministic reliability in the real world.
+                    </p>
+
+                    <!-- Direct Actions -->
+                    <div class="flex flex-wrap items-center gap-3 mb-10">
+                        <a href="#projects" class="bg-stone-900 hover:bg-brand-600 text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-tight shadow-sm hover:shadow transition-all flex items-center gap-2">
+                            <span>View Projects</span>
+                            <span class="text-xs">↓</span>
+                        </a>
+
+                        <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer"
+                           class="bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 px-5 py-2.5 rounded-full text-xs font-medium shadow-sm transition-all flex items-center gap-2">
+                            <span>GitHub</span>
+                            <span class="text-stone-400 text-[11px]">↗</span>
+                        </a>
+
+                        <a href="https://www.linkedin.com/in/ayyan-ibrar" target="_blank" rel="noopener noreferrer"
+                           class="bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 px-5 py-2.5 rounded-full text-xs font-medium shadow-sm transition-all flex items-center gap-2">
+                            <span>LinkedIn</span>
+                            <span class="text-stone-400 text-[11px]">↗</span>
+                        </a>
+
+                        <a href="mailto:syedmuhammadayyanibrar@gmail.com" 
+                           class="bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 px-5 py-2.5 rounded-full text-xs font-medium shadow-sm transition-all flex items-center gap-2">
+                            <span>Email</span>
+                        </a>
+                    </div>
+
+                    <!-- Key Proof Metrics -->
+                    <div class="grid grid-cols-3 gap-6 pt-6 border-t border-stone-200/80">
+                        <div>
+                            <span class="block text-2xl font-bold text-stone-900 tracking-tight">4</span>
+                            <span class="text-xs text-stone-500 font-medium">Core AI Systems</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-brand-600 tracking-tight">100%</span>
+                            <span class="text-xs text-stone-500 font-medium">Open Source Code</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-stone-900 tracking-tight">0ms</span>
+                            <span class="text-xs text-stone-500 font-medium">Cloud Audio Latency</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: High-End Editorial Portrait (5 cols) -->
+                <div class="md:col-span-5 flex justify-center md:justify-end">
+                    <div class="w-full max-w-xs bg-white p-3 rounded-2xl border border-stone-200 shadow-soft">
+                        <div class="aspect-[4/5] rounded-xl overflow-hidden bg-stone-100 relative mb-3">
+                            <img src="./profile.jpg" 
+                                 alt="Syed Muhammad Ayyan Ibrar" 
+                                 class="w-full h-full object-cover object-top filter contrast-[1.02]"
+                                 onerror="this.src='https://avatars.githubusercontent.com/u/264541666?v=4'"/>
+                        </div>
+                        
+                        <div class="px-2 py-1 flex items-center justify-between text-xs">
+                            <div>
+                                <span class="font-semibold text-stone-900 block">Ayyan Ibrar</span>
+                                <span class="text-[11px] text-stone-500">Islamabad, PK (Remote)</span>
+                            </div>
+                            <span class="font-mono text-[10px] bg-stone-100 text-stone-700 px-2 py-1 rounded font-medium">
+                                AI_CORE
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             2. FEATURED PROJECTS (THE HEART OF THE PORTFOLIO)
+             ══════════════════════════════════════════════════════════ -->
+        <section id="projects" class="py-20 border-b border-stone-200/80">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="font-mono text-xs font-semibold text-brand-600 uppercase tracking-wider">PROJECTS &amp; CODEBASES</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-stone-900 mt-1">
+                        Featured Systems &amp; Deployments
+                    </h2>
+                </div>
+                <p class="text-xs text-stone-500 max-w-xs sm:text-right">
+                    All codebases are open source and actively maintained on GitHub.
+                </p>
+            </div>
+
+            <!-- Project Deep Dives -->
+            <div class="space-y-8">
+
+                <!-- Project 1: AuraSight (FLAGSHIP) -->
+                <div class="project-card bg-white rounded-2xl border border-stone-200 p-7 sm:p-9 shadow-soft hover:shadow-soft-hover">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <div class="lg:col-span-8">
+                            <div class="flex flex-wrap items-center gap-2.5 mb-3">
+                                <span class="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-100">
+                                    Flagship // Multimodal AI &amp; Edge
+                                </span>
+                                <span class="text-xs text-stone-400">•</span>
+                                <span class="text-xs text-stone-500 font-mono">Kotlin / Compose / Whisper ONNX / Gemma 4</span>
+                            </div>
+
+                            <h3 class="text-2xl font-bold tracking-tight text-stone-900 mb-3">
+                                <a href="https://github.com/syedmuhammadayyanibrar/AuraSight" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
+                                    AuraSight: AI Voice Assistant for Blind Shopkeepers
+                                </a>
+                            </h3>
+
+                            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                                Offline-first multimodal assistant engineered to empower visually impaired shopkeepers in Pakistan. Integrates local on-device Whisper ONNX speech-to-text in Urdu, CameraX computer vision, and Gemma 4 31B function-calling to detect Pakistani currency notes, verify cash transactions, read product packaging, and manage Khata (debt ledger) logs with physical hardware triggers.
+                            </p>
+
+                            <!-- Key Technical Highlights -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-stone-50 p-4 rounded-xl border border-stone-100 mb-6">
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Offline Urdu STT &amp; Vision</span>
+                                    <span class="text-stone-500">Local Whisper ONNX transcription coupled with Gemma 4 multimodal reasoning for instant denomination detection.</span>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Khata Ledger &amp; Tactile Ergonomics</span>
+                                    <span class="text-stone-500">Automated debt balance reconciliation with physical volume-key hardware triggers designed for visually impaired shop ergonomics.</span>
+                                </div>
+                            </div>
+
+                            <!-- Stack Tags -->
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Kotlin</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Jetpack Compose</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Whisper ONNX</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Gemma 4 31B</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">CameraX</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Android SDK</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Actions -->
+                        <div class="lg:col-span-4 flex flex-col justify-between h-full pt-2 lg:border-l lg:border-stone-100 lg:pl-8">
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Domain</span>
+                                    <span class="font-medium text-stone-800">Blind Accessibility (PK)</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Inference</span>
+                                    <span class="font-medium text-emerald-600">On-Device Urdu STT</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Ergonomics</span>
+                                    <span class="font-medium text-stone-800">Hardware Key Triggers</span>
+                                </div>
+                            </div>
+
+                            <a href="https://github.com/syedmuhammadayyanibrar/AuraSight" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-stone-900 hover:bg-brand-600 text-white py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <span>Inspect on GitHub</span>
+                                <span class="text-stone-400">↗</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Project 2: negotiation_agent -->
+                <div class="project-card bg-white rounded-2xl border border-stone-200 p-7 sm:p-9 shadow-soft hover:shadow-soft-hover">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <div class="lg:col-span-8">
+                            <div class="flex flex-wrap items-center gap-2.5 mb-3">
+                                <span class="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100">
+                                    Multi-Agent // Game Theory
+                                </span>
+                                <span class="text-xs text-stone-400">•</span>
+                                <span class="text-xs text-stone-500 font-mono">Python / LangGraph / PyTest</span>
+                            </div>
+
+                            <h3 class="text-2xl font-bold tracking-tight text-stone-900 mb-3">
+                                <a href="https://github.com/syedmuhammadayyanibrar/negotiation_agent" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
+                                    Negotiation Agent Protocol
+                                </a>
+                            </h3>
+
+                            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                                Distributed multi-agent bargaining engine built to resolve resource contention and automated decision-making. Implements formal game-theoretic concession functions, dynamic coalition formation algorithms, and Pareto-optimal convergence tracking across heterogeneous LLM agents.
+                            </p>
+
+                            <!-- Key Technical Highlights -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-stone-50 p-4 rounded-xl border border-stone-100 mb-6">
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Coalition &amp; Concession Policy</span>
+                                    <span class="text-stone-500">Autonomous concession trajectories preventing deadlocks in multi-party negotiation rounds.</span>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Convergence Engine</span>
+                                    <span class="text-stone-500">Automated convergence scoring ensuring consensus stability prior to execution.</span>
+                                </div>
+                            </div>
+
+                            <!-- Stack Tags -->
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Python 3.11+</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">LangGraph</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Game Theory</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">FastAPI</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Docker</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Actions -->
+                        <div class="lg:col-span-4 flex flex-col justify-between h-full pt-2 lg:border-l lg:border-stone-100 lg:pl-8">
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Architecture</span>
+                                    <span class="font-medium text-stone-800">Decentralized Graph</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Status</span>
+                                    <span class="font-medium text-emerald-600">Production Tested</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">License</span>
+                                    <span class="font-medium text-stone-800">Open Source</span>
+                                </div>
+                            </div>
+
+                            <a href="https://github.com/syedmuhammadayyanibrar/negotiation_agent" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-stone-900 hover:bg-brand-600 text-white py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <span>Inspect on GitHub</span>
+                                <span class="text-stone-400">↗</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Project 3: nexus-intelligence-os -->
+                <div class="project-card bg-white rounded-2xl border border-stone-200 p-7 sm:p-9 shadow-soft hover:shadow-soft-hover">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <div class="lg:col-span-8">
+                            <div class="flex flex-wrap items-center gap-2.5 mb-3">
+                                <span class="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    Agent OS // Task Orchestration
+                                </span>
+                                <span class="text-xs text-stone-400">•</span>
+                                <span class="text-xs text-stone-500 font-mono">AsyncIO / State Graph / Vector Memory</span>
+                            </div>
+
+                            <h3 class="text-2xl font-bold tracking-tight text-stone-900 mb-3">
+                                <a href="https://github.com/syedmuhammadayyanibrar/nexus-intelligence-os" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
+                                    Nexus Intelligence OS
+                                </a>
+                            </h3>
+
+                            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                                Distributed multi-agent orchestration kernel designed to coordinate heterogeneous LLM agents through directed acyclic execution graphs (DAGs). Features a shared hierarchical memory plane, dynamic model routing proxy, and asynchronous state synchronization.
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-stone-50 p-4 rounded-xl border border-stone-100 mb-6">
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">DAG Decomposition</span>
+                                    <span class="text-stone-500">Asynchronous execution of branched agent tasks with dynamic dependency resolution.</span>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Shared Memory Plane</span>
+                                    <span class="text-stone-500">Hierarchical memory indexing allowing agents to query shared cross-task context.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Python</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">AsyncIO</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Task Graphs</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Memory Systems</span>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-4 flex flex-col justify-between h-full pt-2 lg:border-l lg:border-stone-100 lg:pl-8">
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Execution</span>
+                                    <span class="font-medium text-stone-800">Non-blocking Event Loop</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">State Sync</span>
+                                    <span class="font-medium text-stone-800">Sub-10ms latency</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Scope</span>
+                                    <span class="font-medium text-stone-800">Multi-Model Routing</span>
+                                </div>
+                            </div>
+
+                            <a href="https://github.com/syedmuhammadayyanibrar/nexus-intelligence-os" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-stone-900 hover:bg-brand-600 text-white py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <span>Inspect on GitHub</span>
+                                <span class="text-stone-400">↗</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Project 4: metacognitive-agent-v2 -->
+                <div class="project-card bg-white rounded-2xl border border-stone-200 p-7 sm:p-9 shadow-soft hover:shadow-soft-hover">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <div class="lg:col-span-8">
+                            <div class="flex flex-wrap items-center gap-2.5 mb-3">
+                                <span class="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                                    Cognitive Architecture // Introspection
+                                </span>
+                                <span class="text-xs text-stone-400">•</span>
+                                <span class="text-xs text-stone-500 font-mono">Self-Correction / Verification</span>
+                            </div>
+
+                            <h3 class="text-2xl font-bold tracking-tight text-stone-900 mb-3">
+                                <a href="https://github.com/syedmuhammadayyanibrar/metacognitive-agent-v2" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
+                                    Metacognitive Agent Architecture
+                                </a>
+                            </h3>
+
+                            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                                Self-reflective agent framework that incorporates iterative introspection, dynamic uncertainty estimation, and automated verification before dispatching external tool calls. Significantly curbs hallucinations and catches brittle edge-case assumptions before execution.
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-stone-50 p-4 rounded-xl border border-stone-100 mb-6">
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Confidence Calibration</span>
+                                    <span class="text-stone-500">Pre-execution verification gates that inspect generated plans for logical flaws.</span>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-stone-800 block mb-1">Iterative Refinement</span>
+                                    <span class="text-stone-500">Autonomous self-prompt revision based on internal critic evaluation feedback.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Transformers</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Self-Reflection</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Reasoning Loops</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Python</span>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-4 flex flex-col justify-between h-full pt-2 lg:border-l lg:border-stone-100 lg:pl-8">
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Verification</span>
+                                    <span class="font-medium text-stone-800">Pre-Execution Gate</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Feedback Loop</span>
+                                    <span class="font-medium text-stone-800">Multi-Tier Critic</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-stone-500">Repository</span>
+                                    <span class="font-medium text-stone-800">metacognitive-agent-v2</span>
+                                </div>
+                            </div>
+
+                            <a href="https://github.com/syedmuhammadayyanibrar/metacognitive-agent-v2" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-stone-900 hover:bg-brand-600 text-white py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <span>Inspect on GitHub</span>
+                                <span class="text-stone-400">↗</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             3. CORE SKILLS & TECHNICAL DEPTH
+             ══════════════════════════════════════════════════════════ -->
+        <section id="skills" class="py-20 border-b border-stone-200/80">
+            
+            <div class="mb-12">
+                <span class="font-mono text-xs font-semibold text-brand-600 uppercase tracking-wider">TECHNICAL COMPETENCY</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-stone-900 mt-1">
+                    Skills &amp; Engineering Stack
+                </h2>
+                <p class="text-sm text-stone-600 mt-2 max-w-2xl">
+                    Demonstrated proficiencies across the entire autonomous and multimodal AI engineering lifecycle.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Group 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-600"></span>
+                        Autonomous Swarms
+                    </h3>
+                    <ul class="text-xs text-stone-600 space-y-2 font-mono">
+                        <li>• Multi-Agent Protocols</li>
+                        <li>• LangGraph &amp; CrewAI</li>
+                        <li>• Game-Theoretic Policies</li>
+                        <li>• Coalition Formation</li>
+                        <li>• DAG Task Scheduling</li>
+                    </ul>
+                </div>
+
+                <!-- Group 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                        Edge &amp; Multimodal AI
+                    </h3>
+                    <ul class="text-xs text-stone-600 space-y-2 font-mono">
+                        <li>• Whisper ONNX (Urdu STT)</li>
+                        <li>• Gemma 4 Vision Tooling</li>
+                        <li>• CameraX Vision Pipeline</li>
+                        <li>• Kotlin &amp; Jetpack Compose</li>
+                        <li>• On-Device ML Deployment</li>
+                    </ul>
+                </div>
+
+                <!-- Group 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+                        Cognitive Architectures
+                    </h3>
+                    <ul class="text-xs text-stone-600 space-y-2 font-mono">
+                        <li>• Self-Correction Loops</li>
+                        <li>• Uncertainty Calibration</li>
+                        <li>• Multi-Tier Critic Gates</li>
+                        <li>• Prompt Evolution Engine</li>
+                        <li>• Execution Invariants</li>
+                    </ul>
+                </div>
+
+                <!-- Group 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                        Systems &amp; Serving
+                    </h3>
+                    <ul class="text-xs text-stone-600 space-y-2 font-mono">
+                        <li>• Python (Advanced AsyncIO)</li>
+                        <li>• FastAPI Production APIs</li>
+                        <li>• Docker &amp; Containerization</li>
+                        <li>• Non-blocking Event Loops</li>
+                        <li>• Git / GitHub CI/CD</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             4. ABOUT & PHILOSOPHY
+             ══════════════════════════════════════════════════════════ -->
+        <section id="about" class="py-20 border-b border-stone-200/80">
+            <div class="max-w-3xl">
+                <span class="font-mono text-xs font-semibold text-brand-600 uppercase tracking-wider">ENGINEERING MANIFESTO</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-stone-900 mt-1 mb-6">
+                    How I think about AI engineering
+                </h2>
+
+                <div class="space-y-4 text-stone-600 text-base leading-relaxed">
+                    <p>
+                        A lot of modern AI development has fallen into the trap of superficial wrapper architecture—gluing prompt templates together and hoping non-deterministic LLMs figure out the rest. In production and real-world environments, that breaks down immediately.
+                    </p>
+                    <p>
+                        My philosophy is that <strong class="text-stone-900 font-semibold">autonomous AI systems must have deterministic boundaries</strong>: clear convergence invariants, game-theoretic negotiation rules, structured execution graphs, and self-evaluating gates before any irreversible action is taken.
+                    </p>
+                    <p>
+                        Whether building on-device multimodal assistants that run offline for blind shopkeepers or coordinating distributed multi-agent swarms, I prioritize observability, tactile ergonomics, test coverage, and architectures that perform reliably when conditions are unconstrained.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             5. CONTACT & INITIATE HANDSHAKE
+             ══════════════════════════════════════════════════════════ -->
+        <section id="contact" class="py-24 text-center">
+            <div class="max-w-xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-stone-200 shadow-soft">
+                <span class="font-mono text-xs font-semibold text-brand-600 uppercase tracking-wider">CONNECT</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900 mt-1 mb-4">
+                    Let’s build together
+                </h2>
+                <p class="text-sm text-stone-600 mb-8 leading-relaxed">
+                    Looking for an AI engineer to build resilient multi-agent systems, multimodal on-device intelligence, or architect autonomous workflows? Reach out directly:
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+                    <a href="mailto:syedmuhammadayyanibrar@gmail.com" 
+                       class="w-full sm:w-auto bg-stone-900 hover:bg-brand-600 text-white px-6 py-3.5 rounded-xl text-xs font-semibold tracking-tight shadow transition-all flex items-center justify-center gap-2">
+                        <span>Send Email</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </a>
+
+                    <button onclick="copyEmail()" 
+                            class="w-full sm:w-auto bg-stone-100 hover:bg-stone-200 text-stone-800 px-5 py-3.5 rounded-xl text-xs font-medium transition-all flex items-center justify-center gap-2">
+                        <span id="copy-btn-text">Copy Email Address</span>
+                    </button>
+                </div>
+
+                <!-- Verified External Channels -->
+                <div class="flex items-center justify-center gap-6 pt-6 border-t border-stone-100 text-xs font-medium text-stone-500">
+                    <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        <span>GitHub</span>
+                    </a>
+                    <span>•</span>
+                    <a href="https://www.linkedin.com/in/ayyan-ibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        <span>LinkedIn</span>
+                    </a>
+                    <span>•</span>
+                    <a href="mailto:syedmuhammadayyanibrar@gmail.com" class="hover:text-stone-900 transition-colors font-mono">
+                        syedmuhammadayyanibrar@gmail.com
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ─── FOOTER ───────────────────────────────────────────────── -->
+    <footer class="py-8 px-6 sm:px-12 border-t border-stone-200 text-xs font-mono text-stone-500 bg-white/40">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                © 2026 Syed Muhammad Ayyan Ibrar. All rights reserved.
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors">GitHub</a>
+                <a href="https://www.linkedin.com/in/ayyan-ibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors">LinkedIn</a>
+                <a href="mailto:syedmuhammadayyanibrar@gmail.com" class="hover:text-stone-900 transition-colors">Email</a>
+                <a href="#" class="hover:text-stone-900 transition-colors">Back to top ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-stone-900 text-white font-sans text-xs font-medium px-4 py-3 rounded-xl shadow-2xl translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toast-text">Copied to clipboard</span>
+    </div>
+
+    <script>
+        function copyEmail() {
+            navigator.clipboard.writeText('syedmuhammadayyanibrar@gmail.com');
+            const btn = document.getElementById('copy-btn-text');
+            btn.innerText = 'Copied to Clipboard!';
+            showToast('Copied: syedmuhammadayyanibrar@gmail.com');
+            setTimeout(() => {
+                btn.innerText = 'Copy Email Address';
+            }, 2200);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2600);
+        }
+    </script>
+</body>
+</html>
