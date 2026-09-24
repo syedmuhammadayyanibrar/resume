@@ -1,6 +1,8 @@
 # Syed Muhammad Ayyan Ibrar — AI Engineer Portfolio
 
-Personal portfolio and engineering showcase of **Syed Muhammad Ayyan Ibrar**, specializing in autonomous multi-agent federations, evidence-driven compliance auditing, on-device multimodal systems, and game-theoretic protocols.
+Personal portfolio and engineering showcase of **Syed Muhammad Ayyan Ibrar**, specializing in autonomous multi-agent federations, evidence-driven compliance auditing, on-device multimodal systems, and research pipelines.
+
+📄 **[Download Curriculum Vitae (PDF)](./Ayyan_Ibrar_Resume.pdf)**
 
 ---
 
@@ -21,10 +23,10 @@ Personal portfolio and engineering showcase of **Syed Muhammad Ayyan Ibrar**, sp
 - **Stack:** LangGraph, Python, FastAPI, Next.js, pgvector, PostgreSQL, Slack API, Linear API
 - **Highlights:** Stateful audit graph (Classify → Plan → Requirements → Evidence → Gaps → Remediation) gathering evidence across code repositories and docs with dual-key human approval before Linear ticket remediation.
 
-### 4. [Negotiation Agent Protocol](https://github.com/syedmuhammadayyanibrar/negotiation_agent)
-- **Domain:** Autonomous Multi-Agent Swarms // Game Theory
-- **Stack:** Python 3.11+, LangGraph, Game-Theoretic Concession Functions, FastAPI, Docker
-- **Highlights:** Dynamic coalition formation algorithms, formal concession curves, and automated Pareto-optimal convergence verification across heterogeneous LLM agents.
+### 4. [NEXUS Intelligence OS: Multi-Agent Research System](https://github.com/syedmuhammadayyanibrar/nexus-intelligence-os)
+- **Domain:** Multi-Agent Systems // LangGraph Research Pipeline
+- **Stack:** Python, LangGraph, ChromaDB, Pydantic v2, FastAPI (SSE Streaming), Streamlit, AsyncIO
+- **Highlights:** 6-agent autonomous research pipeline with dedicated planning, extraction, contradiction detection, code execution, synthesis, and an internal Critic executing self-correcting reflection loops.
 
 ---
 
@@ -33,6 +35,7 @@ Personal portfolio and engineering showcase of **Syed Muhammad Ayyan Ibrar**, sp
 - **LinkedIn:** [linkedin.com/in/ayyan-ibrar](https://www.linkedin.com/in/ayyan-ibrar)
 - **GitHub:** [github.com/syedmuhammadayyanibrar](https://github.com/syedmuhammadayyanibrar)
 - **Email:** [syedmuhammadayyanibrar@gmail.com](mailto:syedmuhammadayyanibrar@gmail.com)
+- **Resume:** [Download Ayyan_Ibrar_Resume.pdf](./Ayyan_Ibrar_Resume.pdf)
 
 ---
 

@@ -123,7 +123,14 @@
             </nav>
 
             <!-- Quick Direct Actions -->
-            <div class="pointer-events-auto flex items-center gap-2.5">
+            <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
+                <!-- Resume Download Button in Navbar -->
+                <a href="./Ayyan_Ibrar_Resume.pdf" download="Syed_Ayyan_Ibrar_Resume.pdf" target="_blank"
+                   class="bg-white/90 backdrop-blur-md border border-stone-200 hover:border-stone-300 hover:bg-stone-50 text-stone-800 px-3.5 py-2 rounded-full shadow-pill transition-all flex items-center gap-1.5 text-xs font-medium" title="Download CV (PDF)">
+                    <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>CV</span>
+                </a>
+
                 <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer" 
                    class="bg-white/90 backdrop-blur-md border border-stone-200 hover:border-stone-300 text-stone-700 hover:text-stone-900 p-2 rounded-full shadow-pill transition-all" title="GitHub Profile">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -173,9 +180,17 @@
 
                     <!-- Direct Actions -->
                     <div class="flex flex-wrap items-center gap-3 mb-10">
+                        <!-- Primary CTA -->
                         <a href="#projects" class="bg-stone-900 hover:bg-brand-600 text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-tight shadow-sm hover:shadow transition-all flex items-center gap-2">
                             <span>View Projects</span>
                             <span class="text-xs">↓</span>
+                        </a>
+
+                        <!-- Download CV Action -->
+                        <a href="./Ayyan_Ibrar_Resume.pdf" download="Syed_Ayyan_Ibrar_Resume.pdf" target="_blank"
+                           class="bg-brand-50 hover:bg-brand-100 border border-brand-200 text-brand-700 px-5 py-2.5 rounded-full text-xs font-semibold shadow-sm transition-all flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span>Download CV</span>
                         </a>
 
                         <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer"
@@ -196,7 +211,7 @@
                         </a>
                     </div>
 
-                    <!-- Key Proof Metrics -->
+                    <!-- Key Proof Metrics (Clean, factual, no confusing audio latency) -->
                     <div class="grid grid-cols-3 gap-6 pt-6 border-t border-stone-200/80">
                         <div>
                             <span class="block text-2xl font-bold text-stone-900 tracking-tight">6+</span>
@@ -207,8 +222,8 @@
                             <span class="text-xs text-stone-500 font-medium">Benchmark Grounding</span>
                         </div>
                         <div>
-                            <span class="block text-2xl font-bold text-stone-900 tracking-tight">0ms</span>
-                            <span class="text-xs text-stone-500 font-medium">Cloud Audio Latency</span>
+                            <span class="block text-2xl font-bold text-stone-900 tracking-tight">100%</span>
+                            <span class="text-xs text-stone-500 font-medium">Open Source Codebases</span>
                         </div>
                     </div>
 
@@ -227,7 +242,7 @@
                         <div class="px-2 py-1 flex items-center justify-between text-xs">
                             <div>
                                 <span class="font-semibold text-stone-900 block">Ayyan Ibrar</span>
-                                <span class="text-[11px] text-stone-500">Islamabad, PK (Remote)</span>
+                                <span class="text-[11px] text-stone-500">Lahore, PK (Remote)</span>
                             </div>
                             <span class="font-mono text-[10px] bg-stone-100 text-stone-700 px-2 py-1 rounded font-medium">
                                 AI_FEDERATION
@@ -483,48 +498,50 @@
                     </div>
                 </div>
 
-                <!-- ─── PROJECT 4: negotiation_agent ─── -->
+                <!-- ─── PROJECT 4: NEXUS Intelligence OS ─── -->
                 <div class="project-card bg-white rounded-2xl border border-stone-200 p-7 sm:p-9 shadow-soft hover:shadow-soft-hover">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                         
                         <div class="lg:col-span-8">
                             <div class="flex flex-wrap items-center gap-2.5 mb-3">
                                 <span class="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100">
-                                    Multi-Agent // Game Theory
+                                    Multi-Agent System // Research Pipeline
                                 </span>
                                 <span class="text-xs text-stone-400">•</span>
-                                <span class="text-xs text-stone-500 font-mono">Python / LangGraph / PyTest / Docker</span>
+                                <span class="text-xs text-stone-500 font-mono">Python / LangGraph / ChromaDB / Pydantic v2 / FastAPI</span>
                             </div>
 
                             <h3 class="text-2xl font-bold tracking-tight text-stone-900 mb-3">
-                                <a href="https://github.com/syedmuhammadayyanibrar/negotiation_agent" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
-                                    Negotiation Agent Protocol
+                                <a href="https://github.com/syedmuhammadayyanibrar/nexus-intelligence-os" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 transition-colors">
+                                    NEXUS Intelligence OS: Multi-Agent Research System
                                 </a>
                             </h3>
 
                             <p class="text-stone-600 text-sm leading-relaxed mb-6">
-                                Distributed multi-agent bargaining engine built to resolve resource contention and automated decision-making. Implements formal game-theoretic concession functions, dynamic coalition formation algorithms, and Pareto-optimal convergence tracking across heterogeneous LLM agents.
+                                Distributed 6-agent autonomous research system orchestrated with LangGraph (Planner, Searcher, Extractor, Synthesiser, Critic, Memory, Code Agent). Ingests information from live web sources, enforces strict type-safe Pydantic v2 schemas, executes self-correcting reflection loops, and maintains persistent semantic memory with ChromaDB, streaming real-time execution over FastAPI Server-Sent Events.
                             </p>
 
                             <!-- Key Technical Highlights -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-stone-50 p-4 rounded-xl border border-stone-100 mb-6">
                                 <div>
-                                    <span class="font-semibold text-stone-800 block mb-1">Coalition &amp; Concession Policy</span>
-                                    <span class="text-stone-500">Autonomous concession trajectories preventing deadlocks in multi-party negotiation rounds.</span>
+                                    <span class="font-semibold text-stone-800 block mb-1">6-Agent LangGraph Pipeline</span>
+                                    <span class="text-stone-500">Autonomous planning, extraction, contradiction detection, code execution, and self-correcting reflection loops scored by an internal Critic.</span>
                                 </div>
                                 <div>
-                                    <span class="font-semibold text-stone-800 block mb-1">Convergence Engine</span>
-                                    <span class="text-stone-500">Automated convergence scoring ensuring consensus stability prior to execution.</span>
+                                    <span class="font-semibold text-stone-800 block mb-1">Type-Safe I/O &amp; Semantic Memory</span>
+                                    <span class="text-stone-500">Pydantic v2 custom validators, persistent ChromaDB memory improving over repeated use, and real-time SSE streaming.</span>
                                 </div>
                             </div>
 
                             <!-- Stack Tags -->
                             <div class="flex flex-wrap gap-2">
-                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Python 3.11+</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Python</span>
                                 <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">LangGraph</span>
-                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Game Theory</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">ChromaDB</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Pydantic v2</span>
                                 <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">FastAPI</span>
-                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Docker</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">Streamlit</span>
+                                <span class="font-mono text-[11px] px-2.5 py-1 bg-stone-100 text-stone-700 rounded">AsyncIO</span>
                             </div>
                         </div>
 
@@ -533,19 +550,19 @@
                             <div class="space-y-3 mb-6">
                                 <div class="flex justify-between items-center text-xs">
                                     <span class="text-stone-500">Architecture</span>
-                                    <span class="font-medium text-stone-800">Decentralized Graph</span>
+                                    <span class="font-medium text-stone-800">6-Agent Directed Graph</span>
                                 </div>
                                 <div class="flex justify-between items-center text-xs">
-                                    <span class="text-stone-500">Status</span>
-                                    <span class="font-medium text-emerald-600">Production Tested</span>
+                                    <span class="text-stone-500">Memory Plane</span>
+                                    <span class="font-medium text-stone-800">ChromaDB Vector Store</span>
                                 </div>
                                 <div class="flex justify-between items-center text-xs">
-                                    <span class="text-stone-500">License</span>
-                                    <span class="font-medium text-stone-800">Open Source</span>
+                                    <span class="text-stone-500">Interface</span>
+                                    <span class="font-medium text-emerald-600">FastAPI SSE Streaming</span>
                                 </div>
                             </div>
 
-                            <a href="https://github.com/syedmuhammadayyanibrar/negotiation_agent" target="_blank" rel="noopener noreferrer"
+                            <a href="https://github.com/syedmuhammadayyanibrar/nexus-intelligence-os" target="_blank" rel="noopener noreferrer"
                                class="w-full bg-stone-900 hover:bg-brand-600 text-white py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 shadow-sm">
                                 <span>Inspect on GitHub</span>
                                 <span class="text-stone-400">↗</span>
@@ -625,14 +642,14 @@
                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
                     <h3 class="font-semibold text-stone-900 text-sm mb-3 flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-purple-600"></span>
-                        Systems &amp; Serving
+                        Data &amp; Systems
                     </h3>
                     <ul class="text-xs text-stone-600 space-y-2 font-mono">
                         <li>• Python (Advanced AsyncIO)</li>
                         <li>• FastAPI Production APIs</li>
                         <li>• PostgreSQL &amp; pgvector</li>
-                        <li>• Docker &amp; Containerization</li>
-                        <li>• PyTest CI/CD Workflows</li>
+                        <li>• ChromaDB &amp; Qdrant</li>
+                        <li>• Docker &amp; PyTest CI/CD</li>
                     </ul>
                 </div>
 
@@ -674,7 +691,7 @@
                     Let’s build together
                 </h2>
                 <p class="text-sm text-stone-600 mb-8 leading-relaxed">
-                    Looking for an AI engineer to build resilient multi-agent federations, autonomous compliance auditors, or architect edge multimodal systems? Reach out directly:
+                    Looking for an AI engineer to build resilient multi-agent federations, autonomous compliance auditors, or architect edge multimodal systems? Reach out directly or grab my CV:
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -684,9 +701,16 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </a>
 
+                    <!-- Download CV Button in Contact -->
+                    <a href="./Ayyan_Ibrar_Resume.pdf" download="Syed_Ayyan_Ibrar_Resume.pdf" target="_blank"
+                       class="w-full sm:w-auto bg-brand-50 hover:bg-brand-100 border border-brand-200 text-brand-700 px-5 py-3.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span>Download CV (PDF)</span>
+                    </a>
+
                     <button onclick="copyEmail()" 
                             class="w-full sm:w-auto bg-stone-100 hover:bg-stone-200 text-stone-800 px-5 py-3.5 rounded-xl text-xs font-medium transition-all flex items-center justify-center gap-2">
-                        <span id="copy-btn-text">Copy Email Address</span>
+                        <span id="copy-btn-text">Copy Email</span>
                     </button>
                 </div>
 
@@ -719,6 +743,7 @@
                 © 2026 Syed Muhammad Ayyan Ibrar. All rights reserved.
             </div>
             <div class="flex items-center gap-6">
+                <a href="./Ayyan_Ibrar_Resume.pdf" download="Syed_Ayyan_Ibrar_Resume.pdf" target="_blank" class="hover:text-brand-600 transition-colors font-semibold">Download CV</a>
                 <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors">GitHub</a>
                 <a href="https://www.linkedin.com/in/ayyan-ibrar" target="_blank" rel="noopener noreferrer" class="hover:text-stone-900 transition-colors">LinkedIn</a>
                 <a href="mailto:syedmuhammadayyanibrar@gmail.com" class="hover:text-stone-900 transition-colors">Email</a>
@@ -740,7 +765,7 @@
             btn.innerText = 'Copied to Clipboard!';
             showToast('Copied: syedmuhammadayyanibrar@gmail.com');
             setTimeout(() => {
-                btn.innerText = 'Copy Email Address';
+                btn.innerText = 'Copy Email';
             }, 2200);
         }
 
