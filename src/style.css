@@ -259,6 +259,18 @@ html, body {
   transform: translateY(-2px);
 }
 
+.hud-btn-text-mobile {
+  display: none;
+}
+
+.desktop-tutorial {
+  display: block;
+}
+
+.mobile-tutorial {
+  display: none;
+}
+
 /* Floating Notification Toast */
 .hud-toast {
   position: fixed;
@@ -458,6 +470,165 @@ html, body {
 
 .interact-icon {
   font-size: 14px;
+}
+
+/* ==========================================================================
+   MOBILE SCREEN RESPONSIVE LAYOUT (Screens <= 768px)
+   Leaves desktop layout completely intact
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Top HUD on Mobile: Slim, single row, perfectly spaced */
+  #hud {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .hud-panel {
+    padding: 4px 8px;
+  }
+
+  .hud-profile {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .hud-avatar {
+    width: 30px;
+    height: 30px;
+    border-width: 1.5px;
+  }
+
+  .hud-name {
+    font-size: 9px;
+  }
+
+  .hud-tag {
+    font-size: 7px;
+    padding: 1px 3px;
+  }
+
+  .hud-title,
+  .hud-telemetry {
+    display: none !important;
+  }
+
+  .hud-controls {
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  .hud-btn {
+    padding: 6px 8px;
+    min-height: 30px;
+    font-size: 10px;
+    gap: 0;
+  }
+
+  /* Hide long button labels on mobile HUD, show crisp icons */
+  .hud-btn .hud-btn-text {
+    display: none !important;
+  }
+
+  .hud-btn .hud-icon {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* CV Download button: Compact pill with icon + "CV" text */
+  .hud-cv-btn {
+    padding: 6px 9px !important;
+    gap: 4px !important;
+  }
+
+  .hud-cv-btn .hud-btn-text-mobile {
+    display: inline-block !important;
+    font-family: var(--font-retro);
+    font-size: 8px;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+
+  .hud-audio-bars {
+    display: none !important;
+  }
+
+  .hud-btn-square {
+    padding: 6px 9px;
+    min-width: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Bottom Walk Controls on Mobile (Bottom-Left) */
+  .mobile-controls {
+    bottom: 12px;
+    left: 12px;
+    right: auto;
+    pointer-events: auto;
+  }
+
+  .dpad-cluster {
+    gap: 8px;
+  }
+
+  .dpad-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 13px;
+  }
+
+  /* Mobile Tap-to-Open Button: Given its own dedicated space at Bottom-Right */
+  .mobile-interact-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    left: auto !important;
+    transform: none !important;
+    padding: 9px 15px;
+    font-size: 8.5px;
+    border-radius: 20px;
+    box-shadow: 0 0 16px rgba(0, 255, 204, 0.55);
+  }
+
+  .mobile-interact-btn:hover,
+  .mobile-interact-btn:active {
+    transform: scale(1.05) !important;
+  }
+
+  .mobile-interact-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(14px) scale(0.9) !important;
+  }
+
+  /* Start Tutorial Guidance Banner on Mobile: Compact & Centered above controls */
+  .start-tutorial-banner {
+    bottom: 68px;
+    padding: 6px 12px;
+    gap: 8px;
+    max-width: 90vw;
+  }
+
+  .desktop-tutorial {
+    display: none !important;
+  }
+
+  .mobile-tutorial {
+    display: block !important;
+    font-size: 8.5px;
+  }
+
+  .tutorial-arrow {
+    font-size: 16px;
+  }
+
+  .tutorial-sub {
+    display: none !important;
+  }
 }
 
 /* ==========================================================================

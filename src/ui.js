@@ -44,6 +44,7 @@ export class UIManager {
         <a href="${DEVELOPER_PROFILE.cvUrl}" download="Syed_Ayyan_CV.pdf" class="hud-btn hud-cv-btn" id="btn-top-cv" title="Download Syed's CV (PDF)">
           <span class="hud-icon">⬇</span>
           <span class="hud-btn-text">DOWNLOAD CV (PDF)</span>
+          <span class="hud-btn-text-mobile">CV</span>
         </a>
 
         <!-- Weather / Time Toggle -->
@@ -161,7 +162,8 @@ export class UIManager {
     banner.innerHTML = `
       <div class="tutorial-arrow">👉</div>
       <div class="tutorial-content">
-        <div class="tutorial-text">PRESS [D] OR [→] TO MOVE FORWARD</div>
+        <div class="tutorial-text desktop-tutorial">PRESS [D] OR [→] TO MOVE FORWARD</div>
+        <div class="tutorial-text mobile-tutorial">TAP [▶] OR TAP STREET TO WALK</div>
         <div class="tutorial-sub">(OR CLICK ANYWHERE ON THE STREET AHEAD)</div>
       </div>
     `;
