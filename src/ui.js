@@ -12,7 +12,7 @@ export class UIManager {
     this.isCrtEnabled = true;
 
     this.renderHUD();
-    this.renderMinimap();
+    this.renderStartTutorialOverlay();
     this.renderMobileDpad();
     this.bindGlobalKeys();
   }
@@ -31,9 +31,9 @@ export class UIManager {
           <div class="hud-title">${DEVELOPER_PROFILE.title}</div>
           <div class="hud-telemetry">
             <span class="hud-status-dot"></span>
-            <span id="hud-pos">POS: X: 480px</span>
+            <span id="hud-pos">POS: X: 240px</span>
             <span class="hud-sep">|</span>
-            <span id="hud-landmark">01: NEUROSTREAM</span>
+            <span id="hud-landmark">00: DEV DIRECTORY</span>
           </div>
         </div>
       </div>
@@ -154,54 +154,18 @@ export class UIManager {
     }
   }
 
-  renderMinimap() {
-    const minimap = document.createElement("div");
-    minimap.id = "minimap-panel";
-    minimap.className = "minimap-panel";
-
-    let iconsHtml = "";
-    LANDMARKS.forEach((lm, idx) => {
-      const pct = (lm.x / STREET_TOTAL_WIDTH) * 100;
-      let symbol = "📍";
-      if (lm.id === "start_board") symbol = "📋";
-      else if (lm.id === "neurostream") symbol = "🧠";
-      else if (lm.id === "omnivision") symbol = "👁️";
-      else if (lm.id === "synapseflow") symbol = "📊";
-      else if (lm.id === "aegisguard") symbol = "🛡️";
-      else if (lm.id === "voicesynapse") symbol = "🎙️";
-      else if (lm.id === "pixeldiffusion") symbol = "🎨";
-      else if (lm.id === "connect_pavilion") symbol = "🤝";
-
-      iconsHtml += `
-        <button class="minimap-node" style="left: ${pct}%;" data-idx="${idx}" title="${lm.label} (Key: ${idx + 1})">
-          <span class="minimap-node-icon">${symbol}</span>
-          <span class="minimap-node-label">${lm.badge}</span>
-        </button>
-      `;
-    });
-
-    minimap.innerHTML = `
-      <div class="minimap-header">
-        <span class="minimap-title">AI AVENUE // PROJECT RADAR</span>
-        <span class="minimap-hint">CLICK ICON TO TRAVEL</span>
-      </div>
-      <div class="minimap-track" id="minimap-track">
-        <div class="minimap-road"></div>
-        ${iconsHtml}
-        <div class="minimap-player-blip" id="minimap-player-blip"></div>
+  renderStartTutorialOverlay() {
+    const banner = document.createElement("div");
+    banner.id = "start-tutorial-banner";
+    banner.className = "start-tutorial-banner";
+    banner.innerHTML = `
+      <div class="tutorial-arrow">👉</div>
+      <div class="tutorial-content">
+        <div class="tutorial-text">PRESS [D] OR [→] TO MOVE FORWARD</div>
+        <div class="tutorial-sub">(OR CLICK ANYWHERE ON THE STREET AHEAD)</div>
       </div>
     `;
-
-    this.container.appendChild(minimap);
-
-    minimap.querySelectorAll(".minimap-node").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const idx = parseInt(btn.getAttribute("data-idx"), 10);
-        audio.playClick(1.3);
-        if (this.callbacks.onTravelTo) this.callbacks.onTravelTo(idx);
-      });
-    });
+    this.container.appendChild(banner);
   }
 
   renderMobileDpad() {
@@ -229,10 +193,14 @@ export class UIManager {
       lmEl.textContent = activeLandmark ? activeLandmark.label : "AI SYSTEMS AVENUE";
     }
 
-    const blip = document.getElementById("minimap-player-blip");
-    if (blip) {
-      const pct = (playerX / STREET_TOTAL_WIDTH) * 100;
-      blip.style.left = `${Math.max(1, Math.min(99, pct))}%`;
+    // Toggle start tutorial overlay based on player progress
+    const tutorialBanner = document.getElementById("start-tutorial-banner");
+    if (tutorialBanner) {
+      if (playerX > 400) {
+        tutorialBanner.classList.add("hidden");
+      } else {
+        tutorialBanner.classList.remove("hidden");
+      }
     }
 
     const bars = audio.getVisualizerData();
@@ -332,13 +300,13 @@ export class UIManager {
             </div>
           </div>
 
-          <!-- Panel 3: LinkedIn -->
+            <!-- Panel 3: LinkedIn -->
           <div class="directory-card linkedin">
             <div class="dir-icon">💼</div>
             <h3>LINKEDIN NETWORK</h3>
             <p>Verified professional trajectory, peer endorsements, architecture case studies.</p>
-            <div class="dir-handle">/in/syedayyan</div>
-            <a href="https://linkedin.com/in/syedayyan" target="_blank" class="dir-btn linkedin-btn">
+            <div class="dir-handle">/in/ayyan-ibrar</div>
+            <a href="https://linkedin.com/in/ayyan-ibrar" target="_blank" class="dir-btn linkedin-btn">
               CONNECT ON LINKEDIN ↗
             </a>
           </div>
@@ -510,7 +478,7 @@ export class UIManager {
               <span class="foot-icon">🐙</span> GitHub
             </a>
             <span class="dot-sep">•</span>
-            <a href="https://linkedin.com/in/syedayyan" target="_blank" class="finale-foot-link">
+            <a href="https://linkedin.com/in/ayyan-ibrar" target="_blank" class="finale-foot-link">
               <span class="foot-icon">💼</span> LinkedIn
             </a>
             <span class="dot-sep">•</span>
@@ -544,7 +512,7 @@ export class UIManager {
               <div class="help-row"><span>WEATHER / TIME</span><span>[T] (Snowy Dusk / Midnight Cyber / Fog)</span></div>
               <div class="help-row"><span>CRT SCANLINES</span><span>[C] Toggle retro screen overlay</span></div>
               <div class="help-row"><span>8-BIT SYNTH MUSIC</span><span>[M] Toggle cozy lofi synth audio</span></div>
-              <div class="help-row"><span>QUICK TRAVEL</span><span>Keys [1] through [8]</span></div>
+              <div class="help-row"><span>QUICK TRAVEL</span><span>Keys [1] through [6]</span></div>
             </div>
 
             <h3 style="margin-top: 20px;">🌟 EASTER EGGS</h3>

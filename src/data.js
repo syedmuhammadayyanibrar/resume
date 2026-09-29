@@ -1,61 +1,62 @@
-// src/data.js - Portfolio, AI/ML Projects & Street Landmark Data for Syed Ayyan
+// src/data.js - Real Portfolio & Project Data for Syed Muhammad Ayyan Ibrar
 
 export const DEVELOPER_PROFILE = {
   name: "Syed Muhammad Ayyan Ibrar",
-  shortName: "Syed Ayyan",
-  title: "AI / ML Engineer",
-  tagline: "Reliable data pipelines, deterministic multi-agent systems, & edge multimodal architectures.",
-  location: "Neo-Tokyo Ave, Sector 7 (Remote / Worldwide)",
+  shortName: "Ayyan Ibrar",
+  title: "Enterprise AI Systems Engineer",
+  tagline: "Deterministic multi-agent federations, automated regulatory governance, & edge multimodal architectures.",
+  location: "Lahore, Pakistan (Open to Remote Worldwide)",
+  phone: "+92 322 0621975",
   email: "syedmuhammadayyanibrar@gmail.com",
   cvUrl: "/Syed_Ayyan_CV.pdf",
-  status: "🟢 OPEN TO OPPORTUNITIES // AI/ML & MULTI-AGENT SYSTEMS",
+  status: "🟢 OPEN TO OPPORTUNITIES // AI SYSTEMS & AGENTIC ARCHITECTURES",
   stats: {
-    experience: "6+ Years",
-    pipelinesShipped: "30+ Prod Pipelines",
-    inferenceLatency: "<10ms P99",
-    modelsFineTuned: "45+ Models",
-    slaReliability: "99.99%",
+    experience: "Freelance AI Engineer",
+    turnaroundReduction: "75%",
+    defenseGrounding: "100%",
+    evidenceAccuracy: "99.3%",
+    education: "BS Artificial Intelligence (CGPA 3.76)",
   },
   skills: {
-    coreAi: ["Deterministic Multi-Agent Systems", "RAG & Vector Search", "Edge Multimodal Perception", "LLM Fine-Tuning & Distillation"],
-    pipelines: ["Apache Kafka", "Redis Feature Store", "Ray Distributed", "DuckDB", "PostgreSQL", "Airflow / Dagster"],
-    languages: ["Python", "Rust", "TypeScript", "C++", "Go", "SQL"],
-    frameworks: ["PyTorch", "vLLM", "TensorRT-LLM", "Hugging Face", "LangGraph", "FastAPI"],
+    agentOrchestration: ["Multi-Agent Federations", "LangGraph", "State Machines", "Google Gemini API", "Fastn MCP", "Adversarial Verification"],
+    backendInfra: ["Python 3.12 (AsyncIO)", "FastAPI", "PostgreSQL", "asyncpg", "Redis", "Qdrant", "ChromaDB", "Docker"],
+    governanceSafety: ["EU AI Act Compliance", "Dual-Key HITL Authorization", "Expected Calibration Error (ECE)", "Behavioral Trust Modeling"],
+    edgeMobileAi: ["On-Device Whisper ONNX", "Gemma 4 Multimodal", "CameraX", "Kotlin", "Jetpack Compose", "SQLite / Room"],
   },
   socials: [
     { label: "GitHub", url: "https://github.com/syedmuhammadayyanibrar", icon: "github", handle: "@syedmuhammadayyanibrar" },
-    { label: "LinkedIn", url: "https://linkedin.com/in/syedayyan", icon: "linkedin", handle: "/in/syedayyan" },
+    { label: "LinkedIn", url: "https://linkedin.com/in/ayyan-ibrar", icon: "linkedin", handle: "/in/ayyan-ibrar" },
     { label: "Email", url: "mailto:syedmuhammadayyanibrar@gmail.com", icon: "email", handle: "syedmuhammadayyanibrar@gmail.com" },
   ]
 };
 
-// Street Billboards in between buildings
+// Highway Billboards in between buildings
 export const BILLBOARDS = [
   {
     id: "billboard_1",
-    x: 1980,
-    width: 290,
+    x: 1680,
+    width: 320,
     height: 140,
-    headline: "SYED AYYAN // AI & ML ENGINEER",
+    headline: "SYED AYYAN // AI SYSTEMS ENGINEER",
     sublines: [
-      "★ RELIABLE DATA PIPELINES",
-      "★ DETERMINISTIC MULTI-AGENT SYSTEMS",
-      "★ EDGE MULTIMODAL ARCHITECTURES"
+      "★ DETERMINISTIC MULTI-AGENT FEDERATIONS",
+      "★ AUTOMATED REGULATORY GOVERNANCE (EU AI ACT)",
+      "★ ADVERSARIAL RISK INTELLIGENCE & EVALUATION"
     ],
-    tag: "NOW HIRING & CONSULTING"
+    tag: "PRODUCTION AI ARCHITECT"
   },
   {
     id: "billboard_2",
-    x: 3780,
-    width: 310,
+    x: 3280,
+    width: 330,
     height: 140,
-    headline: "PRODUCTION-GRADE AI SYSTEMS",
+    headline: "ZERO-HALLUCINATION ENTERPRISE AI",
     sublines: [
-      "⚡ SUB-10MS DETERMINISTIC INFERENCE",
-      "🛡️ ZERO-HALLUCINATION GUARDRAILS",
+      "⚡ FASTN MCP NERVOUS SYSTEM INTEGRATION",
+      "🛡️ DUAL-KEY HITL HUMAN AUTHORIZATION GATES",
       "🚀 FROM SOTA RESEARCH TO BULLETPROOF CODE"
     ],
-    tag: "SCALE • RELIABILITY • SPEED"
+    tag: "SAFETY • DETERMINISM • SCALE"
   }
 ];
 
@@ -66,8 +67,8 @@ export const LANDMARKS = [
     id: "start_board",
     type: "start_board",
     x: 240,
-    width: 280,
-    height: 180,
+    width: 290,
+    height: 185,
     label: "DEV DIRECTORY & SOCIALS",
     buildingNumber: "00",
     category: "Quick Connect Board",
@@ -79,7 +80,7 @@ export const LANDMARKS = [
       {
         id: "github",
         title: "GITHUB REPOSITORIES",
-        desc: "Open source AI models, agent frameworks & pipelines",
+        desc: "Access source code, multi-agent frameworks, Fastn MCP & evaluation harnesses.",
         link: "https://github.com/syedmuhammadayyanibrar",
         badge: "CODE",
         color: "#ffffff"
@@ -95,505 +96,361 @@ export const LANDMARKS = [
       {
         id: "linkedin",
         title: "LINKEDIN NETWORK",
-        desc: "Professional trajectory, recommendations & updates",
-        link: "https://linkedin.com/in/syedayyan",
+        desc: "Connect on LinkedIn with Syed Muhammad Ayyan Ibrar.",
+        link: "https://linkedin.com/in/ayyan-ibrar",
         badge: "CONNECT",
         color: "#0088ff"
       }
     ]
   },
 
-  // 2. Project Building 1: NeuroStream (Multi-Agent LLM Gateway)
+  // 2. Project 1: CAS (Contract Agentic Society)
   {
-    id: "neurostream",
+    id: "cas",
     type: "project",
     projectNumber: "01",
-    x: 620,
-    width: 350,
-    height: 250,
-    label: "01: NEUROSTREAM",
-    marqueeName: "NEUROSTREAM // MULTI-AGENT GATEWAY",
+    x: 720,
+    width: 380,
+    height: 260,
+    label: "01: CAS // CONTRACT MESH",
+    marqueeName: "CAS // CONTRACT AGENTIC SOCIETY",
     category: "Featured Project 1",
-    interactionPrompt: "[E] INSPECT NEUROSTREAM",
-    badge: "AGENTS",
+    interactionPrompt: "[E] INSPECT CAS PROJECT",
+    badge: "MULTI-AGENT",
     signColor: "#00ffcc",
     project: {
-      id: "neurostream",
-      name: "NeuroStream Engine",
-      subtitle: "Deterministic Multi-Agent Orchestration & Vector Routing Gateway",
-      tagline: "Sub-8ms token streaming with speculative caching and autonomous fallback hedging.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/neurostream",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/neurostream.git",
-      problem: "Complex multi-agent enterprise workflows suffer from cumulative LLM token latency, upstream API rate-limits, and unpredictable non-deterministic state drifting.",
-      solution: "Engineered a high-performance reverse proxy & agent coordinator in Rust. Features deterministic multi-agent state machines, speculative semantic prompt caching, and zero-downtime provider cascades.",
+      id: "cas",
+      name: "Contract Agentic Society (CAS)",
+      subtitle: "Enterprise Contract Lifecycle Mesh with Fastn MCP Nervous System",
+      tagline: "Federation of 6 autonomous agent societies automating B2B contract lifecycles and cutting review turnaround by 75%.",
+      repoUrl: "https://github.com/syedmuhammadayyanibrar/CAS",
+      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/CAS.git",
+      problem: "Enterprise commercial contract turnaround takes weeks per agreement, suffering from clause ambiguity, overlooked SLA liabilities, and manual reviewer fatigue.",
+      solution: "Architected a federation of 6 autonomous agent societies (Contract, Risk, Negotiation, Compliance, Obligation, Dispute) utilizing Google Gemini and FastAPI. Implemented an adversarial debate pipeline (Prosecution vs. Defense) that stress-tests clauses with 100% defense grounding.",
       metrics: [
-        { label: "Time-to-First-Token", value: "6.8ms", rating: "99th %ile" },
-        { label: "Daily Agent Runs", value: "450k+", rating: "Active" },
-        { label: "Upstream Cost Saved", value: "38%", rating: "Optimized" },
-        { label: "SLA Availability", value: "99.99%", rating: "Grade A" },
+        { label: "Review Speedup", value: "75%", rating: "Verified" },
+        { label: "Defense Grounding", value: "100%", rating: "Adversarial" },
+        { label: "Clause Extraction", value: "100%", rating: "Complete" },
+        { label: "Agent Societies", value: "6 Swarms", rating: "Federated" },
       ],
-      stack: ["Python", "Rust", "vLLM", "Vector DB", "Docker", "Prometheus", "FastAPI"],
+      stack: ["Python 3.12", "FastAPI", "Google Gemini API", "Fastn MCP", "PostgreSQL", "asyncpg", "Docker", "React"],
       architecture: [
-        "Inbound Task ➔ Agentic DAG Planner (Deterministic State Evaluation)",
-        "Semantic Cache Lookup (Cosine Similarity > 0.96) ➔ Sub-2ms Fast Return",
-        "Cache Miss ➔ Distributed Worker Cascade (Claude 3.5 / GPT-4o / Local Qwen)",
-        "Speculative Chunk Compression ➔ Real-time SSE Stream Delivery"
+        "Inbound DocuSign Intake via Fastn MCP ➔ Contract Intake & Parsing Agent",
+        "Adversarial Risk Intelligence Pipeline: Prosecution Agent vs. Defense Agent",
+        "Negotiation & Compliance Validation against Corporate Policy Vectors",
+        "Obligation Extraction ➔ Post-Signature Slack & Google Calendar Sync"
       ],
-      liveDemoUrl: "https://example.com/neurostream-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/neurostream",
+      liveDemoUrl: "https://github.com/syedmuhammadayyanibrar/CAS",
+      githubUrl: "https://github.com/syedmuhammadayyanibrar/CAS",
       slides: [
         {
-          title: "TTY01: SPECULATIVE TOKEN STREAM MONITOR",
+          title: "TTY01: CAS AGENT FEDERATION TELEMETRY",
           content: `
 +----------------------------------------------------------------+
-| [NEUROSTREAM ENGINE v2.4]  STATUS: ONLINE [99.99%]             |
-| REPO: github.com/syedmuhammadayyanibrar/neurostream            |
-| ACTIVE AGENT SWARMS: 1,420  AVG TTFT: 6.8ms (P99: 11.2ms)      |
+| [CAS CONTRACT AGENTIC SOCIETY v3.2]  STATUS: ONLINE            |
+| REPO: github.com/syedmuhammadayyanibrar/CAS                    |
+| ACTIVE SOCIETIES: 6 (CONTRACT, RISK, NEGOTIATION, COMPLIANCE)   |
 +----------------------------------------------------------------+
-| [ROUTER POOL]                                                  |
-| ├─ [AGENT-01: RESEARCHER]  LOAD: 48%  TTFT: 14ms  TOK/S: 98.4  |
-| ├─ [AGENT-02: SYNTHESIZER] LOAD: 39%  TTFT: 18ms  TOK/S: 84.1  |
-| └─ [AGENT-03: CRITIC-LLM]  LOAD: 12%  TTFT:  4ms  TOK/S: 142.0 |
-| [CACHE MESH] COSINE THRESHOLD: 0.96 | HIT RATIO: 41.2%         |
+| INTAKE: MSA_ENTERPRISE_2026.PDF (48 CLAUSES EXTRACTED: 100%)   |
+| ADVERSARIAL RISK DEBATE:                                       |
+| ├─ [PROSECUTION]: CLAUSE 14.2 OVER-LIMITS INDEMNITY LIABILITY  |
+| └─ [DEFENSE]: PROPOSED CAPPED CARVE-OUT (GROUNDED: 100%)       |
+| FASTN MCP WORKFLOW: DOCUSIGN SIGNED ➔ SLACK ALERT DISPATCHED   |
 +----------------------------------------------------------------+`
         },
         {
-          title: "ARCH02: MULTI-AGENT STATE GRAPH",
+          title: "ARCH02: MULTI-AGENT SOCIETY FEDERATION",
           content: `
-[CLIENT PROMPT] ──▶ [DETERMINISTIC AGENT PLANNER]
+[DOCUSIGN / FASTN MCP] ──▶ [CONTRACT INTAKE AGENT]
+                                   │
+               ┌───────────────────┴───────────────────┐
+               ▼                                       ▼
+    [PROSECUTION RISK AGENT]               [DEFENSE RISK AGENT]
+    (Uncovers Latent Liabilities)         (Grounds Valid Carve-Outs)
+               │                                       │
+               └───────────────────┬───────────────────┘
+                                   ▼
+                  [COMPLIANCE & OBLIGATION MESH]
+                                   │
+                 [SLACK & CALENDAR MCP AUTOMATION]`
+        },
+        {
+          title: "PERF03: EVALUATION BENCHMARK METRICS",
+          content: `
++----------------------------------------------------------------+
+| REVIEW DURATION: 14 DAYS REDUCED TO 3.5 HOURS (75% SPEEDUP)    |
+| CLAUSE EXTRACTION COMPLETENESS BENCHMARK: 100.0%               |
+| POSTGRES ASYNCPG CONNECTION POOL LATENCY: 1.4ms                |
+| ZERO UNGROUNDED RISK ALARMS GENERATED IN BENCHMARK HARNESS     |
++----------------------------------------------------------------+`
+        }
+      ]
+    }
+  },
+
+  // 3. Project 2: ComplianceOps (EU AI Act Auditor)
+  {
+    id: "complianceops",
+    type: "project",
+    projectNumber: "02",
+    x: 1380,
+    width: 380,
+    height: 260,
+    label: "02: COMPLIANCEOPS",
+    marqueeName: "COMPLIANCEOPS // EU AI ACT AUDITOR",
+    category: "Featured Project 2",
+    interactionPrompt: "[E] INSPECT COMPLIANCEOPS",
+    badge: "GOVERNANCE",
+    signColor: "#ff0077",
+    project: {
+      id: "complianceops",
+      name: "ComplianceOps",
+      subtitle: "Evidence-Driven AI Compliance Auditor under the EU AI Act",
+      tagline: "Autonomous compliance auditing platform for enterprise AI systems with dual-key human authorization.",
+      repoUrl: "https://github.com/syedmuhammadayyanibrar/compliance-ops",
+      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/compliance-ops.git",
+      problem: "Auditing enterprise AI systems against the EU AI Act requires weeks of manual evidence gathering across Git commits, technical specs, and model cards.",
+      solution: "Developed an autonomous compliance auditing platform with LangGraph. Orchestrates stateful multi-step evidence gathering across GitHub repositories and Google Drive policies with 99.3% accuracy.",
+      metrics: [
+        { label: "Evidence Accuracy", value: "99.3%", rating: "Stateful RAG" },
+        { label: "Gate Compliance", value: "100.0%", rating: "Dual-Key HITL" },
+        { label: "Audit Turnaround", value: "Hours vs Weeks", rating: "Accelerated" },
+        { label: "Eval Metrics", value: "8/8 Passed", rating: "Grade A" },
+      ],
+      stack: ["LangGraph", "Python", "FastAPI", "Next.js", "pgvector", "PostgreSQL", "Slack API", "Linear API"],
+      architecture: [
+        "Audit Trigger ➔ Stateful LangGraph Evidence Gathering Subgraphs",
+        "Ingest Codebase AST + Google Drive Policy Documents ➔ pgvector Similarity",
+        "Deterministic Safety Gate: Dual-Key Human Approval before Ticket Execution",
+        "Linear Remediation Tickets & Automated Executive Audit PDF Generation"
+      ],
+      liveDemoUrl: "https://github.com/syedmuhammadayyanibrar/compliance-ops",
+      githubUrl: "https://github.com/syedmuhammadayyanibrar/compliance-ops",
+      slides: [
+        {
+          title: "TTY01: LIVE COMPLIANCE AUDIT SESSION",
+          content: `
++----------------------------------------------------------------+
+| [COMPLIANCEOPS AUDITOR v2.1]  STANDARD: EU AI ACT (HIGH RISK)  |
+| REPO: github.com/syedmuhammadayyanibrar/compliance-ops         |
+| EVIDENCE ACCURACY: 99.3% | DUAL-KEY HITL STATUS: ENFORCED      |
++----------------------------------------------------------------+
+| AUDIT CHECK #1: ARTICLE 10 (DATA GOVERNANCE) ➔ PASS (GIT LOGS) |
+| AUDIT CHECK #2: ARTICLE 14 (HUMAN OVERSIGHT)  ➔ WARNING        |
+| REMEDIATION ACTION: LINEAR TICKET #ENG-481 QUEUED              |
+| SAFETY GATE: WAITING ON KEY 1 (LEAD) & KEY 2 (SECURITY)        |
++----------------------------------------------------------------+`
+        },
+        {
+          title: "ARCH02: LANGGRAPH STATEFUL AUDIT WORKFLOW",
+          content: `
+[EVIDENCE SOURCES: GITHUB + DRIVE] ──▶ [LANGGRAPH AUDITOR GRAPH]
+                                                 │
+                                                 ▼
+                             [DETERMINISTIC EVALUATION ENGINE]
+                                                 │
+                             ┌───────────────────┴───────────────────┐
+                             ▼                                       ▼
+                   [COMPLIANT (PASS)]                      [GAP DETECTED]
+                             │                                       │
+                             ▼                                       ▼
+                 [AUDIT REPORT GENERATED]                [DUAL-KEY HITL GATE]
+                                                                     │
+                                                         [LINEAR REMEDIATION]`
+        },
+        {
+          title: "PERF03: RIGOROUS SAFETY & POLICY BENCHMARKS",
+          content: `
++----------------------------------------------------------------+
+| EVALUATION PASS RATE: 100.0% ACROSS 8 CRITICAL METRICS         |
+| ZERO UNAUTHORIZED LINEAR TICKET MUTATIONS DETECTED             |
+| VECTOR RETRIEVAL PRECISION (PGVECTOR COSINE): 99.3%            |
++----------------------------------------------------------------+`
+        }
+      ]
+    }
+  },
+
+  // 4. Project 3: Negotiation Agent Engine (B2B Bargaining Mesh)
+  {
+    id: "negotiation_agent",
+    type: "project",
+    projectNumber: "03",
+    x: 2280,
+    width: 380,
+    height: 260,
+    label: "03: NEGOTIATION AGENT",
+    marqueeName: "NEGOTIATION AGENT // B2B BARGAINING",
+    category: "Featured Project 3",
+    interactionPrompt: "[E] INSPECT NEGOTIATION ENGINE",
+    badge: "GAME THEORY",
+    signColor: "#ffd700",
+    project: {
+      id: "negotiation_agent",
+      name: "Autonomous B2B Deal & Procurement Negotiation Engine",
+      subtitle: "Multi-Agent Bargaining Engine with Behavioral Trust Modeling",
+      tagline: "Decentralized multi-agent bargaining engine where buyer and vendor agents autonomously negotiate agreements to prevent deadlocks.",
+      repoUrl: "https://github.com/syedmuhammadayyanibrar/negotiation_agent",
+      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/negotiation_agent.git",
+      problem: "Commercial B2B vendor deals and SLA negotiations frequently stall in multi-party deadlocks, with counterparties making deceptive claims.",
+      solution: "Engineered a decentralized multi-agent bargaining engine in LangGraph and FastAPI. Implemented an asynchronous 17-message state-machine protocol with behavioral trust modeling in Qdrant.",
+      metrics: [
+        { label: "Protocol Messages", value: "17 States", rating: "Deterministic" },
+        { label: "Deadlocks Resolved", value: "100%", rating: "Coalitions" },
+        { label: "Trust Vector Memory", value: "Qdrant", rating: "Real-time" },
+        { label: "Inference Speed", value: "Groq LLM", rating: "<180ms" },
+      ],
+      stack: ["LangGraph", "Groq LLM", "FastAPI", "Redis Checkpoints", "Qdrant Vector DB", "PostgreSQL", "LangSmith"],
+      architecture: [
+        "Buyer & Vendor Agent Personas Ingress ➔ 17-Message State Protocol",
+        "Concession Velocity Tracking & Behavioral Trust Modeling via Qdrant",
+        "Adversarial Bluff Detection ➔ Automated Coalition Pareto Optimum Deal"
+      ],
+      liveDemoUrl: "https://github.com/syedmuhammadayyanibrar/negotiation_agent",
+      githubUrl: "https://github.com/syedmuhammadayyanibrar/negotiation_agent",
+      slides: [
+        {
+          title: "TTY01: MULTI-AGENT BARGAINING TRANSCRIPT",
+          content: `
++----------------------------------------------------------------+
+| [NEGOTIATION ENGINE v2.0]  DEAL: CLOUD STORAGE INFRA SLA       |
+| REPO: github.com/syedmuhammadayyanibrar/negotiation_agent      |
+| STATE MACHINE: ROUND 4 OF 17  PARETO OPTIMUM CONVERGENCE: 94%  |
++----------------------------------------------------------------+
+| [BUYER-AGENT]: "REQUEST 99.99% SLA AT $42k/MO (MAX BUDGET)"   |
+| [VENDOR-AGENT]: "OFFER 99.95% AT $40k/MO OR 99.99% AT $44k/MO"|
+| [TRUST-ENGINE]: VENDOR CONCESSION VELOCITY: 0.82 (HONEST CLAIM)|
+| PROTOCOL ACTION: REACHED EQUILIBRIUM AT $41.8k/MO WITH 99.99% |
++----------------------------------------------------------------+`
+        },
+        {
+          title: "ARCH02: 17-MESSAGE STATE MACHINE TOPOLOGY",
+          content: `
+[BUYER INTAKE]                                [VENDOR INTAKE]
+       │                                             │
+       ▼                                             ▼
+[BUYER STRATEGY AGENT]                     [VENDOR STRATEGY AGENT]
+       │                                             │
+       └──────────────────────┬──────────────────────┘
+                              ▼
+            [17-MESSAGE DETERMINISTIC STATE MACHINE]
                               │
                ┌──────────────┴──────────────┐
                ▼                             ▼
-    [SPECULATIVE VECTOR CACHE]    [MULTI-MODEL CASCADE]
-    - Qdrant Cluster HNSW         - Dynamic Hedging Cascade
-    - Zero-Copy Ring Buffers      - Automated Fallbacks
+    [BEHAVIORAL TRUST MODEL]      [COALITION / PARETO ENGINE]
+    (Qdrant Concession Vectors)   (Resolves Deadlocks)
                │                             │
                └──────────────┬──────────────┘
                               ▼
-                 [VALIDATED SSE STREAM CHUNKS]`
+                 [EXECUTED DEAL MEMORANDUM]`
         },
         {
-          title: "PERF03: STRESS-TEST BENCHMARK PROFILE",
+          title: "PERF03: PARETO EFFICIENCY REPORT",
           content: `
 +----------------------------------------------------------------+
-| CONCURRENT MULTI-AGENT PIPELINES: 12,000 CONCURRENT SESSIONS   |
-| RESIDENT MEMORY USAGE: 24.6 MB (ZERO LEAKS IN RUST RUNTIME)    |
-| RUNTIME JITTER: <0.8ms STANDARD DEVIATION ACROSS 1M TOKENS     |
+| CONVERGENCE SUCCESS RATE: 98.4% WITHIN PROTOCOL TIMEOUT LIMIT  |
+| BAD-FAITH POSTURING IDENTIFICATION ACCURACY: 94.2%             |
+| FASTAPI + REDIS CHECKPOINT RESTORATION LATENCY: 2.1ms          |
 +----------------------------------------------------------------+`
         }
       ]
     }
   },
 
-  // 3. Project Building 2: OmniVision (Edge Multimodal Vision & Perception)
+  // 5. Project 4: AuraSight (Edge-Native Voice Transaction Assistant)
   {
-    id: "omnivision",
-    type: "project",
-    projectNumber: "02",
-    x: 1320,
-    width: 360,
-    height: 260,
-    label: "02: OMNIVISION",
-    marqueeName: "OMNIVISION // EDGE MULTIMODAL",
-    category: "Featured Project 2",
-    interactionPrompt: "[E] INSPECT OMNIVISION",
-    badge: "VISION",
-    signColor: "#ff0077",
-    project: {
-      id: "omnivision",
-      name: "OmniVision Pipeline",
-      subtitle: "Edge Multimodal Vision & Real-Time Video Understanding Engine",
-      tagline: "Ultra-low-latency on-device multimodal perception running at 60 FPS on edge hardware.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/omnivision",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/omnivision.git",
-      problem: "Transmitting 4K video feeds to centralized cloud LLMs introduces 500ms+ latency, massive egress bandwidth costs, and privacy vulnerabilities.",
-      solution: "Developed an on-device edge multimodal inference pipeline utilizing quantized vision transformers (ViT) and TensorRT. Executes frame-level semantic segmentation, OCR, and reasoning at 60 FPS locally.",
-      metrics: [
-        { label: "Edge Frame Rate", value: "62 FPS", rating: "Real-Time" },
-        { label: "Quantized Size", value: "1.4 GB", rating: "INT8 / FP8" },
-        { label: "Inference Latency", value: "16.1ms", rating: "Sub-Frame" },
-        { label: "Bandwidth Saved", value: "96.4%", rating: "Edge Local" },
-      ],
-      stack: ["PyTorch", "TensorRT", "CUDA / C++", "ONNX", "OpenCV", "Python"],
-      architecture: [
-        "Camera Ingress ➔ Zero-Copy Hardware Frame Buffer (NVMM)",
-        "TensorRT Quantized Vision Transformer (ViT-H/14 INT8)",
-        "Temporal Sliding Attention Window for Video Anomaly Detection",
-        "Local Vector Synthesis ➔ Actionable Structured JSON Events"
-      ],
-      liveDemoUrl: "https://example.com/omnivision-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/omnivision",
-      slides: [
-        {
-          title: "TTY01: EDGE MULTIMODAL INFERENCE RADAR",
-          content: `
-+----------------------------------------------------------------+
-| [OMNIVISION ENGINE v1.9]  HARDWARE: JETSON ORIN / RTX 4090     |
-| REPO: github.com/syedmuhammadayyanibrar/omnivision             |
-| RESOLUTION: 1920x1080@60FPS  MODEL: QUANTIZED MULTIMODAL VIT   |
-+----------------------------------------------------------------+
-| FRAME #104,912: DETECTED [3 OBJECTS, 1 TEXT EMBEDDING, 1 POSE]|
-| LATENCY BREAKDOWN: PRE-PROC: 1.2ms | INFER: 12.8ms | POST: 2.1ms
-| POWER ENVELOPE: 32 WATTS   VRAM: 2.1 GB ALLOCATED              |
-+----------------------------------------------------------------+`
-        },
-        {
-          title: "ARCH02: HARDWARE-ACCELERATED DATAFLOW",
-          content: `
-[CAMERA STREAM (RTSP)] ──▶ [ZERO-COPY DMA FRAME BUFFER]
-                                    │
-                                    ▼
-                [TENSORRT QUANTIZED FP8/INT8 VIT]
-                                    │
-               ┌────────────────────┴────────────────────┐
-               ▼                                         ▼
-    [OBJECT / POSE TENSOR MAP]              [FAST OCR & KEYWORDS]
-               │                                         │
-               └────────────────────┬────────────────────┘
-                                    ▼
-                    [LOCAL MULTIMODAL EVENT BUS]`
-        },
-        {
-          title: "PERF03: ON-DEVICE ACCELERATION BENCHMARKS",
-          content: `
-+----------------------------------------------------------------+
-| FPS ON JETSON ORIN NANO: 58.4 FPS (CONTINUOUS 24/7)            |
-| ACCURACY RETENTION: 99.1% OF FULL PRECISION FP32 BASELINE      |
-| END-TO-END GLASS-TO-DECISION LATENCY: 16.1ms                   |
-+----------------------------------------------------------------+`
-        }
-      ]
-    }
-  },
-
-  // 4. Project Building 3: SynapseFlow (Reliable AI Data Pipelines)
-  {
-    id: "synapseflow",
-    type: "project",
-    projectNumber: "03",
-    x: 2400,
-    width: 360,
-    height: 260,
-    label: "03: SYNAPSEFLOW",
-    marqueeName: "SYNAPSEFLOW // DATA PIPELINES",
-    category: "Featured Project 3",
-    interactionPrompt: "[E] INSPECT SYNAPSEFLOW",
-    badge: "PIPELINES",
-    signColor: "#ffd700",
-    project: {
-      id: "synapseflow",
-      name: "SynapseFlow Matrix",
-      subtitle: "High-Throughput Streaming AI Data Pipeline & Feature Store",
-      tagline: "Handling 250,000 events/sec with zero-loss append-only validation and instant feature lookups.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/synapseflow",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/synapseflow.git",
-      problem: "Training and serving multimodal LLMs requires massive continuous ingestion from heterogeneous sources without schema drift, data loss, or pipeline bottlenecks.",
-      solution: "Engineered an event-driven distributed data pipeline with Apache Kafka, Ray, and DuckDB. Delivers automated schema validation, out-of-order deduplication, and sub-3ms online feature retrieval.",
-      metrics: [
-        { label: "Peak Ingestion", value: "280,000 EPS", rating: "Stress-Tested" },
-        { label: "Feature Lookup", value: "2.4ms", rating: "Sub-Millisecond" },
-        { label: "Data Integrity", value: "100.00%", rating: "Zero Dropped" },
-        { label: "Dataset Processed", value: "140 TB+", rating: "In Production" },
-      ],
-      stack: ["Python", "Apache Kafka", "Ray", "DuckDB", "Redis Cluster", "Kubernetes"],
-      architecture: [
-        "Multi-Source Ingress (Webhooks, S3, Databases) ➔ Kafka Topic Partitions",
-        "Distributed Ray Workers with Strict Pydantic Schema Validation",
-        "Online Feature Cache (Redis Cluster) + Parquet Cold Archive (S3 / GCS)"
-      ],
-      liveDemoUrl: "https://example.com/synapseflow-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/synapseflow",
-      slides: [
-        {
-          title: "TTY01: STREAMING INGESTION THROUGHPUT",
-          content: `
-+----------------------------------------------------------------+
-| [SYNAPSEFLOW DATA MATRIX]  ACTIVE TOPICS: 48                   |
-| REPO: github.com/syedmuhammadayyanibrar/synapseflow            |
-| INGESTION RATE: 274,800 EVENTS/SEC | PARTITION LAG: 0ms        |
-+----------------------------------------------------------------+
-| 07:41:02.102  CHUNK#90192  5,000 SAMPLES  VALIDATED [0.9ms]   |
-| 07:41:02.106  CHUNK#90193  5,000 SAMPLES  VALIDATED [1.1ms]   |
-| 07:41:02.110  CHUNK#90194  SCHEMA DRIFT DETECTED ➔ QUARANTINED |
-+----------------------------------------------------------------+`
-        },
-        {
-          title: "ARCH02: DISTRIBUTED DATA FLOW SCHEMATIC",
-          content: `
-[EVENT INGESTION SOURCES]
-         │
-         ▼
-[APACHE KAFKA HIGH-THROUGHPUT CLUSTER]
-         │
-         ▼
-[RAY DISTRIBUTED WORKERS (VALIDATION & EMBEDDING ENRICHMENT)]
-         │
-         ├─▶ [ONLINE STORE: REDIS CLUSTER (<2.5ms LOOKUP)]
-         └─▶ [OFFLINE STORE: PARTITIONED PARQUET DATA LAKE]`
-        },
-        {
-          title: "PERF03: FAULT-TOLERANCE & BACKPRESSURE REPORT",
-          content: `
-+----------------------------------------------------------------+
-| BACKPRESSURE RECOVERY TEST: 500k EVENT BURST TESTED PASSED     |
-| REPLICATION FACTOR: 3 (DISTRIBUTED ACROSS MULTI-AZ)            |
-| END-TO-END PIPELINE PROCESSING LATENCY: 8.2ms                  |
-+----------------------------------------------------------------+`
-        }
-      ]
-    }
-  },
-
-  // 5. Project Building 4: AegisGuard AI (Deterministic Safety & Guardrails)
-  {
-    id: "aegisguard",
+    id: "aurasight",
     type: "project",
     projectNumber: "04",
-    x: 3120,
-    width: 350,
-    height: 270,
-    label: "04: AEGISGUARD AI",
-    marqueeName: "AEGISGUARD AI // SAFETY SHIELD",
+    x: 2980,
+    width: 380,
+    height: 260,
+    label: "04: AURASIGHT",
+    marqueeName: "AURASIGHT // EDGE VOICE ACCOUNTING",
     category: "Featured Project 4",
-    interactionPrompt: "[E] INSPECT AEGISGUARD",
-    badge: "GUARDRAIL",
+    interactionPrompt: "[E] INSPECT AURASIGHT",
+    badge: "EDGE MULTIMODAL",
     signColor: "#00ff88",
     project: {
-      id: "aegisguard",
-      name: "AegisGuard AI",
-      subtitle: "Deterministic Hallucination Shield & Latency-Aware Guardrail Proxy",
-      tagline: "Deterministic output verification and jailbreak defense with sub-5ms overhead.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/aegisguard-ai",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/aegisguard-ai.git",
-      problem: "Generative AI applications in production face severe liabilities: prompt injections, toxic jailbreaks, PII leaks, and factual hallucinations.",
-      solution: "Engineered an ultra-low-latency guardrail reverse proxy in Go and Rust. Utilizes deterministic regex token analyzers and small distilled SLMs to intercept threats in under 4ms.",
+      id: "aurasight",
+      name: "AuraSight",
+      subtitle: "Edge-Native Voice Transaction & Accounting System",
+      tagline: "Offline-first multimodal assistant enabling visually impaired shopkeepers to manage billing and ledgers in Urdu.",
+      repoUrl: "https://github.com/syedmuhammadayyanibrar/AuraSight",
+      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/AuraSight.git",
+      problem: "Visually impaired micro-retailers in South Asia struggle to verify physical currency notes, track customer credit ledgers (Khata), and calculate change in busy, noisy stalls.",
+      solution: "Engineered an offline-first multimodal Android assistant in Kotlin and Jetpack Compose. Pairs local Whisper ONNX speech-to-text with Gemma 4 multimodal vision and constrained function-calling.",
       metrics: [
-        { label: "Inspection Overhead", value: "3.4ms", rating: "Sub-5ms" },
-        { label: "Jailbreaks Blocked", value: "99.8%", rating: "Deterministic" },
-        { label: "PII Masking Accuracy", value: "100.0%", rating: "Zero Leak" },
-        { label: "False Positive Rate", value: "<0.04%", rating: "Calibrated" },
+        { label: "Arithmetic Error", value: "0.000%", rating: "Zero Hallucination" },
+        { label: "Edge Dependency", value: "100% Offline", rating: "On-Device" },
+        { label: "Speech Engine", value: "Whisper ONNX", rating: "Hardware Keyed" },
+        { label: "Vision Model", value: "Gemma 4", rating: "Currency Detect" },
       ],
-      stack: ["Go (Golang)", "Rust", "DistilBERT", "Regex Engines", "Redis", "Docker"],
+      stack: ["Kotlin", "Jetpack Compose", "Whisper ONNX", "Gemma 4", "CameraX", "SQLite / Room", "Android SDK"],
       architecture: [
-        "Inbound User Prompt ➔ Deterministic Regex Aho-Corasick Injection Scanner",
-        "Lightweight Distilled Embedding Classifier (<2ms) ➔ Threat Scoring",
-        "Model Response Ingress ➔ Real-time PII Redaction & Hallucination Cross-Check"
+        "Physical Hardware Volume Trigger ➔ Fast Wake Local Whisper ONNX ASR",
+        "Constrained Grammar Function Calling ➔ Zero Arithmetic Hallucination Parser",
+        "CameraX Currency Verification via Quantized Gemma 4 Multimodal",
+        "Local Encrypted SQLite / Room Ledger (Khata) Storage"
       ],
-      liveDemoUrl: "https://example.com/aegisguard-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/aegisguard-ai",
+      liveDemoUrl: "https://github.com/syedmuhammadayyanibrar/AuraSight",
+      githubUrl: "https://github.com/syedmuhammadayyanibrar/AuraSight",
       slides: [
         {
-          title: "TTY01: LIVE THREAT INTERCEPTION STREAM",
+          title: "TTY01: ON-DEVICE RUNTIME TELEMETRY",
           content: `
 +----------------------------------------------------------------+
-| [AEGISGUARD PROXY v3.1]  STATUS: ARMED & DEFENDING             |
-| REPO: github.com/syedmuhammadayyanibrar/aegisguard-ai          |
-| TOTAL PROMPTS SCANNED 24H: 1,840,290 | THREATS DEFLECTED: 341  |
+| [AURASIGHT EDGE RUNTIME v1.8]  DEVICE: ANDROID ARM64           |
+| REPO: github.com/syedmuhammadayyanibrar/AuraSight              |
+| NETWORK: OFFLINE (AIR-GAPPED) | SPEECH ENGINE: WHISPER ONNX    |
 +----------------------------------------------------------------+
-| 07:44:11.018  REQ#1841  JAILBREAK ATTEMPT (DAN)  BLOCKED [1.8ms]|
-| 07:44:11.022  REQ#1842  PII (SSN/EMAIL) DETECTED REDACTED [2.1ms]|
-| 07:44:11.028  REQ#1843  BENIGN SYSTEM QUERY      PASSED  [0.8ms]|
+| 11:20:04.120  HARDWARE VOL-DOWN TRIGGER ➔ LISTENING [URDU]     |
+| 11:20:05.310  TRANSCRIBED: "احمد نے پانچ سو روپے ادھار لیے"    |
+| PARSED INTENT: RECORD_DEBIT (NAME: AHMAD, AMOUNT: PKR 500)     |
+| VERIFICATION: CONSTRAINED GRAMMAR CHECK ➔ ZERO ARITHMETIC DRIFT|
+| LEDGER UPDATED IN ROOM SQLITE IN 4.2ms                         |
 +----------------------------------------------------------------+`
         },
         {
-          title: "ARCH02: MULTI-LAYER SAFETY DEFENSE MATRIX",
+          title: "ARCH02: OFFLINE FUNCTION-CALLING TOPOLOGY",
           content: `
-[USER PROMPT INPUT]
-         │
-         ▼
-[LAYER 1: AHO-CORASICK DETERMINISTIC TOKEN FILTER (<0.4ms)]
-         │
-         ▼
-[LAYER 2: DISTILLED EMBEDDING CLASSIFIER (<1.8ms)]
-         │
-         ├─▶ [THREAT DETECTED ➔ DROP & RETURN SYNTHETIC SAFE WARNING]
-         │
-         ▼ (PASSED)
-[UPSTREAM LLM EXECUTION ENGINE]
-         │
-         ▼
-[LAYER 3: PII REDACTION & FACTUAL CONSISTENCY MERKLE PROOF]`
+[HARDWARE VOLUME BUTTON] ──▶ [WHISPER ONNX URDU STREAM]
+                                       │
+                                       ▼
+                       [CONSTRAINED GRAMMAR PARSER]
+                     (Guarantees Zero Arithmetic Error)
+                                       │
+               ┌───────────────────────┴───────────────────────┐
+               ▼                                               ▼
+    [ROOM SQLITE LEDGER / KHATA]                   [GEMMA 4 CURRENCY OCR]
+    (Encrypted Local Storage)                      (CameraX Note Verification)
+               │                                               │
+               └───────────────────────┬───────────────────────┘
+                                       ▼
+                         [LOCAL TTS URDU AUDIO FEEDBACK]`
         },
         {
-          title: "PERF03: LATENCY BUDGET BENCHMARK",
+          title: "PERF03: ON-DEVICE RESOURCE ALLOCATION",
           content: `
 +----------------------------------------------------------------+
-| ADDED P99 PROXY LATENCY: 3.4ms                                 |
-| BENCHMARKED UNDER 25,000 CONCURRENT CLIENT CONNECTIONS         |
-| ZERO EXTERNAL API DEPENDENCIES (FULLY AIR-GAPPED READY)        |
+| MEMORY RESIDENT FOOTPRINT: 180 MB ON ANDROID 14                |
+| END-TO-END VOICE COMMAND TO LEDGER COMMIT: <420ms              |
+| BATTERY DRAIN: <3.5% PER 8-HOUR CONTINUOUS RETAIL SHIFT        |
 +----------------------------------------------------------------+`
         }
       ]
     }
   },
 
-  // 6. Project Building 5: VoiceSynapse (Sub-150ms Real-Time Voice Agent)
-  {
-    id: "voicesynapse",
-    type: "project",
-    projectNumber: "05",
-    x: 4180,
-    width: 340,
-    height: 250,
-    label: "05: VOICESYNAPSE",
-    marqueeName: "VOICESYNAPSE // SPEECH AGENT",
-    category: "Featured Project 5",
-    interactionPrompt: "[E] INSPECT VOICESYNAPSE",
-    badge: "VOICE AI",
-    signColor: "#00eeff",
-    project: {
-      id: "voicesynapse",
-      name: "VoiceSynapse Agent",
-      subtitle: "Sub-150ms Full-Duplex Voice-to-Voice Streaming Agent",
-      tagline: "Ultra-low-latency real-time conversational agent with adaptive turn-taking and WebRTC.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/voicesynapse",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/voicesynapse.git",
-      problem: "Traditional voice bots chain STT ➔ LLM ➔ TTS across separate servers, generating a frustrating 1.5 - 2.5 second awkward silence during live conversations.",
-      solution: "Architected a full-duplex WebRTC streaming agent pipeline. Uses continuous streaming VAD (Voice Activity Detection), speculative LLM token generation, and neural streaming audio synthesis in sub-150ms.",
-      metrics: [
-        { label: "Mouth-to-Ear Latency", value: "142ms", rating: "Human-Speed" },
-        { label: "Turn-Taking Accuracy", value: "98.7%", rating: "Adaptive VAD" },
-        { label: "Audio Mesh Quality", value: "48 kHz", rating: "HD Opus" },
-        { label: "Concurrent Calls", value: "1,200", rating: "Per Node" },
-      ],
-      stack: ["Python", "WebRTC", "Rust", "Whisper Streaming", "Kokoro TTS", "WebSockets"],
-      architecture: [
-        "Client Audio Chunk (20ms Opus via WebRTC) ➔ Streaming Silero VAD",
-        "Whisper Streaming Chunk ASR ➔ Speculative Sentence Ingestion",
-        "Streaming Neural LLM ➔ Kokoro TTS Byte Pipeline ➔ WebRTC Return"
-      ],
-      liveDemoUrl: "https://example.com/voicesynapse-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/voicesynapse",
-      slides: [
-        {
-          title: "TTY01: FULL-DUPLEX AUDIO STREAM TELEMETRY",
-          content: `
-+----------------------------------------------------------------+
-| [VOICESYNAPSE ENGINE v2.1]  DUPLEX STATUS: STREAMING           |
-| REPO: github.com/syedmuhammadayyanibrar/voicesynapse           |
-| SAMPLE RATE: 48,000 Hz OPUS  END-TO-END LATENCY: 142ms         |
-+----------------------------------------------------------------+
-| USER SPEECH DETECTED ➔ VAD CONFIRMATION: 18ms                  |
-| FIRST TOKEN STREAMED ➔ TTS AUDIO CHUNK GENERATED: 74ms         |
-| TOTAL DURATION OF SILENCE: 142ms (HUMAN PARVERSATIONAL NORM)   |
-+----------------------------------------------------------------+`
-        },
-        {
-          title: "ARCH02: PIPELINED AUDIO STREAMING ARCHITECTURE",
-          content: `
-[CLIENT MICROPHONE]
-       │ (WebRTC 20ms Frame)
-       ▼
-[STREAMING SILERO VAD & WHISPER CHUNK BUFFER]
-       │ (Zero-Wait Sentence Boundary Detection)
-       ▼
-[SPECULATIVE STREAMING LLM RUNNER]
-       │ (Immediate Token Stream)
-       ▼
-[NEURAL STREAMING TTS SYNTHESIS ENGINE]
-       │ (WebRTC Audio Return)
-       ▼
-[CLIENT EARPHONE / SPEAKER]`
-        },
-        {
-          title: "PERF03: INTERRUPT & BARGE-IN PERFORMANCE",
-          content: `
-+----------------------------------------------------------------+
-| USER BARGE-IN INTERRUPT CUTOFF: <35ms                          |
-| PACKET JITTER BUFFER BUFFERING DELAY: <8ms                     |
-| NETWORK EGRESS SAVED VIA ADAPTIVE OPUS CODEC: 42%              |
-+----------------------------------------------------------------+`
-        }
-      ]
-    }
-  },
-
-  // 7. Project Building 6: PixelDiffusion (Generative AI & Neural Retro Graphics)
-  {
-    id: "pixeldiffusion",
-    type: "project",
-    projectNumber: "06",
-    x: 4860,
-    width: 350,
-    height: 260,
-    label: "06: PIXELDIFFUSION",
-    marqueeName: "PIXELDIFFUSION // GENERATIVE AI",
-    category: "Featured Project 6",
-    interactionPrompt: "[E] INSPECT PIXELDIFFUSION",
-    badge: "GEN AI",
-    signColor: "#9900ff",
-    project: {
-      id: "pixeldiffusion",
-      name: "PixelDiffusion Engine",
-      subtitle: "Real-Time 16-Bit Style Diffusion & Neural Game Asset Generator",
-      tagline: "Generating palette-consistent 16-bit sprites and animated tilemaps in real time.",
-      repoUrl: "https://github.com/syedmuhammadayyanibrar/pixeldiffusion",
-      cloneCmd: "git clone https://github.com/syedmuhammadayyanibrar/pixeldiffusion.git",
-      problem: "Standard diffusion models produce blurry, non-pixel-aligned images with millions of uncontrolled colors that break retro game engine constraints.",
-      solution: "Trained a specialized latent diffusion model fine-tuned with custom LoRA adapters and a hard color-palette quantization loss function for authentic 16-bit pixel art at 120 FPS.",
-      metrics: [
-        { label: "Generation Latency", value: "85ms", rating: "SD-Turbo Latent" },
-        { label: "Palette Adherence", value: "100%", rating: "Exact 16-Color" },
-        { label: "Tile Seamlessness", value: "Zero Seam", rating: "Tiled Conv2d" },
-        { label: "GitHub Stars", value: "2,400 ★", rating: "Open Source" },
-      ],
-      stack: ["Python", "PyTorch", "Diffusers", "LoRA", "WebGPU", "CUDA"],
-      architecture: [
-        "Prompt Embedding (CLIP) ➔ SD-Turbo Latent Step (<4 steps)",
-        "Custom Palettization Quantizer Layer (Aseprite Compatible)",
-        "Automated 8-Frame Sprite Sheet Slicing & Export"
-      ],
-      liveDemoUrl: "https://example.com/pixeldiffusion-demo",
-      githubUrl: "https://github.com/syedmuhammadayyanibrar/pixeldiffusion",
-      slides: [
-        {
-          title: "TTY01: NEURAL GENERATION STREAM",
-          content: `
-+----------------------------------------------------------------+
-| [PIXELDIFFUSION GENERATOR v1.4]  STEPS: 4 (SD-TURBO)           |
-| REPO: github.com/syedmuhammadayyanibrar/pixeldiffusion         |
-| GENERATION TIME: 85ms  TARGET PALETTE: CYBERPUNK 16-COLOR      |
-+----------------------------------------------------------------+
-| PROMPT: "cyberpunk street vendor in winter dusk, 16-bit pixel" |
-| STATUS: 8-FRAME WALK CYCLE GENERATED  SEAMLESS TILES: VERIFIED |
-+----------------------------------------------------------------+`
-        },
-        {
-          title: "ARCH02: PALETTE CONSTRAINED CONVOLUTION",
-          content: `
-[TEXT PROMPT] ──▶ [CLIP ENCODER]
-                        │
-                        ▼
-      [LATENT DIFFUSION BACKBONE (4 INFERENCE STEPS)]
-                        │
-                        ▼
-      [HARD COLOR QUANTIZATION LOSS & PALETTE CLAMP]
-                        │
-                        ▼
-       [PIXEL-PERFECT SPRITESHEET & TILE EXPORT]`
-        },
-        {
-          title: "PERF03: RESOLUTION & RUNTIME STATS",
-          content: `
-+----------------------------------------------------------------+
-| PEAK VRAM USAGE: 1.8 GB (RUNS COMFORTABLY ON CONSUMER GPUS)    |
-| GENERATION THROUGHPUT: 12 COMPLETE SPRITES / SECOND            |
-| EXPORT FORMATS: ASEPRITE (.ase), PNG SPRITESHEET, JSON METADATA|
-+----------------------------------------------------------------+`
-        }
-      ]
-    }
-  },
-
-  // 8. Finale Pavilion: "Let's build together" (Matching Attached Image)
+  // 6. Finale Board: "Let's build together" (Matching Attached Image)
   {
     id: "connect_pavilion",
     type: "connect_pavilion",
-    x: 5460,
-    width: 380,
-    height: 270,
+    x: 3980,
+    width: 390,
+    height: 275,
     label: "FINALE: LET'S BUILD TOGETHER",
-    buildingNumber: "07",
+    buildingNumber: "05",
     category: "Connect & Career",
     interactionPrompt: "[E] CONNECT & HIRE",
     badge: "CONNECT",
@@ -607,11 +464,11 @@ export const LANDMARKS = [
       cvUrl: "/Syed_Ayyan_CV.pdf",
       socials: [
         { name: "GitHub", url: "https://github.com/syedmuhammadayyanibrar" },
-        { name: "LinkedIn", url: "https://linkedin.com/in/syedayyan" },
+        { name: "LinkedIn", url: "https://linkedin.com/in/ayyan-ibrar" },
         { name: "Email", url: "mailto:syedmuhammadayyanibrar@gmail.com", label: "syedmuhammadayyanibrar@gmail.com" },
       ]
     }
   }
 ];
 
-export const STREET_TOTAL_WIDTH = 6000;
+export const STREET_TOTAL_WIDTH = 4600;

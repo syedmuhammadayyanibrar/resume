@@ -7,12 +7,10 @@ import {
   drawCat,
   drawStartBoard,
   drawStreetBillboard,
-  drawNeuroStream,
-  drawOmniVision,
-  drawSynapseFlow,
-  drawAegisGuard,
-  drawVoiceSynapse,
-  drawPixelDiffusion,
+  drawCAS,
+  drawComplianceOps,
+  drawNegotiationAgent,
+  drawAuraSight,
   drawConnectPavilion
 } from "./pixelArt.js";
 import { LANDMARKS, BILLBOARDS, STREET_TOTAL_WIDTH } from "./data.js";
@@ -172,9 +170,9 @@ export class WorldRenderer {
     this.npcs = [
       {
         id: "npc1",
-        x: 480,
-        minX: 300,
-        maxX: 800,
+        x: 500,
+        minX: 340,
+        maxX: 680,
         speed: 1.1,
         facing: 1,
         walkFrame: 0,
@@ -182,14 +180,14 @@ export class WorldRenderer {
         cBottom: "#1e293b",
         cHair: "#0f172a",
         prop: "headphones",
-        bubbleText: "Did you test NeuroStream's sub-8ms streaming?",
+        bubbleText: "CAS federates 6 contract societies with Fastn MCP nervous system!",
         isSpeaking: false,
       },
       {
         id: "npc2",
-        x: 1150,
-        minX: 950,
-        maxX: 1500,
+        x: 1100,
+        minX: 920,
+        maxX: 1320,
         speed: 0.9,
         facing: -1,
         walkFrame: 0,
@@ -197,14 +195,14 @@ export class WorldRenderer {
         cBottom: "#334155",
         cHair: "#78350f",
         prop: "camera",
-        bubbleText: "OmniVision runs multimodal vision at 60 FPS on edge!",
+        bubbleText: "ComplianceOps uses Dual-Key HITL safety gates under EU AI Act!",
         isSpeaking: false,
       },
       {
         id: "npc3",
-        x: 1820,
-        minX: 1650,
-        maxX: 2150,
+        x: 1720,
+        minX: 1540,
+        maxX: 1940,
         speed: 1.2,
         facing: 1,
         walkFrame: 0,
@@ -212,14 +210,14 @@ export class WorldRenderer {
         cBottom: "#1e293b",
         cHair: "#1e293b",
         prop: "backpack",
-        bubbleText: "Syed's AI engineering specializations are top tier!",
+        bubbleText: "Check Syed's highway billboard above! Production AI Architect.",
         isSpeaking: false,
       },
       {
         id: "npc4",
-        x: 2780,
-        minX: 2500,
-        maxX: 3050,
+        x: 2150,
+        minX: 1980,
+        maxX: 2250,
         speed: 0.8,
         facing: -1,
         walkFrame: 0,
@@ -227,14 +225,14 @@ export class WorldRenderer {
         cBottom: "#475569",
         cHair: "#451a03",
         prop: "coffee",
-        bubbleText: "SynapseFlow ingests 280,000 events/sec with zero loss.",
+        bubbleText: "Negotiation Agent ran 17-message state machines with 98.4% convergence!",
         isSpeaking: false,
       },
       {
         id: "npc5",
-        x: 3520,
-        minX: 3250,
-        maxX: 3850,
+        x: 2700,
+        minX: 2520,
+        maxX: 2900,
         speed: 1.0,
         facing: 1,
         walkFrame: 0,
@@ -242,14 +240,14 @@ export class WorldRenderer {
         cBottom: "#0f172a",
         cHair: "#0284c7",
         prop: "headphones",
-        bubbleText: "AegisGuard intercepts LLM jailbreaks in <4ms!",
+        bubbleText: "AuraSight runs on-device Whisper ONNX with 0% arithmetic errors!",
         isSpeaking: false,
       },
       {
         id: "npc6",
-        x: 4520,
-        minX: 4300,
-        maxX: 4800,
+        x: 3450,
+        minX: 3200,
+        maxX: 3700,
         speed: 1.1,
         facing: -1,
         walkFrame: 0,
@@ -257,14 +255,14 @@ export class WorldRenderer {
         cBottom: "#1e293b",
         cHair: "#111827",
         prop: "backpack",
-        bubbleText: "142ms full-duplex voice! No more awkward bot pauses.",
+        bubbleText: "All 4 projects have open-source GitHub repositories you can clone!",
         isSpeaking: false,
       },
       {
         id: "npc7",
-        x: 5240,
-        minX: 5000,
-        maxX: 5600,
+        x: 3880,
+        minX: 3700,
+        maxX: 4100,
         speed: 0.9,
         facing: 1,
         walkFrame: 0,
@@ -272,7 +270,7 @@ export class WorldRenderer {
         cBottom: "#334155",
         cHair: "#713f12",
         prop: "coffee",
-        bubbleText: "Check the finale board ahead to connect with Syed!",
+        bubbleText: "Finale pavilion ahead: 'Let's build together' — grab Syed's CV!",
         isSpeaking: false,
       }
     ];
@@ -668,23 +666,17 @@ export class WorldRenderer {
         case "start_board":
           drawStartBoard(ctx, lm, this.groundY, time);
           break;
-        case "neurostream":
-          drawNeuroStream(ctx, lm, this.groundY, time);
+        case "cas":
+          drawCAS(ctx, lm, this.groundY, time);
           break;
-        case "omnivision":
-          drawOmniVision(ctx, lm, this.groundY, time);
+        case "complianceops":
+          drawComplianceOps(ctx, lm, this.groundY, time);
           break;
-        case "synapseflow":
-          drawSynapseFlow(ctx, lm, this.groundY, time);
+        case "negotiation_agent":
+          drawNegotiationAgent(ctx, lm, this.groundY, time);
           break;
-        case "aegisguard":
-          drawAegisGuard(ctx, lm, this.groundY, time);
-          break;
-        case "voicesynapse":
-          drawVoiceSynapse(ctx, lm, this.groundY, time);
-          break;
-        case "pixeldiffusion":
-          drawPixelDiffusion(ctx, lm, this.groundY, time);
+        case "aurasight":
+          drawAuraSight(ctx, lm, this.groundY, time);
           break;
         case "connect_pavilion":
           drawConnectPavilion(ctx, lm, this.groundY, time);
@@ -738,14 +730,12 @@ export class WorldRenderer {
 
     // Puddles reflecting Project neons
     const puddles = [
-      { x: 380, w: 90, color: "rgba(0, 255, 204, " },
-      { x: 800, w: 110, color: "rgba(0, 255, 204, " },
-      { x: 1500, w: 120, color: "rgba(255, 0, 119, " },
-      { x: 2600, w: 130, color: "rgba(255, 215, 0, " },
-      { x: 3300, w: 115, color: "rgba(0, 255, 136, " },
-      { x: 4350, w: 110, color: "rgba(0, 238, 255, " },
-      { x: 5050, w: 125, color: "rgba(153, 0, 255, " },
-      { x: 5650, w: 100, color: "rgba(2, 132, 199, " }
+      { x: 420, w: 90, color: "rgba(0, 255, 204, " },
+      { x: 920, w: 120, color: "rgba(0, 255, 204, " },
+      { x: 1570, w: 120, color: "rgba(255, 0, 119, " },
+      { x: 2470, w: 130, color: "rgba(255, 215, 0, " },
+      { x: 3170, w: 120, color: "rgba(0, 255, 136, " },
+      { x: 4170, w: 140, color: "rgba(0, 170, 255, " }
     ];
 
     ctx.save();
@@ -1018,7 +1008,51 @@ export class WorldRenderer {
       this.drawInteractionPrompt(activeLandmark.interactionPrompt, charScreenX, charScreenY, time);
     }
 
+    // Start Walk Guidance: Prompt user to press D or arrow to move forward
+    if (player.x < 420) {
+      this.drawStartTutorialPrompt(charScreenX, charScreenY, time);
+    }
+
     this.drawSnowfall(time);
     this.drawRaveEffects(time);
+  }
+
+  // Start Tutorial Prompt: In the start position, prompt user clearly to press D or Arrow
+  drawStartTutorialPrompt(charScreenX, charScreenY, time) {
+    const ctx = this.ctx;
+    const bounceX = Math.sin(time * 0.008) * 8;
+    const promptY = this.groundY - 110;
+    const promptX = Math.max(260, charScreenX + 140);
+
+    ctx.save();
+    const bannerW = 280;
+    const bannerH = 46;
+    const bx = promptX - bannerW / 2;
+
+    ctx.fillStyle = "rgba(10, 16, 28, 0.95)";
+    ctx.fillRect(bx, promptY, bannerW, bannerH);
+    ctx.strokeStyle = "#00ffcc";
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = "#00ffcc";
+    ctx.shadowBlur = 14;
+    ctx.strokeRect(bx, promptY, bannerW, bannerH);
+
+    // Glowing Arrow
+    ctx.fillStyle = "#ff0077";
+    ctx.font = "bold 16px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("👉", bx + 12 + bounceX, promptY + 29);
+
+    // Main line
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 9px 'Press Start 2P', monospace";
+    ctx.fillText("PRESS [D] OR [→]", bx + 46, promptY + 20);
+
+    // Sub line
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "8px 'Press Start 2P', monospace";
+    ctx.fillText("TO MOVE FORWARD ➔", bx + 46, promptY + 36);
+
+    ctx.restore();
   }
 }

@@ -304,114 +304,56 @@ html, body {
 }
 
 /* ==========================================================================
-   MINIMAP & FAST-TRAVEL RADAR
+   START WALK GUIDANCE BANNER (Bottom Center Prompt)
    ========================================================================== */
-.minimap-panel {
+.start-tutorial-banner {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 380px;
-  background: rgba(11, 15, 25, 0.92);
-  border: 2px solid #2d374d;
-  border-radius: 4px;
-  padding: 10px 14px;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 15, 26, 0.94);
+  border: 2px solid var(--color-neon-cyan);
+  box-shadow: 0 0 24px rgba(0, 255, 204, 0.45), inset 0 0 12px rgba(0, 255, 204, 0.15);
+  border-radius: 6px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   z-index: 60;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-}
-
-.minimap-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.minimap-title {
-  font-family: var(--font-retro);
-  font-size: 8px;
-  color: var(--color-neon-cyan);
-  letter-spacing: 0.5px;
-}
-
-.minimap-hint {
-  font-size: 9px;
-  color: #64748b;
-}
-
-.minimap-track {
-  position: relative;
-  width: 100%;
-  height: 38px;
-  background: #141926;
-  border: 1px solid #28334a;
-  border-radius: 3px;
-  overflow: visible;
-}
-
-.minimap-road {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: #334155;
-  transform: translateY(-50%);
-}
-
-.minimap-node {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: #1a2233;
-  border: 1px solid #475569;
-  border-radius: 3px;
-  padding: 2px 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  z-index: 2;
-}
-
-.minimap-node:hover {
-  background: #243048;
-  border-color: var(--color-neon-cyan);
-  transform: translate(-50%, -60%) scale(1.15);
-  box-shadow: 0 0 10px var(--color-neon-cyan);
-  z-index: 5;
-}
-
-.minimap-node-icon {
-  font-size: 11px;
-}
-
-.minimap-node-label {
-  font-family: var(--font-retro);
-  font-size: 6px;
-  color: #94a3b8;
-  margin-top: 1px;
-}
-
-.minimap-player-blip {
-  position: absolute;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  background: #ff0055;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px #ff0055;
-  z-index: 4;
   pointer-events: none;
-  animation: pulse-blip 1s infinite alternate;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-@keyframes pulse-blip {
-  0% { transform: translate(-50%, -50%) scale(0.9); }
-  100% { transform: translate(-50%, -50%) scale(1.3); }
+.start-tutorial-banner.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(25px);
+  pointer-events: none;
+}
+
+.tutorial-arrow {
+  font-size: 22px;
+  animation: arrow-bounce 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes arrow-bounce {
+  from { transform: translateX(0); }
+  to { transform: translateX(10px); }
+}
+
+.tutorial-text {
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}
+
+.tutorial-sub {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
 }
 
 /* ==========================================================================
