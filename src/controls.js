@@ -41,6 +41,9 @@ export class Controls {
         }
         return;
       }
+      if ((e.target.tagName === "BUTTON" || e.target.tagName === "A") && (e.code === "Enter" || e.code === "Space")) {
+        return;
+      }
 
       // Check Konami Code
       const keyNormalized = e.key.length === 1 ? e.key.toLowerCase() : e.key;
@@ -177,8 +180,6 @@ export class Controls {
     setTimeout(() => {
       setupTouchBtn("btn-dpad-left", () => { this.left = true; this.targetX = null; }, () => { this.left = false; });
       setupTouchBtn("btn-dpad-right", () => { this.right = true; this.targetX = null; }, () => { this.right = false; });
-      setupTouchBtn("btn-dpad-jump", () => { this.jump = true; }, () => { this.jump = false; });
-      setupTouchBtn("btn-dpad-act", () => { if (this.onInteract) this.onInteract(); }, () => {});
     }, 200);
   }
 }

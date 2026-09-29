@@ -9,7 +9,7 @@ export class UIManager {
     this.callbacks = callbacks;
     this.activeModal = null;
     this.activeTab = 0;
-    this.isCrtEnabled = true;
+    this.isCrtEnabled = false; // CRT scanlines off by default as requested
 
     this.renderHUD();
     this.renderStartTutorialOverlay();
@@ -24,7 +24,7 @@ export class UIManager {
       <!-- Top Left: Identity & Telemetry -->
       <div class="hud-panel hud-profile">
         <div class="hud-avatar">
-          <div class="pixel-avatar-icon"></div>
+          <img src="${DEVELOPER_PROFILE.photoUrl || '/profile.jpg'}" alt="${DEVELOPER_PROFILE.name}" class="hud-avatar-img" />
         </div>
         <div class="hud-bio">
           <div class="hud-name">${DEVELOPER_PROFILE.name} <span class="hud-tag">AI/ML</span></div>
@@ -52,10 +52,10 @@ export class UIManager {
           <span id="txt-weather" class="hud-btn-text">Snowy Dusk</span>
         </button>
 
-        <!-- CRT Filter Toggle -->
-        <button id="btn-crt" class="hud-btn active" title="Toggle Retro CRT Scanlines (Key: C)">
+        <!-- CRT Filter Toggle (Off by default) -->
+        <button id="btn-crt" class="hud-btn" title="Toggle Retro CRT Scanlines (Key: C)">
           <span class="hud-icon">📺</span>
-          <span class="hud-btn-text">CRT: ON</span>
+          <span class="hud-btn-text">CRT: OFF</span>
         </button>
 
         <!-- Audio Music & SFX Toggle -->
@@ -177,12 +177,23 @@ export class UIManager {
         <button id="btn-dpad-left" class="dpad-btn" title="Walk Left">◀</button>
         <button id="btn-dpad-right" class="dpad-btn" title="Walk Right">▶</button>
       </div>
-      <div class="action-cluster">
-        <button id="btn-dpad-jump" class="action-btn jump" title="Jump (W / Space)">B</button>
-        <button id="btn-dpad-act" class="action-btn act" title="Interact (E)">A</button>
-      </div>
     `;
     this.container.appendChild(dpad);
+
+    // Floating Touch Interaction Button (Compact, appears when near any building/board)
+    const tapBtn = document.createElement("button");
+    tapBtn.id = "btn-mobile-interact";
+    tapBtn.className = "mobile-interact-btn hidden";
+    tapBtn.innerHTML = `
+      <span class="interact-icon">👆</span>
+      <span class="interact-text">TAP TO OPEN</span>
+    `;
+    tapBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      audio.playClick(1.2);
+      if (this.callbacks.onInteract) this.callbacks.onInteract();
+    });
+    this.container.appendChild(tapBtn);
   }
 
   updatePlayerPosition(playerX, activeLandmark) {
@@ -200,6 +211,18 @@ export class UIManager {
         tutorialBanner.classList.add("hidden");
       } else {
         tutorialBanner.classList.remove("hidden");
+      }
+    }
+
+    // Toggle Mobile Tap-to-Open Button
+    const tapBtn = document.getElementById("btn-mobile-interact");
+    if (tapBtn) {
+      if (activeLandmark) {
+        tapBtn.classList.remove("hidden");
+        tapBtn.querySelector(".interact-text").textContent =
+          activeLandmark.type === "cat" ? "PET CAT" : "TAP TO OPEN";
+      } else {
+        tapBtn.classList.add("hidden");
       }
     }
 
@@ -267,9 +290,15 @@ export class UIManager {
     const panels = landmark.panels;
     return `
       <div class="start-board-modal">
-        <div class="start-board-header">
-          <h2>DEVELOPER DIRECTORY & SOCIAL FREQUENCIES</h2>
-          <p>Syed Muhammad Ayyan Ibrar — Connect directly across core channels:</p>
+        <div class="start-board-profile-row">
+          <div class="modal-avatar-box">
+            <img src="${DEVELOPER_PROFILE.photoUrl || '/profile.jpg'}" alt="${DEVELOPER_PROFILE.name}" class="modal-profile-img" />
+          </div>
+          <div class="start-board-header">
+            <h2>DEVELOPER DIRECTORY & SOCIAL FREQUENCIES</h2>
+            <div class="start-board-subtitle">${DEVELOPER_PROFILE.name} — ${DEVELOPER_PROFILE.title}</div>
+            <p>Connect directly across verified engineering channels or explore projects ahead:</p>
+          </div>
         </div>
 
         <div class="three-panels-grid">
@@ -455,6 +484,9 @@ export class UIManager {
     return `
       <div class="connect-pavilion-modal">
         <div class="finale-card">
+          <div class="finale-avatar-wrap">
+            <img src="${card.photoUrl || '/profile.jpg'}" alt="Syed Muhammad Ayyan Ibrar" class="finale-avatar-img" />
+          </div>
           <div class="finale-eyebrow">${card.eyebrow}</div>
           <h1 class="finale-title">${card.title}</h1>
           <p class="finale-desc">${card.description}</p>
@@ -528,6 +560,43 @@ export class UIManager {
     document.getElementById("btn-modal-close").addEventListener("click", () => this.closeModal());
     modal.addEventListener("click", (e) => {
       if (e.target === modal) this.closeModal();
+    });
+  }
+
+  openKonamiModal() {
+    audio.playOpenModal();
+    const modal = document.createElement("div");
+    modal.className = "crt-modal-backdrop";
+    modal.id = "active-modal";
+    modal.innerHTML = `
+      <div class="crt-terminal-frame" style="max-width: 540px; text-align: center; border-color: #00ffcc; box-shadow: 0 0 35px rgba(0, 255, 204, 0.4);">
+        <div class="crt-terminal-header" style="background: rgba(0, 255, 204, 0.2);">
+          <div class="terminal-dots"><span class="dot green"></span><span class="dot yellow"></span><span class="dot red"></span></div>
+          <div class="terminal-title" style="color: #00ffcc;">SECRET UNLOCKED: CYBER RAVE MODE ACTIVATED!</div>
+          <button class="terminal-close" id="btn-modal-close">✕</button>
+        </div>
+        <div class="crt-terminal-body" style="padding: 24px;">
+          <div style="font-size: 36px; margin-bottom: 12px;">🎉 👾 ⚡ 🎶</div>
+          <h2 style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #ff007f; margin-bottom: 14px; line-height: 1.6;">
+            KONAMI CODE RECOGNIZED!
+          </h2>
+          <p style="font-size: 12px; color: #a0aec0; margin-bottom: 20px; line-height: 1.8;">
+            You have unlocked maximum retro neon lighting and strobe effects on the street of AI Systems Avenue!
+          </p>
+          <button class="terminal-action-btn primary" id="btn-konami-close" style="background: #00ffcc; color: #0a0e17; font-weight: bold; padding: 10px 20px;">
+            ROCK ON! 🚀
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    this.activeModal = modal;
+    const closer = () => this.closeModal();
+    document.getElementById("btn-modal-close").addEventListener("click", closer);
+    const btnKonami = document.getElementById("btn-konami-close");
+    if (btnKonami) btnKonami.addEventListener("click", closer);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closer();
     });
   }
 

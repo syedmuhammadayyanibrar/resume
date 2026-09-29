@@ -185,8 +185,8 @@ export class WorldRenderer {
       },
       {
         id: "npc2",
-        x: 1100,
-        minX: 920,
+        x: 1200,
+        minX: 1120,
         maxX: 1320,
         speed: 0.9,
         facing: -1,
@@ -200,9 +200,9 @@ export class WorldRenderer {
       },
       {
         id: "npc3",
-        x: 1720,
-        minX: 1540,
-        maxX: 1940,
+        x: 1980,
+        minX: 1860,
+        maxX: 2180,
         speed: 1.2,
         facing: 1,
         walkFrame: 0,
@@ -215,9 +215,9 @@ export class WorldRenderer {
       },
       {
         id: "npc4",
-        x: 2150,
-        minX: 1980,
-        maxX: 2250,
+        x: 2450,
+        minX: 2340,
+        maxX: 2680,
         speed: 0.8,
         facing: -1,
         walkFrame: 0,
@@ -230,9 +230,9 @@ export class WorldRenderer {
       },
       {
         id: "npc5",
-        x: 2700,
-        minX: 2520,
-        maxX: 2900,
+        x: 3100,
+        minX: 2990,
+        maxX: 3340,
         speed: 1.0,
         facing: 1,
         walkFrame: 0,
@@ -245,9 +245,9 @@ export class WorldRenderer {
       },
       {
         id: "npc6",
-        x: 3450,
-        minX: 3200,
-        maxX: 3700,
+        x: 3650,
+        minX: 3510,
+        maxX: 3840,
         speed: 1.1,
         facing: -1,
         walkFrame: 0,
@@ -260,9 +260,9 @@ export class WorldRenderer {
       },
       {
         id: "npc7",
-        x: 3880,
-        minX: 3700,
-        maxX: 4100,
+        x: 4200,
+        minX: 4060,
+        maxX: 4400,
         speed: 0.9,
         facing: 1,
         walkFrame: 0,
@@ -756,41 +756,6 @@ export class WorldRenderer {
       ctx.fill();
     }
     ctx.restore();
-
-    // Streetlamps
-    const lampSpacing = 440;
-    ctx.save();
-    for (let lx = 140; lx < STREET_TOTAL_WIDTH; lx += lampSpacing) {
-      const scrX = lx - cameraX;
-      if (scrX < -120 || scrX > this.width + 120) continue;
-
-      const lampH = 145;
-      const lampY = groundY - lampH;
-
-      ctx.fillStyle = "#1e1e24";
-      ctx.fillRect(scrX - 3, lampY, 6, lampH);
-      ctx.fillRect(scrX - 8, groundY - 6, 16, 6);
-      ctx.fillRect(scrX - 12, lampY, 24, 4);
-      ctx.fillRect(scrX - 8, lampY + 4, 16, 14);
-
-      ctx.fillStyle = t.lampGlow;
-      ctx.fillRect(scrX - 6, lampY + 6, 12, 10);
-
-      const cone = ctx.createRadialGradient(scrX, lampY + 12, 10, scrX, groundY + 15, 140);
-      cone.addColorStop(0, t.lampColor);
-      cone.addColorStop(0.7, t.lampColor.replace(/[\d\.]+\)$/, "0.08)"));
-      cone.addColorStop(1, "rgba(255, 220, 140, 0)");
-
-      ctx.fillStyle = cone;
-      ctx.beginPath();
-      ctx.moveTo(scrX - 8, lampY + 14);
-      ctx.lineTo(scrX - 110, groundY + 40);
-      ctx.lineTo(scrX + 110, groundY + 40);
-      ctx.lineTo(scrX + 8, lampY + 14);
-      ctx.closePath();
-      ctx.fill();
-    }
-    ctx.restore();
   }
 
   // 9. Draw Walking Visitors (NPCs)
@@ -1008,51 +973,7 @@ export class WorldRenderer {
       this.drawInteractionPrompt(activeLandmark.interactionPrompt, charScreenX, charScreenY, time);
     }
 
-    // Start Walk Guidance: Prompt user to press D or arrow to move forward
-    if (player.x < 420) {
-      this.drawStartTutorialPrompt(charScreenX, charScreenY, time);
-    }
-
     this.drawSnowfall(time);
     this.drawRaveEffects(time);
-  }
-
-  // Start Tutorial Prompt: In the start position, prompt user clearly to press D or Arrow
-  drawStartTutorialPrompt(charScreenX, charScreenY, time) {
-    const ctx = this.ctx;
-    const bounceX = Math.sin(time * 0.008) * 8;
-    const promptY = this.groundY - 110;
-    const promptX = Math.max(260, charScreenX + 140);
-
-    ctx.save();
-    const bannerW = 280;
-    const bannerH = 46;
-    const bx = promptX - bannerW / 2;
-
-    ctx.fillStyle = "rgba(10, 16, 28, 0.95)";
-    ctx.fillRect(bx, promptY, bannerW, bannerH);
-    ctx.strokeStyle = "#00ffcc";
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = "#00ffcc";
-    ctx.shadowBlur = 14;
-    ctx.strokeRect(bx, promptY, bannerW, bannerH);
-
-    // Glowing Arrow
-    ctx.fillStyle = "#ff0077";
-    ctx.font = "bold 16px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("👉", bx + 12 + bounceX, promptY + 29);
-
-    // Main line
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 9px 'Press Start 2P', monospace";
-    ctx.fillText("PRESS [D] OR [→]", bx + 46, promptY + 20);
-
-    // Sub line
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = "8px 'Press Start 2P', monospace";
-    ctx.fillText("TO MOVE FORWARD ➔", bx + 46, promptY + 36);
-
-    ctx.restore();
   }
 }

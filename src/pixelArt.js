@@ -415,31 +415,32 @@ export function drawStartBoard(ctx, lm, groundY, time) {
  */
 export function drawStreetBillboard(ctx, b, groundY, time) {
   const x = b.x;
-  const y = groundY - b.height - 40;
+  const y = groundY - b.height - 65; // Elevated cleanly above player & sidewalk!
   const w = b.width;
   const h = b.height;
 
+  ctx.save();
   // Steel Lattice Scaffolding Legs
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(x + 20, y + h);
-  ctx.lineTo(x + 20, groundY);
-  ctx.moveTo(x + 40, y + h);
-  ctx.lineTo(x + 40, groundY);
-  ctx.moveTo(x + 20, y + h + 10);
-  ctx.lineTo(x + 40, groundY - 10);
-  ctx.moveTo(x + 40, y + h + 10);
-  ctx.lineTo(x + 20, groundY - 10);
+  ctx.moveTo(x + 24, y + h);
+  ctx.lineTo(x + 24, groundY);
+  ctx.moveTo(x + 48, y + h);
+  ctx.lineTo(x + 48, groundY);
+  ctx.moveTo(x + 24, y + h + 15);
+  ctx.lineTo(x + 48, groundY - 10);
+  ctx.moveTo(x + 48, y + h + 15);
+  ctx.lineTo(x + 24, groundY - 10);
 
-  ctx.moveTo(x + w - 40, y + h);
-  ctx.lineTo(x + w - 40, groundY);
-  ctx.moveTo(x + w - 20, y + h);
-  ctx.lineTo(x + w - 20, groundY);
-  ctx.moveTo(x + w - 40, y + h + 10);
-  ctx.lineTo(x + w - 20, groundY - 10);
-  ctx.moveTo(x + w - 20, y + h + 10);
-  ctx.lineTo(x + w - 40, groundY - 10);
+  ctx.moveTo(x + w - 48, y + h);
+  ctx.lineTo(x + w - 48, groundY);
+  ctx.moveTo(x + w - 24, y + h);
+  ctx.lineTo(x + w - 24, groundY);
+  ctx.moveTo(x + w - 48, y + h + 15);
+  ctx.lineTo(x + w - 24, groundY - 10);
+  ctx.moveTo(x + w - 24, y + h + 15);
+  ctx.lineTo(x + w - 48, groundY - 10);
   ctx.stroke();
 
   // Billboard Body
@@ -448,42 +449,171 @@ export function drawStreetBillboard(ctx, b, groundY, time) {
   ctx.strokeStyle = "#00ffcc";
   ctx.lineWidth = 3;
   ctx.shadowColor = "#00ffcc";
-  ctx.shadowBlur = 10;
+  ctx.shadowBlur = 12;
   ctx.strokeRect(x, y, w, h);
 
+  // Spotlights at bottom pointing up
   for (let s = 0; s < 4; s++) {
-    const sx = x + 35 + s * 80;
+    const sx = x + 35 + s * Math.floor((w - 70) / 3);
+    ctx.fillStyle = "#334155";
+    ctx.fillRect(sx - 8, y + h, 16, 6);
     ctx.fillStyle = "#ffdd88";
-    ctx.fillRect(sx - 6, y + h, 12, 6);
+    ctx.fillRect(sx - 6, y + h + 1, 12, 4);
+
+    const cone = ctx.createLinearGradient(sx, y + h, sx, y + h - 45);
+    cone.addColorStop(0, "rgba(255, 230, 140, 0.25)");
+    cone.addColorStop(1, "rgba(255, 230, 140, 0)");
+    ctx.fillStyle = cone;
+    ctx.beginPath();
+    ctx.moveTo(sx - 4, y + h);
+    ctx.lineTo(sx - 24, y + h - 45);
+    ctx.lineTo(sx + 24, y + h - 45);
+    ctx.lineTo(sx + 4, y + h);
+    ctx.closePath();
+    ctx.fill();
   }
 
   // Neon Tag in Top Corner
   ctx.fillStyle = "#ff0077";
   ctx.font = "bold 8px 'Press Start 2P', monospace";
   ctx.textAlign = "left";
-  ctx.fillText(b.tag, x + 16, y + 22);
+  ctx.textBaseline = "top";
+  ctx.fillText(b.tag, x + 16, y + 16);
 
   // Main Headline
   ctx.fillStyle = "#00ffcc";
-  ctx.font = "bold 11px 'Press Start 2P', monospace";
-  ctx.fillText(b.headline, x + 16, y + 44);
+  ctx.font = "bold 10px 'Press Start 2P', monospace";
+  ctx.fillText(b.headline, x + 16, y + 36);
 
   // Sublines
   ctx.fillStyle = "#f8fafc";
   ctx.font = "bold 10px 'Silkscreen', monospace";
   b.sublines.forEach((line, idx) => {
-    ctx.fillText(line, x + 16, y + 68 + idx * 20);
+    ctx.fillText(line, x + 16, y + 60 + idx * 22);
   });
 
+  // Snow on top of billboard
   ctx.fillStyle = "#edf3fa";
   ctx.fillRect(x - 4, y - 5, w + 8, 6);
+  ctx.restore();
 }
 
 /**
- * 4 Real Enterprise Project Buildings
+ * Architectural Pixel Window Helpers
+ */
+function drawPixelWindow(ctx, wx, wy, ww, wh, isLit, glowColor, showSnow = true) {
+  // Recessed window frame
+  ctx.fillStyle = "#0a0e17";
+  ctx.fillRect(wx - 2, wy - 2, ww + 4, wh + 4);
+
+  // Glass Pane
+  if (isLit) {
+    ctx.fillStyle = glowColor || "#ffd778";
+    ctx.fillRect(wx, wy, ww, wh);
+    // Warm pane top sheen
+    ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+    ctx.fillRect(wx, wy, ww, 3);
+  } else {
+    // Unlit cozy nighttime pane
+    ctx.fillStyle = "#151d2a";
+    ctx.fillRect(wx, wy, ww, wh);
+  }
+
+  // Cross mullions (classic 4-pane window grid)
+  ctx.fillStyle = "#0a0e17";
+  ctx.fillRect(wx + Math.floor(ww / 2) - 1, wy, 2, wh);
+  ctx.fillRect(wx, wy + Math.floor(wh / 2) - 1, ww, 2);
+
+  // Snow on window sill and lintel
+  if (showSnow) {
+    ctx.fillStyle = "#edf3fa";
+    ctx.fillRect(wx - 3, wy - 3, ww + 6, 2);
+    ctx.fillRect(wx - 2, wy + wh, ww + 4, 3);
+  }
+}
+
+function drawArchedWindow(ctx, wx, wy, ww, wh, isLit, glowColor) {
+  ctx.save();
+  // Arched Header & Frame
+  ctx.fillStyle = "#0c0812";
+  ctx.fillRect(wx - 2, wy + 6, ww + 4, wh - 6);
+  ctx.beginPath();
+  ctx.arc(wx + ww / 2, wy + 6, ww / 2 + 2, Math.PI, 0);
+  ctx.fill();
+
+  // Glass area
+  if (isLit) {
+    ctx.fillStyle = glowColor || "#ffbe3b";
+    ctx.fillRect(wx, wy + 6, ww, wh - 6);
+    ctx.beginPath();
+    ctx.arc(wx + ww / 2, wy + 6, ww / 2, Math.PI, 0);
+    ctx.fill();
+    // Glass highlight
+    ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+    ctx.fillRect(wx, wy + 6, ww, 3);
+  } else {
+    ctx.fillStyle = "#171221";
+    ctx.fillRect(wx, wy + 6, ww, wh - 6);
+    ctx.beginPath();
+    ctx.arc(wx + ww / 2, wy + 6, ww / 2, Math.PI, 0);
+    ctx.fill();
+  }
+
+  // Window mullions (vertical and horizontal cross)
+  ctx.fillStyle = "#0c0812";
+  ctx.fillRect(wx + Math.floor(ww / 2) - 1, wy, 2, wh);
+  ctx.fillRect(wx, wy + Math.floor(wh / 2), ww, 2);
+
+  // Snow on top of arch and sill
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(wx - 2, wy + wh, ww + 4, 3);
+  ctx.restore();
+}
+
+function drawEntrancePortico(ctx, ex, ey, ew, eh, accentColor) {
+  // Heavy outer entryway architrave
+  ctx.fillStyle = "#090d15";
+  ctx.fillRect(ex - 4, ey - 6, ew + 8, eh + 6);
+
+  // Doorway
+  ctx.fillStyle = "#182030";
+  ctx.fillRect(ex, ey, ew, eh);
+
+  // Left & right door leaves with illuminated warm glass panels
+  const doorW = Math.floor(ew / 2) - 2;
+  const glassH = eh - 16;
+  ctx.fillStyle = "#ffe082";
+  ctx.fillRect(ex + 2, ey + 4, doorW - 1, glassH);
+  ctx.fillRect(ex + doorW + 2, ey + 4, doorW - 1, glassH);
+
+  // Center seam and handles
+  ctx.fillStyle = "#090d15";
+  ctx.fillRect(ex + doorW, ey, 2, eh);
+  ctx.fillStyle = accentColor || "#00ffcc";
+  ctx.fillRect(ex + doorW - 3, ey + Math.floor(eh / 2) - 2, 2, 6);
+  ctx.fillRect(ex + doorW + 3, ey + Math.floor(eh / 2) - 2, 2, 6);
+
+  // Transom glass on top
+  ctx.fillStyle = "rgba(255, 235, 160, 0.85)";
+  ctx.fillRect(ex + 2, ey - 5, ew - 4, 3);
+
+  // Overhanging awning with snow blanket
+  ctx.fillStyle = "#2d3748";
+  ctx.fillRect(ex - 8, ey - 10, ew + 16, 5);
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(ex - 10, ey - 13, ew + 20, 4);
+
+  // Entrance lights (sconces on left and right)
+  ctx.fillStyle = "#ffdd88";
+  ctx.fillRect(ex - 12, ey + 8, 4, 6);
+  ctx.fillRect(ex + ew + 8, ey + 8, 4, 6);
+}
+
+/**
+ * 4 Real Enterprise Project Buildings with Authentic Windows
  */
 
-// 1. CAS (Contract Agentic Society - 6 Agent Societies & Fastn MCP)
+// 1. CAS (Contract Agentic Society)
 export function drawCAS(ctx, lm, groundY, time) {
   const x = lm.x;
   const y = groundY - lm.height;
@@ -492,43 +622,52 @@ export function drawCAS(ctx, lm, groundY, time) {
 
   drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "CAS", "CONTRACT AGENTIC SOCIETY", lm.signColor, time);
 
-  // Legal/Risk Neural Facility Base
+  // Modern Slate Corporate Headquarters Facade
   ctx.fillStyle = "#151c28";
   ctx.fillRect(x, y + 25, w, h - 25);
-  ctx.fillStyle = "#1e283b";
+  ctx.fillStyle = "#1c2538";
   ctx.fillRect(x + 8, y + 33, w - 16, h - 33);
 
-  // 6 Illuminated Agent Society Pods (Contract, Risk, Negotiation, Compliance, Obligation, Dispute)
-  const podW = 50;
-  const podH = 65;
-  for (let r = 0; r < 2; r++) {
-    for (let c = 0; c < 3; c++) {
-      const px = x + 24 + c * 115;
-      const py = y + 70 + r * 75;
-      ctx.fillStyle = "#0d131f";
-      ctx.fillRect(px, py, podW, podH);
-      ctx.strokeStyle = "#00ffcc";
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(px, py, podW, podH);
+  // Decorative cyan architectural pilasters
+  ctx.fillStyle = "#25334d";
+  ctx.fillRect(x + 12, y + 33, 8, h - 33);
+  ctx.fillRect(x + w - 20, y + 33, 8, h - 33);
+  ctx.fillStyle = "#00ffcc";
+  ctx.fillRect(x + 14, y + 35, 4, h - 37);
+  ctx.fillRect(x + w - 18, y + 35, 4, h - 37);
 
-      // Society Hexagon Symbol
-      ctx.fillStyle = (r * 3 + c) % 2 === 0 ? "#00ffcc" : "#00ff88";
-      ctx.font = "bold 16px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("⚖️", px + podW / 2, py + 28);
+  // 3 Upper Floors of Glowing Pixel Windows (4 windows per floor)
+  const cols = 4;
+  const rows = 3;
+  const winW = 54;
+  const winH = 34;
+  const startX = x + 34;
+  const spacingX = 80;
+  const startY = y + 54;
+  const spacingY = 50;
 
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 7px 'Press Start 2P', monospace";
-      const names = ["CONTRACT", "RISK", "NEGOTIATE", "COMPLY", "OBLIGATE", "DISPUTE"];
-      ctx.fillText(names[r * 3 + c], px + podW / 2, py + 48);
+  const glowColors = ["#ffeaa7", "#00f0ff", "#fef08a", "#67e8f9", "#ffd166"];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const wx = startX + c * spacingX;
+      const wy = startY + r * spacingY;
+      const seed = (r * cols + c);
+      const isLit = seed % 5 !== 3;
+      const glow = glowColors[(seed + 1) % glowColors.length];
+      drawPixelWindow(ctx, wx, wy, winW, winH, isLit, glow, true);
     }
   }
 
-  // Fastn MCP Workflow Bus Line
-  ctx.fillStyle = "#00ffcc";
-  ctx.fillRect(x + 10, groundY - 6, w - 20, 3);
-  ctx.fillStyle = "#e0eaf5";
-  ctx.fillRect(x - 4, y + 20, w + 8, 8);
+  // Ground Floor Entrance Portico
+  const doorW = 56;
+  const doorH = 46;
+  const doorX = x + w / 2 - doorW / 2;
+  const doorY = groundY - doorH;
+  drawEntrancePortico(ctx, doorX, doorY, doorW, doorH, "#00ffcc");
+
+  // Snow on facade cornice
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y + 21, w + 8, 6);
 }
 
 // 2. ComplianceOps (EU AI Act Auditor)
@@ -540,42 +679,53 @@ export function drawComplianceOps(ctx, lm, groundY, time) {
 
   drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "COMPLIANCEOPS", "EU AI ACT AUDITOR", lm.signColor, time);
 
-  // Governance Audit Center
-  ctx.fillStyle = "#1e1425";
-  ctx.fillRect(x, y + 28, w, h - 28);
-  ctx.fillStyle = "#2c1c36";
-  ctx.fillRect(x + 8, y + 36, w - 16, h - 36);
+  // Regulatory Governance Center Facade (Deep Slate/Plum Brick)
+  ctx.fillStyle = "#1b1424";
+  ctx.fillRect(x, y + 25, w, h - 25);
+  ctx.fillStyle = "#271c33";
+  ctx.fillRect(x + 8, y + 33, w - 16, h - 33);
 
-  // Dual-Key Human Approval Gate at Center
-  const gateX = x + w / 2 - 45;
-  const gateY = y + 75;
-  ctx.fillStyle = "#100917";
-  ctx.fillRect(gateX, gateY, 90, 105);
-  ctx.strokeStyle = "#ff0077";
-  ctx.lineWidth = 2.5;
-  ctx.strokeRect(gateX, gateY, 90, 105);
-
-  // Two Golden Security Keys (Dual-Key HITL)
-  ctx.fillStyle = "#ffdd00";
-  ctx.font = "bold 20px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("🔑 🔑", gateX + 45, gateY + 40);
-
-  ctx.fillStyle = "#00ff88";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.fillText("DUAL-KEY", gateX + 45, gateY + 68);
-  ctx.fillText("HITL GATE", gateX + 45, gateY + 84);
-
-  // Evidence Stream Waveforms on sides
-  ctx.fillStyle = "#ff0077";
-  for (let b = 0; b < 12; b++) {
-    const barH = 10 + Math.abs(Math.sin(time * 0.008 + b * 0.7)) * 32;
-    ctx.fillRect(x + 22 + b * 10, groundY - 14 - barH, 6, barH);
-    ctx.fillRect(x + w - 135 + b * 10, groundY - 14 - barH, 6, barH);
+  // Architectural stone quoins on edges
+  ctx.fillStyle = "#3b2b4d";
+  for (let b = 0; b < 10; b++) {
+    const qy = y + 35 + b * 20;
+    const qw = b % 2 === 0 ? 14 : 10;
+    ctx.fillRect(x + 8, qy, qw, 14);
+    ctx.fillRect(x + w - 8 - qw, qy, qw, 14);
   }
 
-  ctx.fillStyle = "#e0eaf5";
-  ctx.fillRect(x - 4, y + 23, w + 8, 8);
+  // 3 Floors of Elegant Arched Institutional Windows
+  const cols = 4;
+  const rows = 3;
+  const winW = 50;
+  const winH = 38;
+  const startX = x + 38;
+  const spacingX = 80;
+  const startY = y + 54;
+  const spacingY = 52;
+
+  const glowColors = ["#ffd166", "#c084fc", "#fde047", "#ffbe3b", "#e9d5ff"];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const wx = startX + c * spacingX;
+      const wy = startY + r * spacingY;
+      const seed = (r * cols + c);
+      const isLit = seed % 4 !== 2;
+      const glow = glowColors[seed % glowColors.length];
+      drawArchedWindow(ctx, wx, wy, winW, winH, isLit, glow);
+    }
+  }
+
+  // Grand Portico Entrance on Ground Floor
+  const doorW = 60;
+  const doorH = 48;
+  const doorX = x + w / 2 - doorW / 2;
+  const doorY = groundY - doorH;
+  drawEntrancePortico(ctx, doorX, doorY, doorW, doorH, "#ff0077");
+
+  // Snow on roof cornice
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y + 21, w + 8, 6);
 }
 
 // 3. Negotiation Agent Engine (B2B Bargaining Mesh)
@@ -587,56 +737,49 @@ export function drawNegotiationAgent(ctx, lm, groundY, time) {
 
   drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "NEGOTIATION AGENT", "B2B BARGAINING", lm.signColor, time);
 
-  // Game Theory Exchange Building
-  ctx.fillStyle = "#221e14";
-  ctx.fillRect(x, y + 30, w, h - 30);
-  ctx.fillStyle = "#332c1d";
-  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
+  // Grand Exchange / Commercial Facade (Charcoal & Bronze)
+  ctx.fillStyle = "#221d15";
+  ctx.fillRect(x, y + 25, w, h - 25);
+  ctx.fillStyle = "#31281c";
+  ctx.fillRect(x + 8, y + 33, w - 16, h - 33);
 
-  // Buyer vs. Vendor Protocol Chambers
-  const chW = 100;
-  const chH = 110;
-  // Buyer Chamber
-  ctx.fillStyle = "#14110b";
-  ctx.fillRect(x + 25, y + 70, chW, chH);
-  ctx.strokeStyle = "#38bdf8";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x + 25, y + 70, chW, chH);
+  // Bronze cornice divider bands between floors
+  ctx.fillStyle = "#b45309";
+  ctx.fillRect(x + 10, y + 96, w - 20, 3);
+  ctx.fillRect(x + 10, y + 152, w - 20, 3);
 
-  ctx.fillStyle = "#38bdf8";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("BUYER AGENT", x + 25 + chW / 2, y + 92);
-  ctx.fillText("STRATEGY", x + 25 + chW / 2, y + 108);
+  // 3 Floors of Warm Industrial/Exchange Windows (4 windows per floor)
+  const cols = 4;
+  const rows = 3;
+  const winW = 52;
+  const winH = 34;
+  const startX = x + 36;
+  const spacingX = 80;
+  const startY = y + 54;
+  const spacingY = 52;
 
-  // Vendor Chamber
-  ctx.fillStyle = "#14110b";
-  ctx.fillRect(x + w - 125, y + 70, chW, chH);
-  ctx.strokeStyle = "#fbbf24";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x + w - 125, y + 70, chW, chH);
+  const glowColors = ["#f59e0b", "#fde047", "#fef08a", "#d97706", "#ffedd5"];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const wx = startX + c * spacingX;
+      const wy = startY + r * spacingY;
+      const seed = (r * cols + c);
+      const isLit = seed % 6 !== 4;
+      const glow = glowColors[seed % glowColors.length];
+      drawPixelWindow(ctx, wx, wy, winW, winH, isLit, glow, true);
+    }
+  }
 
-  ctx.fillStyle = "#fbbf24";
-  ctx.fillText("VENDOR AGENT", x + w - 125 + chW / 2, y + 92);
-  ctx.fillText("STRATEGY", x + w - 125 + chW / 2, y + 108);
+  // Grand Double Doors
+  const doorW = 58;
+  const doorH = 46;
+  const doorX = x + w / 2 - doorW / 2;
+  const doorY = groundY - doorH;
+  drawEntrancePortico(ctx, doorX, doorY, doorW, doorH, "#fbbf24");
 
-  // Central State-Machine Channel (17-Message Bridge)
-  const bridgeX = x + 130;
-  const bridgeW = w - 260;
-  ctx.fillStyle = "#ffd700";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.fillText("17-MSG STATE", bridgeX + bridgeW / 2, y + 115);
-  ctx.fillText("PROTOCOL", bridgeX + bridgeW / 2, y + 132);
-
-  // Animated pulse packets between buyer and vendor
-  const pPos = (time * 0.08) % (w - 180);
-  ctx.fillStyle = "#00ff88";
-  ctx.beginPath();
-  ctx.arc(x + 60 + pPos, y + 155, 4, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#e0eaf5";
-  ctx.fillRect(x - 4, y + 25, w + 8, 8);
+  // Snow on cornice
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y + 21, w + 8, 6);
 }
 
 // 4. AuraSight (Edge-Native Voice Transaction Assistant)
@@ -648,41 +791,75 @@ export function drawAuraSight(ctx, lm, groundY, time) {
 
   drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "AURASIGHT", "EDGE VOICE ACCOUNTING", lm.signColor, time);
 
-  // Edge Voice & Retail Hub Base
-  ctx.fillStyle = "#121f18";
-  ctx.fillRect(x, y + 28, w, h - 28);
-  ctx.fillStyle = "#1b2e24";
-  ctx.fillRect(x + 8, y + 36, w - 16, h - 36);
+  // Modern Edge Multimodal Engineering Facility (Dark Slate & Emerald)
+  ctx.fillStyle = "#111c16";
+  ctx.fillRect(x, y + 25, w, h - 25);
+  ctx.fillStyle = "#192b21";
+  ctx.fillRect(x + 8, y + 33, w - 16, h - 33);
 
-  // Giant Microphone & Multimodal Currency Scanner Window
-  const winX = x + 30;
-  const winY = y + 75;
-  const winW = w - 60;
-  ctx.fillStyle = "#08120d";
-  ctx.fillRect(winX, winY, winW, 105);
-  ctx.strokeStyle = "#00ff88";
-  ctx.lineWidth = 2.5;
-  ctx.strokeRect(winX, winY, winW, 105);
+  // Rooftop Comms Mast with Pulsing Aircraft Warning Beacon
+  ctx.fillStyle = "#475569";
+  ctx.fillRect(x + 40, y + 4, 3, 22);
+  ctx.fillRect(x + 36, y + 10, 11, 2);
+  ctx.fillRect(x + 38, y + 16, 7, 2);
+  const beaconBlink = Math.floor(time * 0.003) % 2 === 0;
+  if (beaconBlink) {
+    ctx.fillStyle = "#ef4444";
+    ctx.fillRect(x + 39, y + 2, 5, 5);
+    ctx.fillStyle = "rgba(239, 68, 68, 0.4)";
+    ctx.beginPath();
+    ctx.arc(x + 41, y + 4, 8, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-  // Big Microphone Icon
-  ctx.font = "26px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("🎙️", winX + 45, winY + 50);
+  // 3 Floors of Sleek Ribbon Windows (Panoramic modern office/lab panes)
+  const rows = 3;
+  const ribbonYStarts = [y + 54, y + 104, y + 154];
+  const ribbonW = w - 40;
+  const ribbonH = 30;
+  const ribbonX = x + 20;
 
-  ctx.fillStyle = "#00ff88";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.fillText("WHISPER ONNX", winX + winW / 2 + 30, winY + 38);
-  ctx.fillText("URDU VOICE", winX + winW / 2 + 30, winY + 54);
+  for (let r = 0; r < rows; r++) {
+    const ry = ribbonYStarts[r];
+    // Recessed horizontal ribbon band
+    ctx.fillStyle = "#0c130f";
+    ctx.fillRect(ribbonX - 2, ry - 2, ribbonW + 4, ribbonH + 4);
 
-  // Zero Arithmetic Error Badge
-  ctx.fillStyle = "#ffdd00";
-  ctx.fillText("0 ARITHMETIC ERROR", winX + winW / 2, winY + 84);
+    // Multiple glazed segments in the ribbon
+    const segments = 5;
+    const segW = Math.floor(ribbonW / segments);
+    for (let s = 0; s < segments; s++) {
+      const sx = ribbonX + s * segW;
+      const isLit = (r + s) % 4 !== 3;
+      const glow = (r + s) % 2 === 0 ? "#00ff88" : "#5eead4";
 
-  // Green fiber conduit
-  ctx.fillStyle = "#00ff88";
-  ctx.fillRect(x + 10, groundY - 6, w - 20, 3);
-  ctx.fillStyle = "#e0eaf5";
-  ctx.fillRect(x - 4, y + 23, w + 8, 8);
+      if (isLit) {
+        ctx.fillStyle = glow;
+        ctx.fillRect(sx, ry, segW - 2, ribbonH);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+        ctx.fillRect(sx, ry, segW - 2, 3);
+      } else {
+        ctx.fillStyle = "#112219";
+        ctx.fillRect(sx, ry, segW - 2, ribbonH);
+      }
+    }
+
+    // Snow on ribbon sill and lintel
+    ctx.fillStyle = "#edf3fa";
+    ctx.fillRect(ribbonX - 3, ry - 3, ribbonW + 6, 2);
+    ctx.fillRect(ribbonX - 2, ry + ribbonH, ribbonW + 4, 3);
+  }
+
+  // Modern Security Glazed Entrance
+  const doorW = 56;
+  const doorH = 46;
+  const doorX = x + w / 2 - doorW / 2;
+  const doorY = groundY - doorH;
+  drawEntrancePortico(ctx, doorX, doorY, doorW, doorH, "#00ff88");
+
+  // Snow on cornice
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y + 21, w + 8, 6);
 }
 
 /**

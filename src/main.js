@@ -53,6 +53,7 @@ class App {
         this.ui.updateAudioButton(isUnmuted);
       },
       onTravelTo: (idx) => this.fastTravelToLandmark(idx),
+      onInteract: () => this.handleInteraction(),
     });
 
     // Initialize Controls
@@ -91,7 +92,7 @@ class App {
   setupDOM() {
     this.container.innerHTML = `
       <canvas id="world-canvas"></canvas>
-      <div id="crt-overlay"></div>
+      <div id="crt-overlay" class="disabled"></div>
     `;
   }
 
@@ -118,6 +119,10 @@ class App {
   }
 
   handleInteraction() {
+    if (this.ui.activeModal) {
+      this.ui.closeModal();
+      return;
+    }
     if (this.activeLandmark) {
       if (this.activeLandmark.type === "cat") {
         audio.playCatMeow();

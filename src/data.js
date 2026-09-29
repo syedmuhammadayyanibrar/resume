@@ -9,6 +9,7 @@ export const DEVELOPER_PROFILE = {
   phone: "+92 322 0621975",
   email: "syedmuhammadayyanibrar@gmail.com",
   cvUrl: "/Syed_Ayyan_CV.pdf",
+  photoUrl: "/profile.jpg",
   status: "🟢 OPEN TO OPPORTUNITIES // AI SYSTEMS & AGENTIC ARCHITECTURES",
   stats: {
     experience: "Freelance AI Engineer",
@@ -34,27 +35,27 @@ export const DEVELOPER_PROFILE = {
 export const BILLBOARDS = [
   {
     id: "billboard_1",
-    x: 1680,
-    width: 320,
+    x: 1850,
+    width: 350,
     height: 140,
     headline: "SYED AYYAN // AI SYSTEMS ENGINEER",
     sublines: [
+      "★ AI/ML ENGINEER & SYSTEMS ARCHITECT",
       "★ DETERMINISTIC MULTI-AGENT FEDERATIONS",
-      "★ AUTOMATED REGULATORY GOVERNANCE (EU AI ACT)",
-      "★ ADVERSARIAL RISK INTELLIGENCE & EVALUATION"
+      "★ EU AI ACT DETERMINISTIC GOVERNANCE"
     ],
     tag: "PRODUCTION AI ARCHITECT"
   },
   {
     id: "billboard_2",
-    x: 3280,
-    width: 330,
+    x: 3500,
+    width: 360,
     height: 140,
     headline: "ZERO-HALLUCINATION ENTERPRISE AI",
     sublines: [
-      "⚡ FASTN MCP NERVOUS SYSTEM INTEGRATION",
-      "🛡️ DUAL-KEY HITL HUMAN AUTHORIZATION GATES",
-      "🚀 FROM SOTA RESEARCH TO BULLETPROOF CODE"
+      "⚡ FASTN MCP WORKFLOW NERVOUS SYSTEM",
+      "🛡️ DUAL-KEY HITL HUMAN SAFETY GATES",
+      "🎙️ ON-DEVICE WHISPER ONNX & GEMMA EDGE"
     ],
     tag: "SAFETY • DETERMINISM • SCALE"
   }
@@ -193,7 +194,7 @@ export const LANDMARKS = [
     id: "complianceops",
     type: "project",
     projectNumber: "02",
-    x: 1380,
+    x: 1360,
     width: 380,
     height: 260,
     label: "02: COMPLIANCEOPS",
@@ -276,7 +277,7 @@ export const LANDMARKS = [
     id: "negotiation_agent",
     type: "project",
     projectNumber: "03",
-    x: 2280,
+    x: 2320,
     width: 380,
     height: 260,
     label: "03: NEGOTIATION AGENT",
@@ -446,8 +447,8 @@ export const LANDMARKS = [
   {
     id: "connect_pavilion",
     type: "connect_pavilion",
-    x: 3980,
-    width: 390,
+    x: 4050,
+    width: 400,
     height: 275,
     label: "FINALE: LET'S BUILD TOGETHER",
     buildingNumber: "05",
@@ -462,6 +463,7 @@ export const LANDMARKS = [
       description: "Looking for an AI/ML Engineer to build reliable data pipelines, deterministic multi-agent systems, or architect edge multimodal systems? Reach out directly or grab my resume:",
       email: "syedmuhammadayyanibrar@gmail.com",
       cvUrl: "/Syed_Ayyan_CV.pdf",
+      photoUrl: "/profile.jpg",
       socials: [
         { name: "GitHub", url: "https://github.com/syedmuhammadayyanibrar" },
         { name: "LinkedIn", url: "https://linkedin.com/in/ayyan-ibrar" },
@@ -471,4 +473,4 @@ export const LANDMARKS = [
   }
 ];
 
-export const STREET_TOTAL_WIDTH = 4600;
+export const STREET_TOTAL_WIDTH = 4800;
