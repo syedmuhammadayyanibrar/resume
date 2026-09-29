@@ -1,7 +1,21 @@
-// src/renderer.js - 60FPS Multi-Layer Parallax & Atmospheric 16-Bit Engine
+// src/renderer.js - Multi-Layer Parallax Engine with NPCs, Billboards & AI Project Buildings
 
-import { PALETTES, drawCharacter, drawCat, drawKiosk, drawMetro, drawDataCenter, drawBank, drawBroadcast, drawArcade, drawPhoneBooth } from "./pixelArt.js";
-import { LANDMARKS, STREET_TOTAL_WIDTH } from "./data.js";
+import {
+  PALETTES,
+  drawCharacter,
+  drawNPC,
+  drawCat,
+  drawStartBoard,
+  drawStreetBillboard,
+  drawNeuroStream,
+  drawOmniVision,
+  drawSynapseFlow,
+  drawAegisGuard,
+  drawVoiceSynapse,
+  drawPixelDiffusion,
+  drawConnectPavilion
+} from "./pixelArt.js";
+import { LANDMARKS, BILLBOARDS, STREET_TOTAL_WIDTH } from "./data.js";
 
 export class WorldRenderer {
   constructor(canvas) {
@@ -13,37 +27,30 @@ export class WorldRenderer {
 
     this.currentThemeKey = "dusk";
     this.theme = PALETTES.dusk;
-
-    // Ground level baseline (relative to screen height)
     this.groundY = Math.round(this.height * 0.72);
 
-    // Initialize atmospheric simulation elements
     this.initStars();
     this.initClouds();
     this.initSnowflakes();
     this.initUtilityPoles();
     this.initTrees();
     this.initSteamVents();
+    this.initNPCVisitors();
 
-    // Decals & Dynamic Particles
-    this.footsteps = []; // { x, y, opacity, facing, createdAt }
+    this.footsteps = [];
     this.steamParticles = [];
     this.breathParticles = [];
     this.footPoofs = [];
     this.raveParticles = [];
 
-    // Passing Train Animation state
     this.train = {
       active: true,
       x: -600,
-      speed: 14,
+      speed: 15,
       intervalTimer: 0,
     };
 
-    // Click-to-move destination marker
-    this.destinationMarker = null; // { x, timer }
-
-    // Easter Egg Konami Rave mode
+    this.destinationMarker = null;
     this.isRaveMode = false;
     this.raveHue = 0;
 
@@ -62,7 +69,7 @@ export class WorldRenderer {
 
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(this.dpr, this.dpr);
-    this.ctx.imageSmoothingEnabled = false; // Authentic crisp 16-bit pixel aesthetics
+    this.ctx.imageSmoothingEnabled = false;
 
     this.groundY = Math.round(this.height * 0.72);
   }
@@ -76,9 +83,9 @@ export class WorldRenderer {
 
   initStars() {
     this.stars = [];
-    for (let i = 0; i < 110; i++) {
+    for (let i = 0; i < 130; i++) {
       this.stars.push({
-        x: Math.random() * 3200,
+        x: Math.random() * 3600,
         y: Math.random() * (this.height * 0.45),
         size: Math.random() > 0.8 ? 2 : 1,
         twinkleSpeed: 0.02 + Math.random() * 0.04,
@@ -90,7 +97,7 @@ export class WorldRenderer {
 
   initClouds() {
     this.clouds = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 11; i++) {
       this.clouds.push({
         x: i * 400 + Math.random() * 200,
         y: 20 + Math.random() * (this.height * 0.3),
@@ -103,9 +110,8 @@ export class WorldRenderer {
   }
 
   initSnowflakes() {
-    // Layer 1: Background small micro flakes (180 particles)
     this.bgSnow = [];
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 190; i++) {
       this.bgSnow.push({
         x: Math.random() * this.width,
         y: Math.random() * this.height,
@@ -116,9 +122,8 @@ export class WorldRenderer {
       });
     }
 
-    // Layer 2: Foreground chunky swirling flakes (90 particles)
     this.fgSnow = [];
-    for (let i = 0; i < 90; i++) {
+    for (let i = 0; i < 95; i++) {
       this.fgSnow.push({
         x: Math.random() * this.width,
         y: Math.random() * this.height,
@@ -132,14 +137,14 @@ export class WorldRenderer {
 
   initUtilityPoles() {
     this.utilityPoles = [];
-    for (let x = 200; x < STREET_TOTAL_WIDTH; x += 550) {
+    for (let x = 180; x < STREET_TOTAL_WIDTH; x += 520) {
       this.utilityPoles.push({ x, height: 180 });
     }
   }
 
   initTrees() {
     this.trees = [];
-    for (let x = 320; x < STREET_TOTAL_WIDTH; x += 680) {
+    for (let x = 320; x < STREET_TOTAL_WIDTH; x += 640) {
       this.trees.push({
         x,
         h: 120 + Math.random() * 30,
@@ -150,13 +155,147 @@ export class WorldRenderer {
 
   initSteamVents() {
     this.steamVents = [
-      { x: 380, width: 28 },
-      { x: 1540, width: 32 },
-      { x: 2280, width: 30 },
-      { x: 2920, width: 28 },
-      { x: 3560, width: 34 },
-      { x: 4120, width: 30 },
+      { x: 420, width: 30 },
+      { x: 1120, width: 32 },
+      { x: 1820, width: 30 },
+      { x: 2840, width: 28 },
+      { x: 3580, width: 34 },
+      { x: 4620, width: 30 },
+      { x: 5320, width: 32 },
     ];
+  }
+
+  /**
+   * Initialize Walking Visitors & Pedestrians (NPCs)
+   */
+  initNPCVisitors() {
+    this.npcs = [
+      {
+        id: "npc1",
+        x: 480,
+        minX: 300,
+        maxX: 800,
+        speed: 1.1,
+        facing: 1,
+        walkFrame: 0,
+        cTop: "#3b82f6",
+        cBottom: "#1e293b",
+        cHair: "#0f172a",
+        prop: "headphones",
+        bubbleText: "Did you test NeuroStream's sub-8ms streaming?",
+        isSpeaking: false,
+      },
+      {
+        id: "npc2",
+        x: 1150,
+        minX: 950,
+        maxX: 1500,
+        speed: 0.9,
+        facing: -1,
+        walkFrame: 0,
+        cTop: "#ec4899",
+        cBottom: "#334155",
+        cHair: "#78350f",
+        prop: "camera",
+        bubbleText: "OmniVision runs multimodal vision at 60 FPS on edge!",
+        isSpeaking: false,
+      },
+      {
+        id: "npc3",
+        x: 1820,
+        minX: 1650,
+        maxX: 2150,
+        speed: 1.2,
+        facing: 1,
+        walkFrame: 0,
+        cTop: "#10b981",
+        cBottom: "#1e293b",
+        cHair: "#1e293b",
+        prop: "backpack",
+        bubbleText: "Syed's AI engineering specializations are top tier!",
+        isSpeaking: false,
+      },
+      {
+        id: "npc4",
+        x: 2780,
+        minX: 2500,
+        maxX: 3050,
+        speed: 0.8,
+        facing: -1,
+        walkFrame: 0,
+        cTop: "#f59e0b",
+        cBottom: "#475569",
+        cHair: "#451a03",
+        prop: "coffee",
+        bubbleText: "SynapseFlow ingests 280,000 events/sec with zero loss.",
+        isSpeaking: false,
+      },
+      {
+        id: "npc5",
+        x: 3520,
+        minX: 3250,
+        maxX: 3850,
+        speed: 1.0,
+        facing: 1,
+        walkFrame: 0,
+        cTop: "#8b5cf6",
+        cBottom: "#0f172a",
+        cHair: "#0284c7",
+        prop: "headphones",
+        bubbleText: "AegisGuard intercepts LLM jailbreaks in <4ms!",
+        isSpeaking: false,
+      },
+      {
+        id: "npc6",
+        x: 4520,
+        minX: 4300,
+        maxX: 4800,
+        speed: 1.1,
+        facing: -1,
+        walkFrame: 0,
+        cTop: "#06b6d4",
+        cBottom: "#1e293b",
+        cHair: "#111827",
+        prop: "backpack",
+        bubbleText: "142ms full-duplex voice! No more awkward bot pauses.",
+        isSpeaking: false,
+      },
+      {
+        id: "npc7",
+        x: 5240,
+        minX: 5000,
+        maxX: 5600,
+        speed: 0.9,
+        facing: 1,
+        walkFrame: 0,
+        cTop: "#e11d48",
+        cBottom: "#334155",
+        cHair: "#713f12",
+        prop: "coffee",
+        bubbleText: "Check the finale board ahead to connect with Syed!",
+        isSpeaking: false,
+      }
+    ];
+  }
+
+  updateNPCs(playerX) {
+    for (const npc of this.npcs) {
+      npc.x += npc.speed * npc.facing;
+      npc.walkFrame += 0.16;
+
+      // Reverse direction at patrol edges
+      if (npc.x > npc.maxX) {
+        npc.x = npc.maxX;
+        npc.facing = -1;
+      } else if (npc.x < npc.minX) {
+        npc.x = npc.minX;
+        npc.facing = 1;
+      }
+
+      // Check distance to player for speech bubbles
+      const dist = Math.abs(npc.x - playerX);
+      npc.isSpeaking = dist < 75;
+    }
   }
 
   addFootstep(x, y, facing) {
@@ -213,12 +352,11 @@ export class WorldRenderer {
     }
   }
 
-  // 1. Far Sky & Celestial Layer
+  // 1. Far Sky & Moon
   drawSky(time) {
     const ctx = this.ctx;
     const t = this.theme;
 
-    // Dusky vertical gradient
     const skyGrad = ctx.createLinearGradient(0, 0, 0, this.groundY);
     skyGrad.addColorStop(0, t.skyTop);
     skyGrad.addColorStop(0.45, t.skyMid);
@@ -228,11 +366,11 @@ export class WorldRenderer {
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, this.width, this.height);
 
-    // Drifting smog / cloud bands
+    // Drifting smog
     ctx.save();
     for (const c of this.clouds) {
       c.x += c.speed;
-      if (c.x > 3600) c.x = -200;
+      if (c.x > 3800) c.x = -200;
 
       const scrX = ((c.x - time * 0.02) % (this.width + 400)) - 100;
       ctx.fillStyle = t.skyHaze;
@@ -250,11 +388,9 @@ export class WorldRenderer {
       ctx.fillRect(s.x % this.width, s.y, s.size, s.size);
     }
 
-    // Crescent Moon with Atmospheric Halo
+    // Crescent Moon
     const moonX = this.width * 0.82;
     const moonY = this.height * 0.16;
-
-    // Soft Halo
     const halo = ctx.createRadialGradient(moonX, moonY, 12, moonX, moonY, 48);
     halo.addColorStop(0, "rgba(255, 245, 220, 0.28)");
     halo.addColorStop(1, "rgba(255, 245, 220, 0)");
@@ -263,12 +399,10 @@ export class WorldRenderer {
     ctx.arc(moonX, moonY, 48, 0, Math.PI * 2);
     ctx.fill();
 
-    // Pixel Moon Arc
     ctx.fillStyle = "#fff8db";
     ctx.beginPath();
     ctx.arc(moonX, moonY, 14, 0, Math.PI * 2);
     ctx.fill();
-    // Mask out crescent shadow
     ctx.fillStyle = t.skyTop;
     ctx.beginPath();
     ctx.arc(moonX - 5, moonY - 3, 13, 0, Math.PI * 2);
@@ -276,7 +410,7 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 2. Far Skyline Silhouettes (Parallax Factor: 0.14)
+  // 2. Far Skyline Silhouettes (Parallax Factor: 0.12)
   drawFarSkyline(cameraX, time) {
     const ctx = this.ctx;
     const t = this.theme;
@@ -285,7 +419,6 @@ export class WorldRenderer {
     ctx.save();
     ctx.fillStyle = t.farSkyline;
 
-    // Distant Skyscrapers & Towers
     const numBuildings = 36;
     for (let i = 0; i < numBuildings; i++) {
       const bx = (i * 130 - parallax) % (this.width + 300) - 150;
@@ -295,18 +428,15 @@ export class WorldRenderer {
 
       ctx.fillRect(bx, by, bw, bh + 50);
 
-      // Distant blinking antenna masts on top
       if (i % 3 === 0) {
         const mastX = bx + bw / 2;
         ctx.fillRect(mastX - 1, by - 35, 2, 35);
-        // Beacon light
         const blink = Math.sin(time * 0.005 + i) > 0;
         ctx.fillStyle = blink ? "#ff2244" : "#440011";
         ctx.fillRect(mastX - 2, by - 37, 4, 3);
         ctx.fillStyle = t.farSkyline;
       }
 
-      // Lit Windows grid
       if (i % 2 === 0) {
         for (let wy = by + 20; wy < this.groundY - 50; wy += 14) {
           for (let wx = bx + 12; wx < bx + bw - 12; wx += 14) {
@@ -321,21 +451,10 @@ export class WorldRenderer {
         ctx.fillStyle = t.farSkyline;
       }
     }
-
-    // Suspension Bridge Truss in Distance
-    const bridgeX = (2400 - parallax) % (this.width + 1200) - 600;
-    ctx.strokeStyle = t.farSkyline;
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(bridgeX, this.groundY - 40);
-    ctx.lineTo(bridgeX + 200, this.groundY - 140);
-    ctx.lineTo(bridgeX + 400, this.groundY - 40);
-    ctx.stroke();
-
     ctx.restore();
   }
 
-  // 3. Midground Skyline & Elevated Rail (Parallax Factor: 0.28)
+  // 3. Mid Skyline & Overhead Train (Parallax Factor: 0.28)
   drawMidSkyline(cameraX, time) {
     const ctx = this.ctx;
     const t = this.theme;
@@ -344,7 +463,6 @@ export class WorldRenderer {
     ctx.save();
     ctx.fillStyle = t.midSkyline;
 
-    // Mid-tier industrial rooftops, water towers, HVAC units
     const numBlocks = 28;
     for (let i = 0; i < numBlocks; i++) {
       const bx = (i * 190 - parallax) % (this.width + 400) - 200;
@@ -354,7 +472,6 @@ export class WorldRenderer {
 
       ctx.fillRect(bx, by, bw, bh + 30);
 
-      // Water tower on roof
       if (i % 4 === 1) {
         const twX = bx + 25;
         const twY = by - 30;
@@ -364,29 +481,24 @@ export class WorldRenderer {
       }
     }
 
-    // Elevated Railway Trestle spanning the city
     const railY = this.groundY - 110;
     ctx.fillStyle = "#1e142e";
     ctx.fillRect(0, railY, this.width, 10);
-    // Steel truss pillars
     for (let px = (0 - parallax) % 300 - 100; px < this.width + 100; px += 300) {
       ctx.fillRect(px, railY + 10, 16, this.groundY - (railY + 10));
     }
 
-    // High-Speed 8-Bit Bullet Train passing occasionally
     this.train.intervalTimer += 1;
-    if (this.train.intervalTimer > 420) {
+    if (this.train.intervalTimer > 400) {
       this.train.x += this.train.speed;
       const trainScreenX = this.train.x - parallax;
 
       if (trainScreenX > -400 && trainScreenX < this.width + 400) {
-        // Train Body
         ctx.fillStyle = "#e0e6ed";
         ctx.fillRect(trainScreenX, railY - 18, 380, 18);
         ctx.fillStyle = "#00bbff";
         ctx.fillRect(trainScreenX, railY - 10, 380, 3);
 
-        // Lit Passenger Windows
         for (let w = 0; w < 16; w++) {
           ctx.fillStyle = "rgba(255, 230, 130, 0.85)";
           ctx.fillRect(trainScreenX + 16 + w * 22, railY - 16, 12, 5);
@@ -398,26 +510,22 @@ export class WorldRenderer {
         this.train.intervalTimer = 0;
       }
     }
-
     ctx.restore();
   }
 
-  // 4. Midground Props: Bare Winter Trees & Utility Poles with Sagging Wires
+  // 4. Bare Winter Trees & Utility Poles with Sagging Wires
   drawMidgroundProps(cameraX, time) {
     const ctx = this.ctx;
-
-    // Bare Winter Trees
     ctx.save();
+
     for (const tree of this.trees) {
       const scrX = tree.x - cameraX;
       if (scrX < -80 || scrX > this.width + 80) continue;
 
       const treeY = this.groundY;
       ctx.fillStyle = "#2c211a";
-      // Trunk
       ctx.fillRect(scrX - 3, treeY - tree.h, 6, tree.h);
 
-      // Main branches with snow
       const bAngles = [-0.6, 0.5, -0.4, 0.7, -0.8];
       bAngles.forEach((ang, idx) => {
         const branchStartY = treeY - tree.h + 20 + idx * 16;
@@ -432,7 +540,6 @@ export class WorldRenderer {
         ctx.lineTo(bx, by);
         ctx.stroke();
 
-        // Snow along the top of each branch
         ctx.strokeStyle = "#edf3fa";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -442,27 +549,21 @@ export class WorldRenderer {
       });
     }
 
-    // Utility Poles & Dangling Catenary Power Cables
     for (let i = 0; i < this.utilityPoles.length; i++) {
       const pole = this.utilityPoles[i];
       const scrX = pole.x - cameraX;
       if (scrX < -150 || scrX > this.width + 150) continue;
 
       const poleTopY = this.groundY - pole.height;
-
-      // Wooden Pole Mast
       ctx.fillStyle = "#221710";
       ctx.fillRect(scrX - 3, poleTopY, 6, pole.height);
 
-      // Crossarms with ceramic insulators
       ctx.fillRect(scrX - 22, poleTopY + 12, 44, 4);
       ctx.fillRect(scrX - 16, poleTopY + 28, 32, 4);
 
-      // Transformer cylinder
       ctx.fillStyle = "#3e4450";
       ctx.fillRect(scrX + 5, poleTopY + 36, 14, 22);
 
-      // Connect catenary wires to next pole
       if (i < this.utilityPoles.length - 1) {
         const nextPole = this.utilityPoles[i + 1];
         const nextScrX = nextPole.x - cameraX;
@@ -470,38 +571,39 @@ export class WorldRenderer {
         ctx.strokeStyle = "rgba(20, 20, 30, 0.85)";
         ctx.lineWidth = 1.2;
 
-        // Wire 1
         ctx.beginPath();
         ctx.moveTo(scrX - 20, poleTopY + 12);
-        ctx.quadraticCurveTo(
-          (scrX + nextScrX) / 2,
-          poleTopY + 12 + 35,
-          nextScrX - 20,
-          poleTopY + 12
-        );
+        ctx.quadraticCurveTo((scrX + nextScrX) / 2, poleTopY + 12 + 35, nextScrX - 20, poleTopY + 12);
         ctx.stroke();
 
-        // Wire 2
         ctx.beginPath();
         ctx.moveTo(scrX + 20, poleTopY + 12);
-        ctx.quadraticCurveTo(
-          (scrX + nextScrX) / 2,
-          poleTopY + 12 + 28,
-          nextScrX + 20,
-          poleTopY + 12
-        );
+        ctx.quadraticCurveTo((scrX + nextScrX) / 2, poleTopY + 12 + 28, nextScrX + 20, poleTopY + 12);
         ctx.stroke();
       }
     }
     ctx.restore();
   }
 
-  // 5. Steam Vents & Animated Pixel Steam
+  // 5. Elevated Highway Billboards
+  drawBillboards(cameraX, time) {
+    const ctx = this.ctx;
+    for (const b of BILLBOARDS) {
+      const scrX = b.x - cameraX;
+      if (scrX + b.width < -100 || scrX > this.width + 100) continue;
+
+      ctx.save();
+      ctx.translate(-cameraX, 0);
+      drawStreetBillboard(ctx, b, this.groundY, time);
+      ctx.restore();
+    }
+  }
+
+  // 6. Steam Vents
   drawSteamVents(cameraX, time) {
     const ctx = this.ctx;
     const t = this.theme;
 
-    // Emit new steam particles periodically
     for (const v of this.steamVents) {
       if (Math.random() > 0.4) {
         this.steamParticles.push({
@@ -517,7 +619,6 @@ export class WorldRenderer {
         });
       }
 
-      // Draw sidewalk manhole grate
       const scrX = v.x - cameraX;
       if (scrX > -50 && scrX < this.width + 50) {
         ctx.fillStyle = "#1e2129";
@@ -529,7 +630,6 @@ export class WorldRenderer {
       }
     }
 
-    // Update and render steam particles
     ctx.save();
     for (let i = this.steamParticles.length - 1; i >= 0; i--) {
       const p = this.steamParticles[i];
@@ -554,65 +654,62 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 6. Landmark Buildings Dispatcher
+  // 7. Landmark Buildings (All Projects + Start Board + Finale Board)
   drawLandmarks(cameraX, time) {
     const ctx = this.ctx;
     for (const lm of LANDMARKS) {
       const scrX = lm.x - cameraX;
-      // Frustum culling: only draw if in view
       if (scrX + lm.width < -100 || scrX > this.width + 100) continue;
 
       ctx.save();
       ctx.translate(-cameraX, 0);
 
-      switch (lm.type) {
-        case "kiosk":
-          drawKiosk(ctx, lm, this.groundY, time);
+      switch (lm.id) {
+        case "start_board":
+          drawStartBoard(ctx, lm, this.groundY, time);
           break;
-        case "metro":
-          drawMetro(ctx, lm, this.groundY, time);
+        case "neurostream":
+          drawNeuroStream(ctx, lm, this.groundY, time);
           break;
-        case "datacenter":
-          drawDataCenter(ctx, lm, this.groundY, time);
+        case "omnivision":
+          drawOmniVision(ctx, lm, this.groundY, time);
           break;
-        case "bank":
-          drawBank(ctx, lm, this.groundY, time);
+        case "synapseflow":
+          drawSynapseFlow(ctx, lm, this.groundY, time);
           break;
-        case "broadcast":
-          drawBroadcast(ctx, lm, this.groundY, time);
+        case "aegisguard":
+          drawAegisGuard(ctx, lm, this.groundY, time);
           break;
-        case "arcade":
-          drawArcade(ctx, lm, this.groundY, time);
+        case "voicesynapse":
+          drawVoiceSynapse(ctx, lm, this.groundY, time);
           break;
-        case "cat":
-          drawCat(ctx, lm.x, this.groundY, time * 0.06);
+        case "pixeldiffusion":
+          drawPixelDiffusion(ctx, lm, this.groundY, time);
           break;
-        case "phonebooth":
-          drawPhoneBooth(ctx, lm, this.groundY, time);
+        case "connect_pavilion":
+          drawConnectPavilion(ctx, lm, this.groundY, time);
+          // Draw Mochi the cat perched right beside the connect pavilion
+          drawCat(ctx, lm.x + lm.width + 45, this.groundY, time * 0.06);
           break;
       }
       ctx.restore();
     }
   }
 
-  // 7. Foreground Sidewalk, Snow Footsteps, Neon Puddles & Streetlamps
+  // 8. Sidewalk, Snow Footsteps, Neon Puddles & Streetlamps
   drawSidewalk(cameraX, time) {
     const ctx = this.ctx;
     const t = this.theme;
     const groundY = this.groundY;
 
-    // Sidewalk Slab & Snow Surface
     ctx.fillStyle = t.snowSidewalk;
     ctx.fillRect(0, groundY, this.width, this.height - groundY);
 
-    // Curb edge line
     ctx.fillStyle = t.curbColor;
     ctx.fillRect(0, groundY + 45, this.width, 6);
-    // Lower asphalt street line
     ctx.fillStyle = "#161922";
     ctx.fillRect(0, groundY + 51, this.width, this.height - (groundY + 51));
 
-    // Snowdrifts along the building edges
     ctx.fillStyle = t.snowSidewalkDrift;
     for (let x = - (cameraX % 40); x < this.width + 40; x += 40) {
       ctx.beginPath();
@@ -620,11 +717,9 @@ export class WorldRenderer {
       ctx.fill();
     }
 
-    // Footstep Imprints in the Snow (with gradual decay)
     ctx.save();
     for (let i = this.footsteps.length - 1; i >= 0; i--) {
       const step = this.footsteps[i];
-      // Slow fade over 35 seconds
       const age = (performance.now() - step.createdAt) / 1000;
       step.opacity = Math.max(0, 1 - age / 35);
 
@@ -641,15 +736,16 @@ export class WorldRenderer {
     }
     ctx.restore();
 
-    // Neon-Reflecting Puddles with Shimmering Ripples
+    // Puddles reflecting Project neons
     const puddles = [
-      { x: 580, w: 90, color: "rgba(255, 120, 20, " }, // reflects Kiosk neon
-      { x: 1220, w: 120, color: "rgba(0, 238, 255, " }, // reflects Metro neon
-      { x: 1940, w: 110, color: "rgba(0, 255, 136, " }, // reflects Data Center
-      { x: 2620, w: 130, color: "rgba(255, 215, 0, " }, // reflects Bank
-      { x: 3280, w: 100, color: "rgba(255, 0, 119, " }, // reflects Broadcast
-      { x: 3900, w: 115, color: "rgba(153, 0, 255, " }, // reflects Arcade
-      { x: 4460, w: 75, color: "rgba(255, 34, 68, " },   // reflects Phonebooth
+      { x: 380, w: 90, color: "rgba(0, 255, 204, " },
+      { x: 800, w: 110, color: "rgba(0, 255, 204, " },
+      { x: 1500, w: 120, color: "rgba(255, 0, 119, " },
+      { x: 2600, w: 130, color: "rgba(255, 215, 0, " },
+      { x: 3300, w: 115, color: "rgba(0, 255, 136, " },
+      { x: 4350, w: 110, color: "rgba(0, 238, 255, " },
+      { x: 5050, w: 125, color: "rgba(153, 0, 255, " },
+      { x: 5650, w: 100, color: "rgba(2, 132, 199, " }
     ];
 
     ctx.save();
@@ -658,28 +754,21 @@ export class WorldRenderer {
       if (scrX < -150 || scrX > this.width + 150) continue;
 
       const pudY = groundY + 18;
-      // Dark puddle base
       ctx.fillStyle = "#181c26";
       ctx.beginPath();
       ctx.ellipse(scrX, pudY, pud.w / 2, 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Neon Reflection with animated ripple waves
       const ripple = Math.sin(time * 0.005 + pud.x * 0.01) * 2;
-      const refAlpha = t.puddleReflectAlpha;
-      ctx.fillStyle = `${pud.color}${refAlpha})`;
+      ctx.fillStyle = `${pud.color}${t.puddleReflectAlpha})`;
       ctx.beginPath();
       ctx.ellipse(scrX, pudY + ripple * 0.5, (pud.w / 2) - 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
-
-      // Shimmer lines
-      ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.fillRect(scrX - 15, pudY - 1, 30, 1);
     }
     ctx.restore();
 
-    // Glowing Streetlamps with Volumetric Light Cones
-    const lampSpacing = 420;
+    // Streetlamps
+    const lampSpacing = 440;
     ctx.save();
     for (let lx = 140; lx < STREET_TOTAL_WIDTH; lx += lampSpacing) {
       const scrX = lx - cameraX;
@@ -688,20 +777,15 @@ export class WorldRenderer {
       const lampH = 145;
       const lampY = groundY - lampH;
 
-      // Ornate Cast-Iron Lamp Post
       ctx.fillStyle = "#1e1e24";
       ctx.fillRect(scrX - 3, lampY, 6, lampH);
-      ctx.fillRect(scrX - 8, groundY - 6, 16, 6); // Base
-
-      // Arched lantern head
+      ctx.fillRect(scrX - 8, groundY - 6, 16, 6);
       ctx.fillRect(scrX - 12, lampY, 24, 4);
       ctx.fillRect(scrX - 8, lampY + 4, 16, 14);
 
-      // Lantern Glass & Warm Core
       ctx.fillStyle = t.lampGlow;
       ctx.fillRect(scrX - 6, lampY + 6, 12, 10);
 
-      // Volumetric Radial Light Cone onto the sidewalk
       const cone = ctx.createRadialGradient(scrX, lampY + 12, 10, scrX, groundY + 15, 140);
       cone.addColorStop(0, t.lampColor);
       cone.addColorStop(0.7, t.lampColor.replace(/[\d\.]+\)$/, "0.08)"));
@@ -719,15 +803,22 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 8. Dynamic Snowfall Particles (Two Multi-Speed Layers)
+  // 9. Draw Walking Visitors (NPCs)
+  drawNPCs(cameraX, time) {
+    const ctx = this.ctx;
+    for (const npc of this.npcs) {
+      const scrX = npc.x - cameraX;
+      if (scrX < -80 || scrX > this.width + 80) continue;
+      drawNPC(ctx, { ...npc, x: scrX }, this.groundY, time);
+    }
+  }
+
+  // 10. Snowfall Particles
   drawSnowfall(time) {
     const ctx = this.ctx;
     const t = this.theme;
-
-    // Wind gust calculation
     const wind = Math.sin(time * 0.001) * 0.8 + 0.3;
 
-    // Layer 1: Background Fine Micro Flakes
     ctx.save();
     ctx.fillStyle = t.snowParticle;
     for (const f of this.bgSnow) {
@@ -746,7 +837,6 @@ export class WorldRenderer {
       ctx.fillRect(Math.round(wx), Math.round(f.y), f.size, f.size);
     }
 
-    // Layer 2: Foreground Chunky Swirling Flakes
     for (const f of this.fgSnow) {
       f.y += f.speedY;
       f.x += f.speedX + wind * 0.9;
@@ -765,11 +855,10 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 9. Foot Poofs & Cold Breath Particles
+  // 11. Foot Poofs & Cold Breath Particles
   drawCharacterParticles(cameraX) {
     const ctx = this.ctx;
 
-    // Foot Snow Poofs
     ctx.save();
     for (let i = this.footPoofs.length - 1; i >= 0; i--) {
       const p = this.footPoofs[i];
@@ -785,7 +874,6 @@ export class WorldRenderer {
       if (p.alpha <= 0.01) this.footPoofs.splice(i, 1);
     }
 
-    // Winter Breath Condensation Puffs
     for (let i = this.breathParticles.length - 1; i >= 0; i--) {
       const p = this.breathParticles[i];
       p.x += p.vx;
@@ -805,7 +893,7 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 10. Floating Interactive Prompt: [E] INSPECT / READ / ACCESS
+  // 12. Floating Prompt: [E] INSPECT ...
   drawInteractionPrompt(promptText, charScreenX, charScreenY, time) {
     const ctx = this.ctx;
     const bounce = Math.sin(time * 0.008) * 3;
@@ -814,30 +902,27 @@ export class WorldRenderer {
     ctx.save();
     ctx.font = "bold 9px 'Press Start 2P', monospace";
     const textWidth = ctx.measureText(promptText).width;
-    const padX = 10;
+    const padX = 12;
     const boxW = textWidth + padX * 2;
-    const boxH = 22;
+    const boxH = 24;
     const boxX = charScreenX - boxW / 2;
 
-    // Glowing Neon Badge Box
-    ctx.fillStyle = "#12141d";
+    ctx.fillStyle = "#0c101a";
     ctx.fillRect(boxX, py, boxW, boxH);
     ctx.strokeStyle = "#00ffcc";
     ctx.lineWidth = 2;
     ctx.shadowColor = "#00ffcc";
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 10;
     ctx.strokeRect(boxX, py, boxW, boxH);
 
-    // Downward pixel arrow pointer
     ctx.fillStyle = "#00ffcc";
     ctx.beginPath();
-    ctx.moveTo(charScreenX - 5, py + boxH);
-    ctx.lineTo(charScreenX + 5, py + boxH);
+    ctx.moveTo(charScreenX - 6, py + boxH);
+    ctx.lineTo(charScreenX + 6, py + boxH);
     ctx.lineTo(charScreenX, py + boxH + 6);
     ctx.closePath();
     ctx.fill();
 
-    // Text with pulse
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -846,7 +931,6 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 11. Click-to-Move Target Reticle
   drawDestinationMarker(cameraX, time) {
     if (!this.destinationMarker) return;
     const scrX = this.destinationMarker.x - cameraX;
@@ -868,20 +952,17 @@ export class WorldRenderer {
     ctx.ellipse(scrX, groundY + 2, 14 + pulse, 6 + pulse * 0.4, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Target crosshairs
     ctx.fillStyle = "#00ffcc";
     ctx.fillRect(scrX - 1, groundY - 6, 2, 16);
     ctx.fillRect(scrX - 8, groundY + 1, 16, 2);
     ctx.restore();
   }
 
-  // 12. Konami Cyber Rave Fireworks Mode
   drawRaveEffects(time) {
     if (!this.isRaveMode) return;
     const ctx = this.ctx;
     this.raveHue = (this.raveHue + 4) % 360;
 
-    // Rainbow Aurora Borealis ribbon across sky
     const ribbonGrad = ctx.createLinearGradient(0, 0, this.width, 0);
     ribbonGrad.addColorStop(0, `hsla(${this.raveHue}, 100%, 50%, 0.15)`);
     ribbonGrad.addColorStop(0.5, `hsla(${(this.raveHue + 120) % 360}, 100%, 50%, 0.25)`);
@@ -889,7 +970,6 @@ export class WorldRenderer {
     ctx.fillStyle = ribbonGrad;
     ctx.fillRect(0, 0, this.width, this.height * 0.5);
 
-    // Rave spark particles
     for (let i = this.raveParticles.length - 1; i >= 0; i--) {
       const p = this.raveParticles[i];
       p.x += p.vx;
@@ -903,40 +983,28 @@ export class WorldRenderer {
     }
   }
 
-  // Master Render Frame
   render(player, cameraX, activeLandmark, time) {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
-    // 1. Far Sky & Moon
     this.drawSky(time);
-
-    // 2. Far Skyline (Parallax factor: 0.12)
     this.drawFarSkyline(cameraX, time);
-
-    // 3. Mid Skyline & Overhead Rail (Parallax factor: 0.28)
     this.drawMidSkyline(cameraX, time);
-
-    // 4. Midground Trees & Utility Poles
     this.drawMidgroundProps(cameraX, time);
-
-    // 5. Steam Vents
+    this.drawBillboards(cameraX, time);
     this.drawSteamVents(cameraX, time);
-
-    // 6. Landmark Buildings
     this.drawLandmarks(cameraX, time);
-
-    // 7. Sidewalk, Snow Footsteps, Neon Puddles & Streetlamps
     this.drawSidewalk(cameraX, time);
 
-    // 8. Click Destination Reticle
-    this.drawDestinationMarker(cameraX, time);
+    // Update & Draw Visitors (NPCs)
+    this.updateNPCs(player.x);
+    this.drawNPCs(cameraX, time);
 
-    // 9. Character Particles (Foot poofs, breath condensation)
+    this.drawDestinationMarker(cameraX, time);
     this.drawCharacterParticles(cameraX);
 
-    // 10. Player Character
+    // Player
     const charScreenX = player.x - cameraX;
-    const charScreenY = this.groundY - player.y; // player.y is jump height
+    const charScreenY = this.groundY - player.y;
     drawCharacter(this.ctx, charScreenX, charScreenY, {
       facing: player.facing,
       isMoving: player.isMoving,
@@ -946,15 +1014,11 @@ export class WorldRenderer {
       breatheOffset: player.breatheOffset,
     });
 
-    // 11. Interactive Prompt above Character Head
     if (activeLandmark) {
       this.drawInteractionPrompt(activeLandmark.interactionPrompt, charScreenX, charScreenY, time);
     }
 
-    // 12. Foreground Snowfall Particles (Chunky swirling flakes)
     this.drawSnowfall(time);
-
-    // 13. Konami Rave Mode Overlay
     this.drawRaveEffects(time);
   }
 }

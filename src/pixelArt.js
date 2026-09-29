@@ -1,6 +1,5 @@
-// src/pixelArt.js - Procedural 16-bit Pixel Sprites & Architectural Renderers
+// src/pixelArt.js - Procedural 16-bit Sprites, Crisp Marquees, NPCs & Architectural Projects
 
-// Color Palettes for Themes
 export const PALETTES = {
   dusk: {
     name: "Snowy Dusk",
@@ -65,57 +64,108 @@ export const PALETTES = {
 };
 
 /**
- * 16-Bit Player Character Renderer
- * Draws Syed Ayyan: dark jacket, fluttering emerald-teal scarf, beanie/hair, boots.
- * 8-frame walk cycle with realistic leg and arm swing, body bob, and wind physics on the scarf.
+ * High-Contrast, Crystal-Clear Marquee Name Sign
+ * Fixes legibility: bold lettering, dark high-contrast backing plate, neon borders.
+ */
+export function drawBuildingMarquee(ctx, x, y, width, number, name, subtitle, neonColor, time) {
+  const h = 48;
+  const marqueeY = y - h - 14;
+
+  ctx.save();
+  // Support struts
+  ctx.fillStyle = "#1e2230";
+  ctx.fillRect(x + 25, marqueeY + h, 6, 14);
+  ctx.fillRect(x + width - 31, marqueeY + h, 6, 14);
+
+  // Dark backing plate with drop shadow
+  ctx.fillStyle = "#090d15";
+  ctx.fillRect(x + 10, marqueeY, width - 20, h);
+
+  // Vibrant Neon Border with Glow
+  const flicker = Math.sin(time * 0.01 + x) > -0.95 ? 1 : 0.6;
+  ctx.strokeStyle = neonColor;
+  ctx.lineWidth = 3;
+  ctx.shadowColor = neonColor;
+  ctx.shadowBlur = 12 * flicker;
+  ctx.strokeRect(x + 10, marqueeY, width - 20, h);
+
+  // Marquee chasing corner dots
+  const dotColor = (Math.floor(time * 0.005) % 2 === 0) ? "#ffffff" : neonColor;
+  ctx.fillStyle = dotColor;
+  ctx.fillRect(x + 13, marqueeY + 3, 4, 4);
+  ctx.fillRect(x + width - 17, marqueeY + 3, 4, 4);
+  ctx.fillRect(x + 13, marqueeY + h - 7, 4, 4);
+  ctx.fillRect(x + width - 17, marqueeY + h - 7, 4, 4);
+
+  // Row 1: Building Number Badge
+  ctx.fillStyle = neonColor;
+  ctx.font = "bold 9px 'Press Start 2P', monospace";
+  ctx.textAlign = "left";
+  ctx.fillText(`PROJECT ${number}`, x + 24, marqueeY + 18);
+
+  // Row 2: Big Bold Readable Title
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 13px 'Silkscreen', 'Press Start 2P', sans-serif";
+  ctx.fillText(name.toUpperCase(), x + 24, marqueeY + 34);
+
+  // Row 3: Subtitle Pill
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "9px 'Silkscreen', monospace";
+  ctx.textAlign = "right";
+  ctx.fillText(subtitle.toUpperCase(), x + width - 24, marqueeY + 28);
+
+  // Snow on top of marquee
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x + 8, marqueeY - 4, width - 16, 5);
+
+  ctx.restore();
+}
+
+/**
+ * 16-Bit Player Character Renderer (Syed Ayyan)
  */
 export function drawCharacter(ctx, x, y, state) {
-  // state: { facing: 1 | -1, isMoving: bool, isGrounded: bool, walkFrame: int, vy: float, breatheOffset: float }
   ctx.save();
   ctx.translate(Math.round(x), Math.round(y));
   ctx.scale(state.facing, 1);
 
   const frame = state.isMoving && state.isGrounded ? Math.floor(state.walkFrame) % 8 : 0;
   const bob = state.isGrounded ? (state.isMoving ? (frame % 2 === 1 ? -1 : 0) : Math.round(state.breatheOffset)) : 0;
-
-  // Jump leg tuck
   const jumpTuck = !state.isGrounded ? -2 : 0;
 
-  // Colors
-  const cHair = "#141419";
-  const cSkin = "#e0a98b";
-  const cSkinShadow = "#c2876b";
-  const cCoat = "#1e2433";
-  const cCoatHighlight = "#2d374d";
-  const cCoatDark = "#131722";
-  const cScarf = "#00d4a0";
-  const cScarfDark = "#008f6b";
+  const cHair = "#111116";
+  const cSkin = "#dfa98b";
+  const cSkinShadow = "#be8468";
+  const cCoat = "#1c2333";
+  const cCoatDark = "#121724";
+  const cCoatHighlight = "#2c3850";
+  const cScarf = "#00e6a8";
+  const cScarfDark = "#009970";
   const cPants = "#181d26";
-  const cBoots = "#4a3528";
-  const cBootTread = "#271c15";
+  const cBoots = "#423023";
+  const cBootTread = "#241a13";
 
-  // Foot offsets for 8-frame walk cycle
   const legOffsets = [
-    { leftX: -3, leftY: 0, rightX: 3, rightY: 0 },       // Frame 0: Passing
-    { leftX: -5, leftY: -2, rightX: 4, rightY: 0 },      // Frame 1: Left high step
-    { leftX: -6, leftY: 0, rightX: 5, rightY: 0 },       // Frame 2: Left stride max
-    { leftX: -4, leftY: 0, rightX: 3, rightY: -1 },      // Frame 3: Left landing
-    { leftX: 3, leftY: 0, rightX: -3, rightY: 0 },       // Frame 4: Passing opposite
-    { leftX: 4, leftY: 0, rightX: -5, rightY: -2 },      // Frame 5: Right high step
-    { leftX: 5, leftY: 0, rightX: -6, rightY: 0 },       // Frame 6: Right stride max
-    { leftX: 3, leftY: -1, rightX: -4, rightY: 0 },      // Frame 7: Right landing
+    { leftX: -3, leftY: 0, rightX: 3, rightY: 0 },
+    { leftX: -5, leftY: -2, rightX: 4, rightY: 0 },
+    { leftX: -6, leftY: 0, rightX: 5, rightY: 0 },
+    { leftX: -4, leftY: 0, rightX: 3, rightY: -1 },
+    { leftX: 3, leftY: 0, rightX: -3, rightY: 0 },
+    { leftX: 4, leftY: 0, rightX: -5, rightY: -2 },
+    { leftX: 5, leftY: 0, rightX: -6, rightY: 0 },
+    { leftX: 3, leftY: -1, rightX: -4, rightY: 0 },
   ];
 
   const leg = state.isGrounded ? legOffsets[frame] : { leftX: -2, leftY: jumpTuck, rightX: 2, rightY: jumpTuck };
 
-  // 1. Shadow underneath
+  // Shadow underneath
   ctx.fillStyle = "rgba(10, 12, 20, 0.45)";
   const shadowWidth = state.isGrounded ? 18 : 12;
   ctx.beginPath();
   ctx.ellipse(0, 0, shadowWidth / 2, 3, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 2. Back Leg & Boot
+  // Back Leg & Boot
   ctx.fillStyle = cPants;
   ctx.fillRect(leg.rightX - 2, -14 + leg.rightY, 4, 10);
   ctx.fillStyle = cBoots;
@@ -123,7 +173,7 @@ export function drawCharacter(ctx, x, y, state) {
   ctx.fillStyle = cBootTread;
   ctx.fillRect(leg.rightX - 3, -1 + leg.rightY, 6, 1);
 
-  // 3. Coat Body
+  // Coat Body
   ctx.fillStyle = cCoatDark;
   ctx.fillRect(-6, -26 + bob, 11, 14);
   ctx.fillStyle = cCoat;
@@ -131,12 +181,7 @@ export function drawCharacter(ctx, x, y, state) {
   ctx.fillStyle = cCoatHighlight;
   ctx.fillRect(-4, -26 + bob, 2, 10);
 
-  // Belt / Coat buttons
-  ctx.fillStyle = "#ffaa00";
-  ctx.fillRect(-1, -21 + bob, 2, 2);
-  ctx.fillRect(-1, -17 + bob, 2, 2);
-
-  // 4. Front Leg & Boot
+  // Front Leg & Boot
   ctx.fillStyle = cPants;
   ctx.fillRect(leg.leftX - 2, -14 + leg.leftY, 4, 10);
   ctx.fillStyle = cBoots;
@@ -144,35 +189,30 @@ export function drawCharacter(ctx, x, y, state) {
   ctx.fillStyle = cBootTread;
   ctx.fillRect(leg.leftX - 3, -1 + leg.leftY, 6, 1);
 
-  // 5. Head & Face
-  // Neck
+  // Head & Face
   ctx.fillStyle = cSkinShadow;
   ctx.fillRect(-2, -30 + bob, 4, 3);
-  // Face
   ctx.fillStyle = cSkin;
   ctx.fillRect(-4, -38 + bob, 8, 9);
-  // Nose
   ctx.fillStyle = cSkinShadow;
   ctx.fillRect(3, -34 + bob, 2, 2);
-  // Eye
   ctx.fillStyle = "#111";
   ctx.fillRect(1, -35 + bob, 2, 2);
-  // Hair / Beanie
+
+  // Hair & Beanie
   ctx.fillStyle = cHair;
   ctx.fillRect(-5, -42 + bob, 10, 5);
   ctx.fillRect(-6, -39 + bob, 3, 5);
   ctx.fillRect(-2, -43 + bob, 6, 2);
-  // Beanie fold
-  ctx.fillStyle = "#333842";
+  ctx.fillStyle = "#2a3242";
   ctx.fillRect(-5, -39 + bob, 10, 2);
 
-  // 6. Fluttering Scarf
+  // Fluttering Scarf
   ctx.fillStyle = cScarf;
   ctx.fillRect(-5, -31 + bob, 10, 4);
   ctx.fillStyle = cScarfDark;
   ctx.fillRect(-4, -28 + bob, 8, 2);
 
-  // Trailing scarf tail with wind flutter
   const windTail = Math.sin(Date.now() * 0.008) * 3;
   const runTail = state.isMoving ? -4 : 0;
   ctx.fillStyle = cScarf;
@@ -181,7 +221,7 @@ export function drawCharacter(ctx, x, y, state) {
   ctx.fillStyle = cScarfDark;
   ctx.fillRect(-12 + runTail, -21 + bob + windTail * 1.8, 3, 2);
 
-  // 7. Front Arm
+  // Front Arm
   const armSwing = state.isGrounded && state.isMoving ? Math.sin(state.walkFrame * Math.PI / 4) * 4 : 0;
   ctx.fillStyle = cCoat;
   ctx.fillRect(-1 + armSwing, -26 + bob, 4, 10);
@@ -192,7 +232,656 @@ export function drawCharacter(ctx, x, y, state) {
 }
 
 /**
- * Stray Cat (Mochi) Pixel Sprite
+ * Animated Pedestrian / Visitor NPC Renderer
+ */
+export function drawNPC(ctx, npc, groundY, time) {
+  ctx.save();
+  ctx.translate(Math.round(npc.x), groundY);
+  ctx.scale(npc.facing, 1);
+
+  const frame = Math.floor(npc.walkFrame) % 6;
+  const bob = frame % 2 === 1 ? -1 : 0;
+
+  // Leg offsets for 6-frame cycle
+  const legX1 = frame === 0 ? -3 : (frame === 1 ? -5 : (frame === 2 ? -2 : 3));
+  const legX2 = -legX1;
+
+  // Shadow
+  ctx.fillStyle = "rgba(10, 12, 20, 0.4)";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 8, 2.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Pants & Shoes
+  ctx.fillStyle = npc.cBottom;
+  ctx.fillRect(legX1 - 2, -12, 3, 9);
+  ctx.fillRect(legX2 - 2, -12, 3, 9);
+  ctx.fillStyle = "#221c17";
+  ctx.fillRect(legX1 - 3, -3, 5, 3);
+  ctx.fillRect(legX2 - 3, -3, 5, 3);
+
+  // Torso / Jacket
+  ctx.fillStyle = npc.cTop;
+  ctx.fillRect(-4, -23 + bob, 9, 12);
+
+  // Accessory / Prop
+  if (npc.prop === "backpack") {
+    ctx.fillStyle = "#e07a38";
+    ctx.fillRect(-7, -22 + bob, 4, 9);
+  } else if (npc.prop === "coffee") {
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(4, -18 + bob, 3, 4);
+    ctx.fillStyle = "#8b4513";
+    ctx.fillRect(4, -19 + bob, 3, 1);
+  } else if (npc.prop === "camera") {
+    ctx.fillStyle = "#333";
+    ctx.fillRect(3, -20 + bob, 5, 4);
+    // Occasional camera flash!
+    if (Math.floor(time * 0.003 + npc.x) % 15 === 0) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.beginPath();
+      ctx.arc(8, -18 + bob, 14, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // Head & Hair
+  ctx.fillStyle = "#e8b898";
+  ctx.fillRect(-3, -32 + bob, 7, 9);
+  ctx.fillStyle = npc.cHair;
+  ctx.fillRect(-4, -36 + bob, 9, 5);
+  ctx.fillRect(-4, -33 + bob, 3, 4);
+
+  // Headphones
+  if (npc.prop === "headphones") {
+    ctx.fillStyle = "#00ffcc";
+    ctx.fillRect(-5, -34 + bob, 2, 4);
+    ctx.fillRect(3, -34 + bob, 2, 4);
+    ctx.fillRect(-4, -36 + bob, 8, 2);
+  }
+
+  ctx.restore();
+
+  // Speech bubble if player is nearby
+  if (npc.bubbleText && npc.isSpeaking) {
+    ctx.save();
+    ctx.font = "8px 'Silkscreen', monospace";
+    const textW = ctx.measureText(npc.bubbleText).width;
+    const bx = npc.x - textW / 2 - 8;
+    const by = groundY - 48;
+
+    ctx.fillStyle = "rgba(10, 15, 25, 0.9)";
+    ctx.fillRect(bx, by, textW + 16, 18);
+    ctx.strokeStyle = "#00ffcc";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bx, by, textW + 16, 18);
+
+    ctx.fillStyle = "#fff";
+    ctx.fillText(npc.bubbleText, bx + 8, by + 12);
+    ctx.restore();
+  }
+}
+
+/**
+ * 3-Panel Street Board (At Very Start: GitHub, Gmail, LinkedIn)
+ */
+export function drawStartBoard(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  // Framework & Scaffolding Posts
+  ctx.fillStyle = "#1e2230";
+  ctx.fillRect(x + 15, y, 10, h);
+  ctx.fillRect(x + w - 25, y, 10, h);
+
+  // Main Dark Backboard
+  ctx.fillStyle = "#0c101a";
+  ctx.fillRect(x + 5, y + 25, w - 10, h - 25);
+  ctx.strokeStyle = "#00ffcc";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x + 5, y + 25, w - 10, h - 25);
+
+  // Overhead Spotlight Lamps
+  for (let s = 0; s < 3; s++) {
+    const sx = x + 35 + s * 95;
+    ctx.fillStyle = "#334155";
+    ctx.fillRect(sx - 8, y + 10, 16, 8);
+    ctx.fillStyle = "#ffdd88";
+    ctx.fillRect(sx - 6, y + 18, 12, 4);
+
+    // Warm light cone down onto panel
+    const cone = ctx.createLinearGradient(sx, y + 22, sx, y + 80);
+    cone.addColorStop(0, "rgba(255, 220, 130, 0.35)");
+    cone.addColorStop(1, "rgba(255, 220, 130, 0)");
+    ctx.fillStyle = cone;
+    ctx.beginPath();
+    ctx.moveTo(sx - 4, y + 22);
+    ctx.lineTo(sx - 35, y + 90);
+    ctx.lineTo(sx + 35, y + 90);
+    ctx.lineTo(sx + 4, y + 22);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Header Title
+  ctx.fillStyle = "#00ffcc";
+  ctx.font = "bold 9px 'Press Start 2P', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("DEV DIRECTORY & SOCIALS", x + w / 2, y + 42);
+
+  // Three Distinct Vertical Panels
+  const panelW = 78;
+  const panelH = 95;
+  const panels = [
+    { title: "GITHUB", icon: "🐙", desc: "REPOS", color: "#ffffff" },
+    { title: "GMAIL", icon: "✉️", desc: "CONTACT", color: "#ff4444" },
+    { title: "LINKEDIN", icon: "💼", desc: "PROFILE", color: "#0088ff" }
+  ];
+
+  panels.forEach((p, idx) => {
+    const px = x + 16 + idx * 86;
+    const py = y + 54;
+
+    ctx.fillStyle = "#141c2b";
+    ctx.fillRect(px, py, panelW, panelH);
+    ctx.strokeStyle = p.color;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(px, py, panelW, panelH);
+
+    // Icon
+    ctx.font = "20px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(p.icon, px + panelW / 2, py + 34);
+
+    // Title
+    ctx.fillStyle = p.color;
+    ctx.font = "bold 8px 'Press Start 2P', monospace";
+    ctx.fillText(p.title, px + panelW / 2, py + 56);
+
+    // Desc
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = "8px 'Silkscreen', monospace";
+    ctx.fillText(p.desc, px + panelW / 2, py + 72);
+
+    // Action indicator
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "7px 'Press Start 2P', monospace";
+    ctx.fillText("[OPEN]", px + panelW / 2, py + 86);
+  });
+
+  // Snow on top
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x, y + 21, w, 5);
+}
+
+/**
+ * Elevated Highway / Industrial Billboards
+ */
+export function drawStreetBillboard(ctx, b, groundY, time) {
+  const x = b.x;
+  const y = groundY - b.height - 40;
+  const w = b.width;
+  const h = b.height;
+
+  // Steel Lattice Scaffolding Legs
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  // Left leg
+  ctx.moveTo(x + 20, y + h);
+  ctx.lineTo(x + 20, groundY);
+  ctx.moveTo(x + 40, y + h);
+  ctx.lineTo(x + 40, groundY);
+  // Cross bracing
+  ctx.moveTo(x + 20, y + h + 10);
+  ctx.lineTo(x + 40, groundY - 10);
+  ctx.moveTo(x + 40, y + h + 10);
+  ctx.lineTo(x + 20, groundY - 10);
+  // Right leg
+  ctx.moveTo(x + w - 40, y + h);
+  ctx.lineTo(x + w - 40, groundY);
+  ctx.moveTo(x + w - 20, y + h);
+  ctx.lineTo(x + w - 20, groundY);
+  // Cross bracing
+  ctx.moveTo(x + w - 40, y + h + 10);
+  ctx.lineTo(x + w - 20, groundY - 10);
+  ctx.moveTo(x + w - 20, y + h + 10);
+  ctx.lineTo(x + w - 40, groundY - 10);
+  ctx.stroke();
+
+  // Billboard Frame
+  ctx.fillStyle = "#080c14";
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = "#00ffcc";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x, y, w, h);
+
+  // Spotlights shining upwards
+  for (let s = 0; s < 4; s++) {
+    const sx = x + 35 + s * 80;
+    ctx.fillStyle = "#ffdd88";
+    ctx.fillRect(sx - 6, y + h, 12, 6);
+  }
+
+  // Neon Tag in Top Corner
+  ctx.fillStyle = "#ff0077";
+  ctx.font = "bold 8px 'Press Start 2P', monospace";
+  ctx.textAlign = "left";
+  ctx.fillText(b.tag, x + 16, y + 22);
+
+  // Main Headline
+  ctx.fillStyle = "#00ffcc";
+  ctx.font = "bold 11px 'Press Start 2P', monospace";
+  ctx.fillText(b.headline, x + 16, y + 44);
+
+  // Sublines
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = "bold 10px 'Silkscreen', monospace";
+  b.sublines.forEach((line, idx) => {
+    ctx.fillText(line, x + 16, y + 68 + idx * 20);
+  });
+
+  // Snow on top
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y - 5, w + 8, 6);
+}
+
+/**
+ * 6 AI/ML Architectural Project Buildings
+ */
+
+// 1. NeuroStream (AI Multi-Agent Gateway)
+export function drawNeuroStream(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  // Crisp Marquee Sign above building
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "NEUROSTREAM", "MULTI-AGENT GATEWAY", lm.signColor, time);
+
+  // Brutalist Neural Facility Base
+  ctx.fillStyle = "#151a24";
+  ctx.fillRect(x, y + 25, w, h - 25);
+  ctx.fillStyle = "#1e2536";
+  ctx.fillRect(x + 8, y + 33, w - 16, h - 33);
+
+  // Server rack bay windows with flickering LEDs
+  for (let b = 0; b < 3; b++) {
+    const bx = x + 24 + b * 105;
+    const by = y + 70;
+    ctx.fillStyle = "#0d111a";
+    ctx.fillRect(bx, by, 85, 115);
+    ctx.strokeStyle = "#00ffcc";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bx, by, 85, 115);
+
+    // Glowing server units
+    for (let r = 0; r < 6; r++) {
+      ctx.fillStyle = "#1a2233";
+      ctx.fillRect(bx + 6, by + 8 + r * 17, 73, 13);
+      for (let l = 0; l < 4; l++) {
+        const blink = (Math.floor(time * 0.008 + b * 3 + r * 2 + l) % 3 === 0);
+        ctx.fillStyle = blink ? "#00ff88" : "#00aaff";
+        ctx.fillRect(bx + 14 + l * 12, by + 12 + r * 17, 4, 5);
+      }
+    }
+  }
+
+  // Cyan fiber-optic conduits
+  ctx.fillStyle = "#00ffcc";
+  ctx.fillRect(x + 10, groundY - 6, w - 20, 3);
+  // Snow on roof
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 20, w + 8, 8);
+}
+
+// 2. OmniVision (Edge Multimodal Vision & OCR)
+export function drawOmniVision(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "OMNIVISION", "EDGE MULTIMODAL", lm.signColor, time);
+
+  // High-Tech Optical Perception Lab
+  ctx.fillStyle = "#1f1424";
+  ctx.fillRect(x, y + 30, w, h - 30);
+  ctx.fillStyle = "#2c1c33";
+  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
+
+  // Giant Glowing Camera Aperture / Multimodal Optical Sensor
+  const lensX = x + w / 2;
+  const lensY = y + 90;
+  ctx.beginPath();
+  ctx.arc(lensX, lensY, 32, 0, Math.PI * 2);
+  ctx.fillStyle = "#0f0714";
+  ctx.fill();
+  ctx.strokeStyle = "#ff0077";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Cyan & Magenta Scanning Laser Rings
+  const laserAngle = (time * 0.004) % (Math.PI * 2);
+  ctx.beginPath();
+  ctx.arc(lensX, lensY, 22, 0, Math.PI * 2);
+  ctx.strokeStyle = "#00eeff";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = "rgba(255, 0, 119, 0.45)";
+  ctx.beginPath();
+  ctx.arc(lensX, lensY, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Glass Frame Panels below
+  ctx.fillStyle = "#120a17";
+  ctx.fillRect(x + 20, y + 145, w - 40, h - 155);
+  ctx.strokeStyle = "#ff0077";
+  ctx.strokeRect(x + 20, y + 145, w - 40, h - 155);
+
+  // Live Multimodal Waveform
+  ctx.fillStyle = "#ff0077";
+  for (let bar = 0; bar < 18; bar++) {
+    const barH = 8 + Math.abs(Math.sin(time * 0.01 + bar * 0.7)) * 28;
+    ctx.fillRect(x + 32 + bar * 16, groundY - 14 - barH, 9, barH);
+  }
+
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 25, w + 8, 8);
+}
+
+// 3. SynapseFlow (Reliable AI Data Pipelines)
+export function drawSynapseFlow(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "SYNAPSEFLOW", "STREAMING PIPELINES", lm.signColor, time);
+
+  // Industrial Matrix Data Silos
+  ctx.fillStyle = "#222016";
+  ctx.fillRect(x, y + 30, w, h - 30);
+  ctx.fillStyle = "#332f1e";
+  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
+
+  // 3 Vertical Data Pipeline Columns
+  for (let c = 0; c < 3; c++) {
+    const cx = x + 28 + c * 105;
+    ctx.fillStyle = "#17150e";
+    ctx.fillRect(cx, y + 65, 80, 125);
+    ctx.strokeStyle = "#ffd700";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cx, y + 65, 80, 125);
+
+    // Streaming Data Particles flowing down
+    const pOffset = (time * 0.08 + c * 40) % 110;
+    ctx.fillStyle = "#00ff88";
+    ctx.fillRect(cx + 15, y + 70 + pOffset, 50, 4);
+  }
+
+  // Golden Ticker Line across building
+  ctx.fillStyle = "#000";
+  ctx.fillRect(x + 12, groundY - 32, w - 24, 18);
+  ctx.fillStyle = "#ffd700";
+  ctx.font = "bold 8px 'Press Start 2P', monospace";
+  ctx.fillText("280k EPS // ZERO-LOSS STREAM // 2.4ms P99", x + 24, groundY - 20);
+
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 25, w + 8, 8);
+}
+
+// 4. AegisGuard AI (Deterministic Safety & Guardrails)
+export function drawAegisGuard(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "AEGISGUARD AI", "SAFETY SHIELD", lm.signColor, time);
+
+  // Armored Cyber Shield Base
+  ctx.fillStyle = "#121f18";
+  ctx.fillRect(x, y + 28, w, h - 28);
+  ctx.fillStyle = "#1a2e24";
+  ctx.fillRect(x + 8, y + 36, w - 16, h - 36);
+
+  // Giant Electromagnetic Security Grid at Center
+  const gridX = x + w / 2 - 50;
+  const gridY = y + 75;
+  ctx.fillStyle = "#09120e";
+  ctx.fillRect(gridX, gridY, 100, 110);
+  ctx.strokeStyle = "#00ff88";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(gridX, gridY, 100, 110);
+
+  // Pulsing Hexagon Shield Icon
+  ctx.save();
+  ctx.strokeStyle = "#00ff88";
+  ctx.lineWidth = 2;
+  const pulse = Math.sin(time * 0.008) * 3;
+  ctx.beginPath();
+  ctx.arc(gridX + 50, gridY + 55, 30 + pulse, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = "rgba(0, 255, 136, 0.25)";
+  ctx.fill();
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 20px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("🛡️", gridX + 50, gridY + 62);
+  ctx.restore();
+
+  // Green fiber conduits
+  ctx.fillStyle = "#00ff88";
+  ctx.fillRect(x + 10, groundY - 6, w - 20, 3);
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 22, w + 8, 8);
+}
+
+// 5. VoiceSynapse (Sub-150ms Real-Time Voice Agent)
+export function drawVoiceSynapse(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "VOICESYNAPSE", "SPEECH AGENT", lm.signColor, time);
+
+  // Acoustic Studio Building Base
+  ctx.fillStyle = "#121a24";
+  ctx.fillRect(x, y + 30, w, h - 30);
+  ctx.fillStyle = "#1b2636";
+  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
+
+  // Tall Broadcast Antenna
+  const mastX = x + w / 2;
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(mastX - 12, y + 30);
+  ctx.lineTo(mastX, y - 10);
+  ctx.lineTo(mastX + 12, y + 30);
+  ctx.stroke();
+
+  // Blinking cyan antenna light
+  const blink = Math.sin(time * 0.008) > 0;
+  ctx.fillStyle = blink ? "#00eeff" : "#005577";
+  ctx.fillRect(mastX - 3, y - 12, 6, 4);
+
+  // Large Studio Window with HD Audio Waveforms
+  const winX = x + 20;
+  const winY = y + 75;
+  const winW = w - 40;
+  ctx.fillStyle = "#090d14";
+  ctx.fillRect(winX, winY, winW, 95);
+  ctx.strokeStyle = "#00eeff";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(winX, winY, winW, 95);
+
+  // Animated Sine Wave Audio Visualizer
+  ctx.strokeStyle = "#00eeff";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  for (let px = 0; px < winW - 10; px += 4) {
+    const py = winY + 48 + Math.sin(time * 0.01 + px * 0.08) * 26;
+    if (px === 0) ctx.moveTo(winX + 5 + px, py);
+    else ctx.lineTo(winX + 5 + px, py);
+  }
+  ctx.stroke();
+
+  // Sub-150ms Label
+  ctx.fillStyle = "#00eeff";
+  ctx.font = "bold 8px 'Press Start 2P', monospace";
+  ctx.fillText("FULL-DUPLEX // 142ms LATENCY", x + 30, groundY - 18);
+
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 25, w + 8, 8);
+}
+
+// 6. PixelDiffusion (Neural Retro Graphics Engine)
+export function drawPixelDiffusion(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  drawBuildingMarquee(ctx, x, y, w, lm.projectNumber, "PIXELDIFFUSION", "GENERATIVE AI", lm.signColor, time);
+
+  // Generative AI Art Studio Base
+  ctx.fillStyle = "#1c1226";
+  ctx.fillRect(x, y + 30, w, h - 30);
+  ctx.fillStyle = "#291a38";
+  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
+
+  // Animated 16-Color Gradient Palette Display
+  const palX = x + 24;
+  const palY = y + 70;
+  const palW = w - 48;
+  ctx.fillStyle = "#0d0714";
+  ctx.fillRect(palX, palY, palW, 45);
+  ctx.strokeStyle = "#9900ff";
+  ctx.strokeRect(palX, palY, palW, 45);
+
+  const colors = ["#ff0055", "#ff5500", "#ffaa00", "#00ff66", "#00eeff", "#0066ff", "#9900ff", "#ff00aa"];
+  for (let c = 0; c < colors.length; c++) {
+    ctx.fillStyle = colors[c];
+    ctx.fillRect(palX + 6 + c * 35, palY + 8, 30, 28);
+  }
+
+  // Pixel Sprite Canvas Sub-window
+  const subY = y + 125;
+  ctx.fillStyle = "#08040d";
+  ctx.fillRect(palX, subY, palW, 60);
+
+  // Animated mini pixel sword/crystal rotating
+  const rot = time * 0.003;
+  ctx.save();
+  ctx.translate(palX + palW / 2, subY + 30);
+  ctx.rotate(rot);
+  ctx.fillStyle = "#00eeff";
+  ctx.fillRect(-6, -16, 12, 32);
+  ctx.fillStyle = "#ff0077";
+  ctx.fillRect(-12, -4, 24, 8);
+  ctx.restore();
+
+  ctx.fillStyle = "#e0eaf5";
+  ctx.fillRect(x - 4, y + 25, w + 8, 8);
+}
+
+/**
+ * 7. Finale Pavilion: "Let's build together" (Matching Attached Image)
+ */
+export function drawConnectPavilion(ctx, lm, groundY, time) {
+  const x = lm.x;
+  const y = groundY - lm.height;
+  const w = lm.width;
+  const h = lm.height;
+
+  // Modern Clean Rounded Pavilion Frame (As in attached picture)
+  ctx.save();
+  // Pillared background
+  ctx.fillStyle = "#1e2433";
+  ctx.fillRect(x, y + 10, w, h - 10);
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 4;
+
+  // Clean White/Light Board Body replicating the user's uploaded image
+  const cardX = x + 12;
+  const cardY = y + 22;
+  const cardW = w - 24;
+  const cardH = h - 32;
+
+  ctx.fillStyle = "#f8fafc";
+  ctx.beginPath();
+  ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+  ctx.fill();
+  ctx.stroke();
+
+  // Eyebrow Tag: CONNECT (in vibrant blue uppercase)
+  ctx.fillStyle = "#0284c7";
+  ctx.font = "bold 10px 'Press Start 2P', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("CONNECT", cardX + cardW / 2, cardY + 34);
+
+  // Main Heading: Let's build together (bold clean black text)
+  ctx.fillStyle = "#0f172a";
+  ctx.font = "bold 20px 'Silkscreen', 'Press Start 2P', sans-serif";
+  ctx.fillText("Let's build together", cardX + cardW / 2, cardY + 68);
+
+  // Subtitle / Prompt
+  ctx.fillStyle = "#475569";
+  ctx.font = "9px 'Silkscreen', sans-serif";
+  ctx.fillText("AI/ML Engineer • Data Pipelines • Multi-Agent Systems", cardX + cardW / 2, cardY + 95);
+
+  // 3 Action Buttons Replica
+  // Button 1: Send Email
+  const btnY = cardY + 115;
+  ctx.fillStyle = "#0f172a";
+  ctx.beginPath();
+  ctx.roundRect(cardX + 16, btnY, 95, 34, 8);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 8px 'Silkscreen', monospace";
+  ctx.fillText("Send Email ✉", cardX + 16 + 47, btnY + 21);
+
+  // Button 2: Download CV (PDF)
+  ctx.fillStyle = "#e0f2fe";
+  ctx.beginPath();
+  ctx.roundRect(cardX + 120, btnY, 125, 34, 8);
+  ctx.fill();
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.fillStyle = "#0284c7";
+  ctx.fillText("⬇ Download CV", cardX + 120 + 62, btnY + 21);
+
+  // Button 3: Copy Email
+  ctx.fillStyle = "#f1f5f9";
+  ctx.beginPath();
+  ctx.roundRect(cardX + 254, btnY, 85, 34, 8);
+  ctx.fill();
+  ctx.fillStyle = "#334155";
+  ctx.fillText("Copy Email", cardX + 254 + 42, btnY + 21);
+
+  // Footer Row: GitHub • LinkedIn • syedmuhammadayyanibrar@gmail.com
+  ctx.fillStyle = "#475569";
+  ctx.font = "8px 'Silkscreen', monospace";
+  ctx.fillText("GitHub   •   LinkedIn   •   syedmuhammadayyanibrar@gmail.com", cardX + cardW / 2, cardY + cardH - 18);
+
+  // Snow on top of pavilion
+  ctx.fillStyle = "#edf3fa";
+  ctx.fillRect(x - 4, y + 6, w + 8, 8);
+
+  ctx.restore();
+}
+
+/**
+ * Stray Cat (Mochi) on Fence
  */
 export function drawCat(ctx, x, y, frameTick) {
   ctx.save();
@@ -208,53 +897,29 @@ export function drawCat(ctx, x, y, frameTick) {
   ctx.fillRect(-18, 6, 6, 25);
   ctx.fillRect(12, 6, 6, 25);
 
-  // Cat body (Warm calico/black & white)
-  ctx.fillStyle = "#1e1e24"; // dark body
+  // Cat body
+  ctx.fillStyle = "#1e1e24";
   ctx.fillRect(-10, -12 + breathe, 16, 12);
-  ctx.fillStyle = "#e07a38"; // orange calico patch
+  ctx.fillStyle = "#e07a38";
   ctx.fillRect(-7, -12 + breathe, 6, 7);
-  ctx.fillStyle = "#f5f5f5"; // white chest & paws
+  ctx.fillStyle = "#f5f5f5";
   ctx.fillRect(-2, -6 + breathe, 6, 6);
-  ctx.fillRect(4, -3, 3, 3);
-  ctx.fillRect(-9, -3, 3, 3);
 
-  // Cat Head
+  // Head & Ears
   ctx.fillStyle = "#1e1e24";
   ctx.fillRect(3, -19 + breathe, 10, 9);
   ctx.fillStyle = "#e07a38";
   ctx.fillRect(6, -19 + breathe, 4, 5);
+  ctx.fillStyle = "#ffdd44";
+  ctx.fillRect(8, -16 + breathe, 2, 2);
 
-  // Ears
-  ctx.fillStyle = "#e07a38";
-  ctx.fillRect(4, -22 + breathe, 3, 3);
-  ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(10, -22 + breathe, 3, 3);
-  ctx.fillStyle = "#ffb0b0";
-  ctx.fillRect(5, -21 + breathe, 1, 2);
-
-  // Eyes (Twinkling gold)
-  const blink = (Math.floor(frameTick / 60) % 5 === 0) && (frameTick % 60 < 6);
-  if (!blink) {
-    ctx.fillStyle = "#ffdd44";
-    ctx.fillRect(8, -16 + breathe, 2, 2);
-    ctx.fillStyle = "#111";
-    ctx.fillRect(9, -16 + breathe, 1, 2);
-  } else {
-    ctx.fillStyle = "#444";
-    ctx.fillRect(8, -15 + breathe, 2, 1);
-  }
-
-  // Cute red collar with gold bell
+  // Collar
   ctx.fillStyle = "#ff2244";
   ctx.fillRect(2, -10 + breathe, 3, 2);
-  ctx.fillStyle = "#ffdd00";
-  ctx.fillRect(3, -8 + breathe, 2, 2);
 
   // Tail
   ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(-13, -11 + breathe, 4, 4);
   ctx.fillRect(-16, -15 + breathe + tailWag, 4, 6);
-  ctx.fillRect(-14, -18 + breathe + tailWag * 1.3, 4, 4);
 
   // Snow on fence
   ctx.fillStyle = "rgba(240, 245, 255, 0.9)";
@@ -262,540 +927,4 @@ export function drawCat(ctx, x, y, frameTick) {
   ctx.fillRect(14, -2, 10, 3);
 
   ctx.restore();
-}
-
-/**
- * Architectural Building Renderers
- */
-
-// 1. Cyber Kiosk / Newsstand (About Me)
-export function drawKiosk(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Stall Main Frame
-  ctx.fillStyle = "#2a1e17";
-  ctx.fillRect(x, y + 40, w, h - 40);
-  ctx.fillStyle = "#3e2c22";
-  ctx.fillRect(x + 4, y + 44, w - 8, h - 48);
-
-  // Slanted Striped Awning (Red & Cream)
-  const stripes = 12;
-  const stripeW = w / stripes;
-  for (let i = 0; i < stripes; i++) {
-    ctx.fillStyle = i % 2 === 0 ? "#b32a2a" : "#eae0cf";
-    ctx.fillRect(x + i * stripeW, y + 20, stripeW, 24);
-  }
-  // Snow piling on the awning roof
-  ctx.fillStyle = "#e8eff7";
-  ctx.fillRect(x - 4, y + 16, w + 8, 7);
-  ctx.fillRect(x + 10, y + 13, w - 24, 4);
-
-  // Glowing Neon Sign: "DAILY BYTES"
-  const neonFlicker = Math.sin(time * 0.015) > -0.92 ? 1 : 0.4;
-  ctx.save();
-  ctx.shadowColor = "#ff7700";
-  ctx.shadowBlur = 12 * neonFlicker;
-  ctx.fillStyle = `rgba(255, 120, 20, ${neonFlicker})`;
-  ctx.fillRect(x + 20, y + 2, w - 40, 14);
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 9px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("DAILY BYTES", x + w / 2, y + 12);
-  ctx.restore();
-
-  // Newsstand Counter & Newspaper Racks
-  ctx.fillStyle = "#1a120d";
-  ctx.fillRect(x + 10, y + 70, w - 20, 50);
-
-  // Newspaper stacks on counter
-  for (let s = 0; s < 5; s++) {
-    ctx.fillStyle = "#dfdacc";
-    ctx.fillRect(x + 18 + s * 40, y + 80, 32, 38);
-    // Newsprint lines
-    ctx.fillStyle = "#222";
-    ctx.fillRect(x + 22 + s * 40, y + 84, 24, 4);
-    ctx.fillStyle = "#666";
-    ctx.fillRect(x + 22 + s * 40, y + 92, 24, 2);
-    ctx.fillRect(x + 22 + s * 40, y + 96, 20, 2);
-    ctx.fillRect(x + 22 + s * 40, y + 100, 22, 2);
-  }
-
-  // Warm interior counter light
-  const grad = ctx.createRadialGradient(x + w / 2, y + 75, 5, x + w / 2, y + 75, 80);
-  grad.addColorStop(0, "rgba(255, 210, 130, 0.45)");
-  grad.addColorStop(1, "rgba(255, 210, 130, 0)");
-  ctx.fillStyle = grad;
-  ctx.fillRect(x + 10, y + 60, w - 20, 65);
-
-  // Steaming Coffee Cup on Counter
-  ctx.fillStyle = "#eee";
-  ctx.fillRect(x + w - 35, y + 76, 8, 8);
-  ctx.fillStyle = "#5c3317";
-  ctx.fillRect(x + w - 34, y + 75, 6, 2);
-}
-
-// 2. Neo-Central Rail Station (Experience)
-export function drawMetro(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Station Brick Grand Structure
-  ctx.fillStyle = "#2b2234";
-  ctx.fillRect(x, y + 30, w, h - 30);
-  ctx.fillStyle = "#3a2e47";
-  ctx.fillRect(x + 8, y + 38, w - 16, h - 38);
-
-  // Classic Brickwork Accents
-  ctx.fillStyle = "#201729";
-  for (let r = 0; r < 6; r++) {
-    for (let c = 0; c < 12; c++) {
-      ctx.fillRect(x + 14 + c * 24 + (r % 2) * 12, y + 46 + r * 14, 18, 4);
-    }
-  }
-
-  // Roof Cornice with Heavy Snowdrifts
-  ctx.fillStyle = "#4a3b5a";
-  ctx.fillRect(x - 8, y + 24, w + 16, 12);
-  ctx.fillStyle = "#f0f5fc";
-  ctx.fillRect(x - 12, y + 16, w + 24, 10);
-  ctx.fillRect(x + 10, y + 10, w - 20, 7);
-
-  // Illuminated Central Clock
-  const clockX = x + w / 2;
-  const clockY = y + 70;
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(clockX, clockY, 20, 0, Math.PI * 2);
-  ctx.fillStyle = "#fff8db";
-  ctx.fill();
-  ctx.strokeStyle = "#875f28";
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  // Clock Hands (Tick slowly)
-  const angle = (time * 0.0005) % (Math.PI * 2);
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(clockX, clockY);
-  ctx.lineTo(clockX + Math.cos(angle) * 12, clockY + Math.sin(angle) * 12);
-  ctx.stroke();
-  ctx.restore();
-
-  // Cyan Neon Header Sign: "NEO-CENTRAL STATION"
-  ctx.save();
-  ctx.shadowColor = "#00eeff";
-  ctx.shadowBlur = 14;
-  ctx.fillStyle = "#00eeff";
-  ctx.font = "bold 9px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("NEO-CENTRAL STATION", x + w / 2, y + 115);
-  ctx.restore();
-
-  // Grand Arched Double Doors with Golden Interior Glow
-  const doorX = x + w / 2 - 35;
-  const doorY = y + 130;
-  ctx.fillStyle = "#ffdd88";
-  ctx.fillRect(doorX, doorY, 70, h - 130);
-  ctx.fillStyle = "#472e1c"; // Door frame
-  ctx.fillRect(doorX + 32, doorY, 6, h - 130);
-  ctx.fillRect(doorX, doorY, 70, 5);
-
-  // Warm light spill from the station entrance
-  const lightSpill = ctx.createLinearGradient(doorX, doorY + 60, doorX, groundY + 20);
-  lightSpill.addColorStop(0, "rgba(255, 220, 130, 0.45)");
-  lightSpill.addColorStop(1, "rgba(255, 220, 130, 0)");
-  ctx.fillStyle = lightSpill;
-  ctx.fillRect(doorX - 25, doorY + 40, 120, groundY - (doorY + 40) + 15);
-}
-
-// 3. AI Data Center / Neural Labs (Project 1)
-export function drawDataCenter(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Dark Slate Brutalist Concrete Blocks
-  ctx.fillStyle = "#151821";
-  ctx.fillRect(x, y + 25, w, h - 25);
-  ctx.fillStyle = "#1e2230";
-  ctx.fillRect(x + 6, y + 32, w - 12, h - 32);
-
-  // Roof Snow Drift & Cooling Towers
-  ctx.fillStyle = "#dce5f0";
-  ctx.fillRect(x - 4, y + 18, w + 8, 9);
-
-  // Rotating rooftop radar dish
-  const dishAngle = Math.sin(time * 0.002) * 0.5;
-  ctx.save();
-  ctx.translate(x + 50, y + 16);
-  ctx.rotate(dishAngle);
-  ctx.fillStyle = "#7b889b";
-  ctx.fillRect(-2, 0, 4, 12);
-  ctx.beginPath();
-  ctx.arc(0, 0, 14, Math.PI, 0, true);
-  ctx.fillStyle = "#434e61";
-  ctx.fill();
-  ctx.restore();
-
-  // Green Holographic Neon Sign: "NEURAL DATA LABS"
-  ctx.save();
-  ctx.shadowColor = "#00ff88";
-  ctx.shadowBlur = 12;
-  ctx.fillStyle = "#00ff88";
-  ctx.font = "bold 9px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("NEURAL DATA LABS", x + w / 2, y + 54);
-  ctx.restore();
-
-  // Big Glass Server Rack Bay Windows
-  const bayW = 75;
-  const bayH = 120;
-  for (let b = 0; b < 3; b++) {
-    const bayX = x + 24 + b * 100;
-    const bayY = y + 75;
-
-    // Window frame
-    ctx.fillStyle = "#0f1118";
-    ctx.fillRect(bayX, bayY, bayW, bayH);
-    ctx.fillStyle = "rgba(0, 255, 180, 0.08)";
-    ctx.fillRect(bayX + 2, bayY + 2, bayW - 4, bayH - 4);
-
-    // Server blade units inside
-    for (let s = 0; s < 7; s++) {
-      const rackY = bayY + 6 + s * 16;
-      ctx.fillStyle = "#1b212c";
-      ctx.fillRect(bayX + 6, rackY, bayW - 12, 12);
-
-      // Flickering server activity LEDs
-      const ledTick = Math.floor(time * 0.008 + b * 7 + s * 3);
-      for (let l = 0; l < 4; l++) {
-        const isGreen = (ledTick + l) % 3 === 0;
-        ctx.fillStyle = isGreen ? "#00ff66" : ((ledTick + l) % 5 === 0 ? "#00ccff" : "#ffaa00");
-        ctx.fillRect(bayX + 12 + l * 8, rackY + 4, 4, 4);
-      }
-    }
-  }
-
-  // Cyan fiber-optic glow conduit along the base
-  ctx.fillStyle = "#00ddff";
-  ctx.shadowColor = "#00ddff";
-  ctx.shadowBlur = 8;
-  ctx.fillRect(x + 10, groundY - 6, w - 20, 3);
-}
-
-// 4. Quantum Vault / Fintech Bank (Project 2)
-export function drawBank(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Classical Neo-Deco Stone Facade
-  ctx.fillStyle = "#272a38";
-  ctx.fillRect(x, y + 40, w, h - 40);
-
-  // Pediment Roof Triangle & Snow
-  ctx.fillStyle = "#3a3e52";
-  ctx.beginPath();
-  ctx.moveTo(x - 10, y + 40);
-  ctx.lineTo(x + w / 2, y + 8);
-  ctx.lineTo(x + w + 10, y + 40);
-  ctx.fill();
-  ctx.fillStyle = "#e2eaf5";
-  ctx.beginPath();
-  ctx.moveTo(x - 14, y + 40);
-  ctx.lineTo(x + w / 2, y + 4);
-  ctx.lineTo(x + w + 14, y + 40);
-  ctx.lineTo(x + w + 10, y + 45);
-  ctx.lineTo(x + w / 2, y + 12);
-  ctx.lineTo(x - 10, y + 45);
-  ctx.fill();
-
-  // Golden Deco Vault Medallion
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x + w / 2, y + 28, 12, 0, Math.PI * 2);
-  ctx.fillStyle = "#ffd700";
-  ctx.shadowColor = "#ffd700";
-  ctx.shadowBlur = 10;
-  ctx.fill();
-  ctx.fillStyle = "#222";
-  ctx.font = "bold 10px monospace";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("QV", x + w / 2, y + 28);
-  ctx.restore();
-
-  // Scrolling Financial LED Ticker Tape
-  ctx.fillStyle = "#0f1118";
-  ctx.fillRect(x + 10, y + 48, w - 20, 18);
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(x + 10, y + 48, w - 20, 18);
-  ctx.clip();
-  const tickerText = "BTC +5.2%  ETH +3.8%  TPS: 124,000  P99: 3.8ms  RECON: 0 DELTA  AEGISPAY ONLINE  ";
-  const tickerOffset = (time * 0.05) % 450;
-  ctx.fillStyle = "#00ff88";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.fillText(tickerText, x + 20 - tickerOffset, y + 61);
-  ctx.fillText(tickerText, x + 20 - tickerOffset + 450, y + 61);
-  ctx.restore();
-
-  // Fluted Classical Pillars (4 pillars)
-  for (let p = 0; p < 4; p++) {
-    const px = x + 30 + p * 85;
-    ctx.fillStyle = "#4a4f66";
-    ctx.fillRect(px, y + 74, 22, h - 80);
-    ctx.fillStyle = "#656c8a";
-    ctx.fillRect(px + 3, y + 74, 5, h - 80);
-  }
-
-  // Golden Vault Blast Door at Center
-  const vX = x + w / 2 - 35;
-  const vY = y + 105;
-  ctx.fillStyle = "#1a1c24";
-  ctx.fillRect(vX, vY, 70, h - 110);
-  ctx.beginPath();
-  ctx.arc(vX + 35, vY + 45, 26, 0, Math.PI * 2);
-  ctx.fillStyle = "#d4af37";
-  ctx.fill();
-  ctx.strokeStyle = "#8c721f";
-  ctx.lineWidth = 4;
-  ctx.stroke();
-  // Spokes
-  for (let s = 0; s < 6; s++) {
-    const spokeA = (s * Math.PI / 3) + (time * 0.001);
-    ctx.beginPath();
-    ctx.moveTo(vX + 35, vY + 45);
-    ctx.lineTo(vX + 35 + Math.cos(spokeA) * 22, vY + 45 + Math.sin(spokeA) * 22);
-    ctx.stroke();
-  }
-}
-
-// 5. EchoSphere Broadcast Hub (Project 3)
-export function drawBroadcast(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Station Building Base
-  ctx.fillStyle = "#221929";
-  ctx.fillRect(x, y + 60, w, h - 60);
-  ctx.fillStyle = "#31233b";
-  ctx.fillRect(x + 6, y + 68, w - 12, h - 68);
-
-  // Roof Snow Drift
-  ctx.fillStyle = "#e3ecf5";
-  ctx.fillRect(x - 4, y + 54, w + 8, 8);
-
-  // Huge Broadcast Lattice Antenna Mast
-  const mastX = x + w / 2;
-  const mastBaseY = y + 54;
-  ctx.strokeStyle = "#725b82";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(mastX - 16, mastBaseY);
-  ctx.lineTo(mastX, y - 45);
-  ctx.lineTo(mastX + 16, mastBaseY);
-  // Cross bracing
-  for (let c = 0; c < 5; c++) {
-    const cy = mastBaseY - c * 18;
-    ctx.moveTo(mastX - 14 + c * 2, cy);
-    ctx.lineTo(mastX + 14 - c * 2, cy);
-  }
-  ctx.stroke();
-
-  // Blinking Red Aviation Beacon Light at the mast tip
-  const beaconBlink = Math.sin(time * 0.006) > 0;
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(mastX, y - 46, 4, 0, Math.PI * 2);
-  ctx.fillStyle = beaconBlink ? "#ff0033" : "#660011";
-  ctx.shadowColor = "#ff0033";
-  ctx.shadowBlur = beaconBlink ? 14 : 0;
-  ctx.fill();
-  ctx.restore();
-
-  // Pulsing Radio Waves radiating from mast
-  const waveRadius = ((time * 0.04) % 60) + 10;
-  const waveAlpha = Math.max(0, 1 - waveRadius / 70);
-  ctx.strokeStyle = `rgba(255, 0, 119, ${waveAlpha * 0.7})`;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(mastX, y - 46, waveRadius, -Math.PI * 0.8, -Math.PI * 0.2);
-  ctx.stroke();
-
-  // Neon "ON AIR" Sign
-  ctx.save();
-  ctx.shadowColor = "#ff0055";
-  ctx.shadowBlur = 10;
-  ctx.fillStyle = "#ff0055";
-  ctx.fillRect(x + 24, y + 74, 52, 16);
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 8px 'Press Start 2P', monospace";
-  ctx.fillText("ON AIR", x + 30, y + 86);
-  ctx.restore();
-
-  // Studio Soundproof Window with Audio Waveform
-  const winX = x + 24;
-  const winY = y + 102;
-  const winW = w - 48;
-  const winH = 80;
-  ctx.fillStyle = "#120917";
-  ctx.fillRect(winX, winY, winW, winH);
-  ctx.strokeStyle = "#4d2959";
-  ctx.strokeRect(winX, winY, winW, winH);
-
-  // Animated Audio Visualizer inside window
-  ctx.fillStyle = "#ff0077";
-  for (let b = 0; b < 16; b++) {
-    const barH = 10 + Math.abs(Math.sin(time * 0.008 + b * 0.6)) * 45;
-    ctx.fillRect(winX + 12 + b * 14, winY + winH - barH - 8, 8, barH);
-  }
-}
-
-// 6. 8-Bit Forge Pixel Arcade (Project 4)
-export function drawArcade(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Dark retro arcade building
-  ctx.fillStyle = "#181024";
-  ctx.fillRect(x, y + 36, w, h - 36);
-
-  // Snow on roof
-  ctx.fillStyle = "#e5eff8";
-  ctx.fillRect(x - 6, y + 28, w + 12, 10);
-
-  // Glowing Marquee Sign: "8-BIT FORGE"
-  const colorShift = Math.floor(time * 0.003) % 3;
-  const marqueeColor = colorShift === 0 ? "#ff00ff" : (colorShift === 1 ? "#00ffff" : "#ffea00");
-  ctx.save();
-  ctx.shadowColor = marqueeColor;
-  ctx.shadowBlur = 16;
-  ctx.fillStyle = marqueeColor;
-  ctx.fillRect(x + 16, y + 45, w - 32, 26);
-  ctx.fillStyle = "#110022";
-  ctx.font = "bold 10px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("8-BIT FORGE", x + w / 2, y + 62);
-  ctx.restore();
-
-  // Glass Window with Arcade Cabinets inside
-  const winX = x + 20;
-  const winY = y + 85;
-  const winW = w - 40;
-  const winH = 105;
-  ctx.fillStyle = "#0c0614";
-  ctx.fillRect(winX, winY, winW, winH);
-
-  // 3 Mini Arcade Cabinets in the window
-  for (let c = 0; c < 3; c++) {
-    const cabX = winX + 18 + c * 75;
-    const cabY = winY + 15;
-    ctx.fillStyle = c === 0 ? "#990033" : (c === 1 ? "#006699" : "#663399");
-    ctx.fillRect(cabX, cabY, 45, 80);
-
-    // Glowing CRT screen inside cabinet
-    const scrFlicker = (time * 0.01 + c) % 2 > 1 ? "#00ffcc" : "#ff00aa";
-    ctx.fillStyle = scrFlicker;
-    ctx.fillRect(cabX + 6, cabY + 12, 33, 28);
-
-    // Joystick & Buttons
-    ctx.fillStyle = "#ffdd00";
-    ctx.fillRect(cabX + 12, cabY + 48, 4, 6);
-    ctx.fillStyle = "#ff0033";
-    ctx.fillRect(cabX + 26, cabY + 50, 4, 4);
-    ctx.fillRect(cabX + 32, cabY + 48, 4, 4);
-  }
-
-  // Neon "INSERT COIN" glowing sign
-  const coinBlink = Math.floor(time * 0.002) % 2 === 0;
-  if (coinBlink) {
-    ctx.fillStyle = "#ffdd00";
-    ctx.font = "7px 'Press Start 2P', monospace";
-    ctx.fillText("INSERT COIN", x + w / 2, y + winH + 105);
-  }
-}
-
-// 7. Red Telephone Booth & Post Box (Contact)
-export function drawPhoneBooth(ctx, lm, groundY, time) {
-  const x = lm.x;
-  const y = groundY - lm.height;
-  const w = lm.width;
-  const h = lm.height;
-
-  // Phone Booth Box (Classic British / Neo-Tokyo Red)
-  const boothX = x + 25;
-  const boothW = 75;
-  const boothH = 175;
-  const boothY = groundY - boothH;
-
-  // Dome Roof with Snow
-  ctx.fillStyle = "#b81d24";
-  ctx.beginPath();
-  ctx.arc(boothX + boothW / 2, boothY + 8, boothW / 2, Math.PI, 0);
-  ctx.fill();
-  ctx.fillStyle = "#f0f5fb";
-  ctx.beginPath();
-  ctx.arc(boothX + boothW / 2, boothY + 5, boothW / 2 + 3, Math.PI, 0);
-  ctx.fill();
-
-  // Outer Red Structure
-  ctx.fillStyle = "#cc242c";
-  ctx.fillRect(boothX, boothY + 8, boothW, boothH - 8);
-
-  // Interior Yellow Glow
-  ctx.fillStyle = "rgba(255, 230, 140, 0.75)";
-  ctx.fillRect(boothX + 8, boothY + 24, boothW - 16, boothH - 34);
-
-  // Glass Window Panes (3x4 grid)
-  ctx.strokeStyle = "#8f1319";
-  ctx.lineWidth = 3;
-  for (let r = 0; r < 4; r++) {
-    for (let c = 0; c < 3; c++) {
-      ctx.strokeRect(boothX + 10 + c * 18, boothY + 30 + r * 28, 18, 28);
-    }
-  }
-
-  // Phone Handset & Coin Box Silhouette
-  ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(boothX + 28, boothY + 55, 18, 30);
-  ctx.fillRect(boothX + 34, boothY + 50, 6, 40); // Handset
-
-  // Royal Red Post Box next to Booth
-  const boxX = x + 120;
-  const boxW = 34;
-  const boxH = 75;
-  const boxY = groundY - boxH;
-
-  // Dome & Snow
-  ctx.fillStyle = "#a81920";
-  ctx.beginPath();
-  ctx.arc(boxX + boxW / 2, boxY + 8, boxW / 2, Math.PI, 0);
-  ctx.fill();
-  ctx.fillStyle = "#edf3fa";
-  ctx.beginPath();
-  ctx.arc(boxX + boxW / 2, boxY + 5, boxW / 2 + 2, Math.PI, 0);
-  ctx.fill();
-
-  // Cylindrical Body
-  ctx.fillStyle = "#c41e25";
-  ctx.fillRect(boxX, boxY + 8, boxW, boxH - 8);
-  // Mail Slot
-  ctx.fillStyle = "#111";
-  ctx.fillRect(boxX + 6, boxY + 24, boxW - 12, 4);
-  // Gold Royal Monogram / Emblem
-  ctx.fillStyle = "#ffdd44";
-  ctx.fillRect(boxX + boxW / 2 - 3, boxY + 38, 6, 8);
 }

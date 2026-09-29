@@ -25,7 +25,7 @@ class App {
 
     // Player State
     this.player = {
-      x: 480, // Start in front of the Cyber Kiosk
+      x: 240, // Start in front of the 3-Panel Start Directory Board
       y: 0,   // Ground level
       vx: 0,
       vy: 0,

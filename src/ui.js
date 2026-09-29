@@ -1,4 +1,4 @@
-// src/ui.js - Retro HUD, Minimap, CRT Dossier Modals & Touch D-Pad
+// src/ui.js - Retro HUD, Persistent CV Button, Feed Repo Links, Start Board & Connect Pavilion
 
 import { DEVELOPER_PROFILE, LANDMARKS, STREET_TOTAL_WIDTH } from "./data.js";
 import { audio } from "./audio.js";
@@ -6,10 +6,9 @@ import { audio } from "./audio.js";
 export class UIManager {
   constructor(appContainer, callbacks) {
     this.container = appContainer;
-    this.callbacks = callbacks; // { onThemeChange, onCrtToggle, onAudioToggle, onTravelTo }
+    this.callbacks = callbacks;
     this.activeModal = null;
     this.activeTab = 0;
-    this.galleryIndex = 0;
     this.isCrtEnabled = true;
 
     this.renderHUD();
@@ -28,19 +27,25 @@ export class UIManager {
           <div class="pixel-avatar-icon"></div>
         </div>
         <div class="hud-bio">
-          <div class="hud-name">${DEVELOPER_PROFILE.name} <span class="hud-tag">LVL.99</span></div>
+          <div class="hud-name">${DEVELOPER_PROFILE.name} <span class="hud-tag">AI/ML</span></div>
           <div class="hud-title">${DEVELOPER_PROFILE.title}</div>
           <div class="hud-telemetry">
             <span class="hud-status-dot"></span>
             <span id="hud-pos">POS: X: 480px</span>
             <span class="hud-sep">|</span>
-            <span id="hud-landmark">DAILY BYTES KIOSK</span>
+            <span id="hud-landmark">01: NEUROSTREAM</span>
           </div>
         </div>
       </div>
 
-      <!-- Top Right: Action Controls -->
+      <!-- Top Right: Action Controls & Persistent CV Download Button -->
       <div class="hud-controls">
+        <!-- CONSTANT TOP BUTTON: Download CV (PDF) -->
+        <a href="${DEVELOPER_PROFILE.cvUrl}" download="Syed_Ayyan_CV.pdf" class="hud-btn hud-cv-btn" id="btn-top-cv" title="Download Syed's CV (PDF)">
+          <span class="hud-icon">⬇</span>
+          <span class="hud-btn-text">DOWNLOAD CV (PDF)</span>
+        </a>
+
         <!-- Weather / Time Toggle -->
         <button id="btn-weather" class="hud-btn" title="Toggle Weather / Time (Key: T)">
           <span class="hud-icon">🌆</span>
@@ -73,6 +78,11 @@ export class UIManager {
     this.container.appendChild(hud);
 
     // Bind HUD button listeners
+    document.getElementById("btn-top-cv").addEventListener("click", () => {
+      audio.playClick(1.6);
+      this.showToast("✅ DOWNLOADING SYED_AYYAN_CV.PDF");
+    });
+
     document.getElementById("btn-weather").addEventListener("click", () => {
       audio.playClick(1.2);
       if (this.callbacks.onThemeChange) this.callbacks.onThemeChange();
@@ -93,6 +103,21 @@ export class UIManager {
       audio.playClick(1.1);
       this.openHelpModal();
     });
+  }
+
+  showToast(msg) {
+    const existing = document.getElementById("hud-toast");
+    if (existing) existing.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "hud-toast";
+    toast.className = "hud-toast";
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      if (toast) toast.remove();
+    }, 2800);
   }
 
   updateAudioButton(isUnmuted) {
@@ -138,14 +163,14 @@ export class UIManager {
     LANDMARKS.forEach((lm, idx) => {
       const pct = (lm.x / STREET_TOTAL_WIDTH) * 100;
       let symbol = "📍";
-      if (lm.type === "kiosk") symbol = "📰";
-      else if (lm.type === "metro") symbol = "🚆";
-      else if (lm.type === "datacenter") symbol = "🧠";
-      else if (lm.type === "bank") symbol = "🏦";
-      else if (lm.type === "broadcast") symbol = "📡";
-      else if (lm.type === "arcade") symbol = "🕹️";
-      else if (lm.type === "cat") symbol = "🐱";
-      else if (lm.type === "phonebooth") symbol = "☎️";
+      if (lm.id === "start_board") symbol = "📋";
+      else if (lm.id === "neurostream") symbol = "🧠";
+      else if (lm.id === "omnivision") symbol = "👁️";
+      else if (lm.id === "synapseflow") symbol = "📊";
+      else if (lm.id === "aegisguard") symbol = "🛡️";
+      else if (lm.id === "voicesynapse") symbol = "🎙️";
+      else if (lm.id === "pixeldiffusion") symbol = "🎨";
+      else if (lm.id === "connect_pavilion") symbol = "🤝";
 
       iconsHtml += `
         <button class="minimap-node" style="left: ${pct}%;" data-idx="${idx}" title="${lm.label} (Key: ${idx + 1})">
@@ -157,7 +182,7 @@ export class UIManager {
 
     minimap.innerHTML = `
       <div class="minimap-header">
-        <span class="minimap-title">STREET RADAR & FAST TRAVEL</span>
+        <span class="minimap-title">AI AVENUE // PROJECT RADAR</span>
         <span class="minimap-hint">CLICK ICON TO TRAVEL</span>
       </div>
       <div class="minimap-track" id="minimap-track">
@@ -169,7 +194,6 @@ export class UIManager {
 
     this.container.appendChild(minimap);
 
-    // Bind minimap click-to-travel
     minimap.querySelectorAll(".minimap-node").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -198,22 +222,19 @@ export class UIManager {
   }
 
   updatePlayerPosition(playerX, activeLandmark) {
-    // Update HUD telemetry
     const posEl = document.getElementById("hud-pos");
     const lmEl = document.getElementById("hud-landmark");
     if (posEl) posEl.textContent = `POS: X: ${Math.round(playerX)}px`;
     if (lmEl) {
-      lmEl.textContent = activeLandmark ? activeLandmark.label : "NEO-TOKYO AVE";
+      lmEl.textContent = activeLandmark ? activeLandmark.label : "AI SYSTEMS AVENUE";
     }
 
-    // Update Minimap blip
     const blip = document.getElementById("minimap-player-blip");
     if (blip) {
       const pct = (playerX / STREET_TOTAL_WIDTH) * 100;
       blip.style.left = `${Math.max(1, Math.min(99, pct))}%`;
     }
 
-    // Update audio equalizer visualizer bars
     const bars = audio.getVisualizerData();
     const barEls = document.querySelectorAll("#audio-visualizer .bar");
     barEls.forEach((el, idx) => {
@@ -232,17 +253,12 @@ export class UIManager {
   openLandmarkModal(landmark) {
     audio.playOpenModal();
     this.activeTab = 0;
-    this.galleryIndex = 0;
 
     let contentHtml = "";
-    if (landmark.type === "kiosk") {
-      contentHtml = this.getKioskHtml(landmark);
-    } else if (landmark.type === "metro") {
-      contentHtml = this.getMetroHtml(landmark);
-    } else if (landmark.type === "cat") {
-      contentHtml = this.getCatHtml(landmark);
-    } else if (landmark.type === "phonebooth") {
-      contentHtml = this.getPhoneBoothHtml(landmark);
+    if (landmark.id === "start_board") {
+      contentHtml = this.getStartBoardHtml(landmark);
+    } else if (landmark.id === "connect_pavilion") {
+      contentHtml = this.getConnectPavilionHtml(landmark);
     } else {
       contentHtml = this.getProjectHtml(landmark);
     }
@@ -270,7 +286,6 @@ export class UIManager {
     document.body.appendChild(modal);
     this.activeModal = modal;
 
-    // Close on backdrop or close button
     document.getElementById("btn-modal-close").addEventListener("click", () => this.closeModal());
     modal.addEventListener("click", (e) => {
       if (e.target === modal) this.closeModal();
@@ -279,102 +294,85 @@ export class UIManager {
     this.bindModalInteractions(landmark);
   }
 
-  getKioskHtml(landmark) {
-    const data = landmark.newspaperData;
+  // 1. Start Board Modal (3 Panels: GitHub, Gmail, LinkedIn)
+  getStartBoardHtml(landmark) {
+    const panels = landmark.panels;
     return `
-      <div class="newspaper-container">
-        <div class="newspaper-header">
-          <div class="news-issue">${data.issueNo}</div>
-          <div class="news-masthead">THE DAILY BYTES</div>
-          <div class="news-date">${data.date}</div>
+      <div class="start-board-modal">
+        <div class="start-board-header">
+          <h2>DEVELOPER DIRECTORY & SOCIAL FREQUENCIES</h2>
+          <p>Syed Muhammad Ayyan Ibrar — Connect directly across core channels:</p>
         </div>
 
-        <div class="news-headline">${data.headline}</div>
+        <div class="three-panels-grid">
+          <!-- Panel 1: GitHub -->
+          <div class="directory-card github">
+            <div class="dir-icon">🐙</div>
+            <h3>GITHUB REPOSITORIES</h3>
+            <p>Access source code, model checkpoints, vector routing algorithms, and multi-agent systems.</p>
+            <div class="dir-handle">@syedmuhammadayyanibrar</div>
+            <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" class="dir-btn github-btn">
+              VIEW GITHUB CODE ↗
+            </a>
+          </div>
 
-        <div class="news-columns">
-          <div class="news-col primary">
-            <h3>EDITORIAL PROFILE</h3>
-            <p>${data.leadArticle}</p>
-            <div class="news-quote">
-              "Great engineering is like classic city architecture: rock-solid infrastructure under the asphalt, with warm, radiant beauty on the surface."
-            </div>
-            <h3>CORE SKILL RADAR</h3>
-            <div class="tech-radar-grid">
-              ${DEVELOPER_PROFILE.skills.languages.map(s => `<span class="tech-pill lang">${s}</span>`).join("")}
-              ${DEVELOPER_PROFILE.skills.backend.map(s => `<span class="tech-pill back">${s}</span>`).join("")}
-              ${DEVELOPER_PROFILE.skills.frontend.map(s => `<span class="tech-pill front">${s}</span>`).join("")}
-              ${DEVELOPER_PROFILE.skills.dataDevOps.map(s => `<span class="tech-pill devops">${s}</span>`).join("")}
+          <!-- Panel 2: Gmail -->
+          <div class="directory-card gmail">
+            <div class="dir-icon">✉️</div>
+            <h3>DIRECT GMAIL INBOX</h3>
+            <p>Direct communication for AI engineering roles, technical architecture, & consulting.</p>
+            <div class="dir-handle">syedmuhammadayyanibrar@gmail.com</div>
+            <div class="dir-btn-group">
+              <a href="mailto:syedmuhammadayyanibrar@gmail.com" class="dir-btn gmail-btn">
+                COMPOSE EMAIL ↗
+              </a>
+              <button class="dir-btn copy-btn" id="btn-copy-gmail-dir">
+                COPY EMAIL
+              </button>
             </div>
           </div>
 
-          <div class="news-col secondary">
-            <h3>ENGINEERING ETHOS</h3>
-            <ul class="ethos-list">
-              ${data.philosophy.map(p => `<li>${p}</li>`).join("")}
-            </ul>
-
-            <h3 style="margin-top: 18px;">CURRENT 2026 FOCUS</h3>
-            <ul class="focus-list">
-              ${data.currentFocus.map(f => `<li>⚡ ${f}</li>`).join("")}
-            </ul>
-
-            <div class="news-status-box">
-              <div class="status-title">STATUS: ACTIVE</div>
-              <div class="status-desc">${DEVELOPER_PROFILE.status}</div>
-            </div>
+          <!-- Panel 3: LinkedIn -->
+          <div class="directory-card linkedin">
+            <div class="dir-icon">💼</div>
+            <h3>LINKEDIN NETWORK</h3>
+            <p>Verified professional trajectory, peer endorsements, architecture case studies.</p>
+            <div class="dir-handle">/in/syedayyan</div>
+            <a href="https://linkedin.com/in/syedayyan" target="_blank" class="dir-btn linkedin-btn">
+              CONNECT ON LINKEDIN ↗
+            </a>
           </div>
         </div>
       </div>
     `;
   }
 
-  getMetroHtml(landmark) {
-    const schedule = landmark.scheduleData;
-    return `
-      <div class="metro-container">
-        <div class="metro-board-header">
-          <div class="metro-board-title">NEO-CENTRAL RAILWAY // CAREER DEPARTURE TIMELINE</div>
-          <div class="metro-board-subtitle">CHRONOLOGICAL PROFESSIONAL MILESTONES & LEADERSHIP</div>
-        </div>
-
-        <div class="metro-schedule-table">
-          ${schedule.map((item, idx) => `
-            <div class="metro-row" style="animation-delay: ${idx * 0.08}s">
-              <div class="metro-col-time">
-                <span class="train-code">${item.trainNo}</span>
-                <span class="train-time">${item.time}</span>
-              </div>
-              <div class="metro-col-main">
-                <div class="metro-role-title">${item.role} <span class="metro-company">@ ${item.company}</span></div>
-                <div class="metro-desc">${item.description}</div>
-                <ul class="metro-bullets">
-                  ${item.highlights.map(h => `<li>▹ ${h}</li>`).join("")}
-                </ul>
-                <div class="metro-tags">
-                  ${item.stack.map(t => `<span class="metro-tag">${t}</span>`).join("")}
-                </div>
-              </div>
-              <div class="metro-col-status">
-                <span class="status-badge ${item.status.toLowerCase()}">${item.status}</span>
-                <span class="platform-badge">${item.platform}</span>
-              </div>
-            </div>
-          `).join("")}
-        </div>
-      </div>
-    `;
-  }
-
+  // 2. Project Dossier (With Repository Link prominently at start of feed!)
   getProjectHtml(landmark) {
     const p = landmark.project;
     return `
       <div class="project-dossier">
-        <!-- Top Dossier Bar -->
+        <!-- PROMINENT REPOSITORY LINK AT THE START OF FEED -->
+        <div class="repo-ingress-feed-banner">
+          <div class="repo-feed-left">
+            <span class="repo-feed-badge">📦 GITHUB REPO</span>
+            <a href="${p.repoUrl}" target="_blank" class="repo-feed-link">
+              ${p.repoUrl.replace("https://", "")} ↗
+            </a>
+          </div>
+          <div class="repo-feed-right">
+            <button class="repo-clone-btn" id="btn-copy-clone" data-cmd="${p.cloneCmd}">
+              📋 ${p.cloneCmd}
+            </button>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
         <div class="dossier-nav">
           <button class="dossier-tab active" data-tab="0">1. OVERVIEW & PROBLEM</button>
-          <button class="dossier-tab" data-tab="1">2. ARCHITECTURE & STACK</button>
-          <button class="dossier-tab" data-tab="2">3. LIVE TELEMETRY</button>
-          <button class="dossier-tab" data-tab="3">4. CRT BLUEPRINT</button>
+          <button class="dossier-tab" data-tab="1">2. SYSTEM ARCHITECTURE</button>
+          <button class="dossier-tab" data-tab="2">3. PERFORMANCE METRICS</button>
+          <button class="dossier-tab" data-tab="3">4. CRT BLUEPRINT CAROUSEL</button>
         </div>
 
         <!-- Tab 0: Overview & Problem -->
@@ -409,7 +407,7 @@ export class UIManager {
 
         <!-- Tab 1: Architecture & Stack -->
         <div class="dossier-page" id="dossier-page-1">
-          <h3>SYSTEM PIPELINE DATAFLOW</h3>
+          <h3>DETERMINISTIC DATAFLOW PIPELINE</h3>
           <div class="architecture-flow">
             ${p.architecture.map((step, idx) => `
               <div class="arch-step">
@@ -425,34 +423,34 @@ export class UIManager {
           </div>
         </div>
 
-        <!-- Tab 2: Live Telemetry & Metrics -->
+        <!-- Tab 2: Performance Telemetry -->
         <div class="dossier-page" id="dossier-page-2">
-          <h3>REAL-TIME CLOUD TELEMETRY // PRODUCTION SLA</h3>
+          <h3>PRODUCTION BENCHMARKS & RELIABILITY</h3>
           <div class="telemetry-grid">
             <div class="telemetry-gauge">
-              <div class="gauge-title">LIGHTHOUSE PERFORMANCE</div>
+              <div class="gauge-title">INFERENCE SLA AVAILABILITY</div>
               <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 100%;"></div></div>
-              <div class="gauge-value">100 / 100 (GRADE A+)</div>
+              <div class="gauge-value">99.99% ZERO DOWNTIME</div>
             </div>
             <div class="telemetry-gauge">
-              <div class="gauge-title">SYSTEM AVAILABILITY (SLA)</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 99.99%;"></div></div>
-              <div class="gauge-value">99.999% ZERO DOWNTIME</div>
+              <div class="gauge-title">DETERMINISTIC TEST PASS RATIO</div>
+              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 98%;"></div></div>
+              <div class="gauge-value">98.9% REGRESSION VERIFIED</div>
             </div>
             <div class="telemetry-gauge">
-              <div class="gauge-title">SPECULATIVE CACHE EFFICIENCY</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 88%;"></div></div>
-              <div class="gauge-value">88.4% HIT RATIO</div>
+              <div class="gauge-title">P99 LATENCY JITTER PROFILE</div>
+              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 92%;"></div></div>
+              <div class="gauge-value">&lt; 0.8ms JITTER VARIANCE</div>
             </div>
             <div class="telemetry-gauge">
-              <div class="gauge-title">TEST COVERAGE & INTEGRATION</div>
+              <div class="gauge-title">MEMORY EFFICIENCY / LEAK DETECTION</div>
               <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 96%;"></div></div>
-              <div class="gauge-value">96.8% AUTOMATED CI</div>
+              <div class="gauge-value">ZERO LEAKS DETECTED (VALGRIND)</div>
             </div>
           </div>
         </div>
 
-        <!-- Tab 3: CRT Blueprint / Simulated Monitor Carousel -->
+        <!-- Tab 3: CRT Blueprint Carousel -->
         <div class="dossier-page" id="dossier-page-3">
           <div class="ascii-monitor">
             <div class="ascii-monitor-topbar">
@@ -469,11 +467,11 @@ export class UIManager {
 
         <!-- Action Footer -->
         <div class="dossier-footer">
-          <a href="${p.liveDemoUrl}" target="_blank" class="terminal-action-btn primary" id="btn-live-demo">
-            🚀 LAUNCH LIVE DEMO
+          <a href="${p.repoUrl}" target="_blank" class="terminal-action-btn primary">
+            📦 VIEW GITHUB REPOSITORY
           </a>
-          <a href="${p.githubUrl}" target="_blank" class="terminal-action-btn secondary">
-            📦 VIEW SOURCE ON GITHUB
+          <a href="${p.liveDemoUrl}" target="_blank" class="terminal-action-btn secondary" id="btn-live-demo">
+            🚀 LAUNCH LIVE BENCHMARK
           </a>
           <button class="terminal-action-btn tertiary" id="btn-copy-link">
             🔗 COPY PROJECT LINK
@@ -483,82 +481,40 @@ export class UIManager {
     `;
   }
 
-  getCatHtml(landmark) {
+  // 3. Finale Board: "Let's build together" (Exact replica of attached picture)
+  getConnectPavilionHtml(landmark) {
+    const card = landmark.connectCard;
     return `
-      <div class="cat-dialogue-modal">
-        <div class="cat-portrait-box">
-          <div class="cat-portrait">🐱</div>
-          <div class="cat-badge">MOCHI // ALLEY GUARDIAN</div>
-        </div>
-        <div class="cat-speech-bubble">
-          <div class="cat-purr-title">*Purrrrrr... Meow!*</div>
-          <p class="cat-quote">${landmark.quote}</p>
-          <div class="cat-perks">
-            <div class="perk">🐾 +50 Warmth in Cold Dusk</div>
-            <div class="perk">✨ Secret Badge Unlocked: [STREET COMPANION]</div>
-            <div class="perk">🛡️ 0 Runtime Exceptions Guarantee</div>
-          </div>
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-          <button class="terminal-action-btn primary" id="btn-pet-again">💖 PET MOCHI AGAIN</button>
-        </div>
-      </div>
-    `;
-  }
+      <div class="connect-pavilion-modal">
+        <div class="finale-card">
+          <div class="finale-eyebrow">${card.eyebrow}</div>
+          <h1 class="finale-title">${card.title}</h1>
+          <p class="finale-desc">${card.description}</p>
 
-  getPhoneBoothHtml(landmark) {
-    const data = landmark.contactData;
-    return `
-      <div class="contact-terminal">
-        <div class="contact-header">
-          <div class="contact-title">TELE-POST CENTRAL // DIRECT TRANSMISSION</div>
-          <div class="contact-subtitle">${data.availability}</div>
-        </div>
-
-        <div class="contact-grid">
-          <!-- Direct Message Form -->
-          <div class="contact-form-box">
-            <h3>TRANSMIT DIRECT DISPATCH</h3>
-            <form id="contact-form" onsubmit="return false;">
-              <div class="form-row">
-                <label>CALLSIGN / NAME:</label>
-                <input type="text" id="msg-name" placeholder="e.g. Alex Vance" required />
-              </div>
-              <div class="form-row">
-                <label>RETURN TRANSMISSION / EMAIL:</label>
-                <input type="email" id="msg-email" placeholder="alex@company.com" required />
-              </div>
-              <div class="form-row">
-                <label>MESSAGE PACKET:</label>
-                <textarea id="msg-body" rows="4" placeholder="Hello Syed, I saw your work on high-throughput distributed systems..." required></textarea>
-              </div>
-              <button type="submit" class="terminal-action-btn primary" id="btn-send-dispatch">
-                📡 TRANSMIT DISPATCH
-              </button>
-              <div id="dispatch-status" class="dispatch-status"></div>
-            </form>
+          <!-- 3 Replicated Buttons -->
+          <div class="finale-buttons-row">
+            <a href="mailto:${card.email}" class="btn-finale send-email" id="btn-finale-email">
+              Send Email ✉
+            </a>
+            <a href="${card.cvUrl}" download="Syed_Ayyan_CV.pdf" class="btn-finale download-cv" id="btn-finale-cv">
+              ⬇ Download CV (PDF)
+            </a>
+            <button class="btn-finale copy-email" id="btn-finale-copy">
+              Copy Email
+            </button>
           </div>
 
-          <!-- Quick Connect & Socials -->
-          <div class="contact-channels">
-            <h3>DIRECT FREQUENCIES</h3>
-            <div class="channel-card">
-              <div class="ch-label">DIRECT EMAIL</div>
-              <div class="ch-val">${data.email}</div>
-              <button class="terminal-action-btn secondary btn-copy" id="btn-copy-email">
-                📋 COPY EMAIL
-              </button>
-            </div>
-
-            <h3 style="margin-top: 16px;">NETWORKS</h3>
-            <div class="social-links-grid">
-              ${DEVELOPER_PROFILE.socials.map(s => `
-                <a href="${s.url}" target="_blank" class="social-btn">
-                  <span>${s.label}</span>
-                  <span class="handle">${s.handle}</span>
-                </a>
-              `).join("")}
-            </div>
+          <!-- Bottom Footer Row -->
+          <div class="finale-footer-row">
+            <a href="https://github.com/syedmuhammadayyanibrar" target="_blank" class="finale-foot-link">
+              <span class="foot-icon">🐙</span> GitHub
+            </a>
+            <span class="dot-sep">•</span>
+            <a href="https://linkedin.com/in/syedayyan" target="_blank" class="finale-foot-link">
+              <span class="foot-icon">💼</span> LinkedIn
+            </a>
+            <span class="dot-sep">•</span>
+            <span class="finale-foot-email">${card.email}</span>
           </div>
         </div>
       </div>
@@ -583,16 +539,16 @@ export class UIManager {
             <div class="help-table">
               <div class="help-row"><span>WALK HORIZONTALLY</span><span>[A] / [D] or [←] / [→] or CLICK ANYWHERE</span></div>
               <div class="help-row"><span>JUMP OVER SNOW</span><span>[SPACE] or [W] or [↑]</span></div>
-              <div class="help-row"><span>INSPECT LANDMARK</span><span>[E] or [ENTER] when prompt appears</span></div>
-              <div class="help-row"><span>CLOSE TERMINAL</span><span>[ESC] or click outside</span></div>
+              <div class="help-row"><span>INSPECT PROJECT / BOARD</span><span>[E] or [ENTER] when prompt appears</span></div>
+              <div class="help-row"><span>DOWNLOAD CV</span><span>Top HUD Button or [E] on Finale Board</span></div>
               <div class="help-row"><span>WEATHER / TIME</span><span>[T] (Snowy Dusk / Midnight Cyber / Fog)</span></div>
               <div class="help-row"><span>CRT SCANLINES</span><span>[C] Toggle retro screen overlay</span></div>
               <div class="help-row"><span>8-BIT SYNTH MUSIC</span><span>[M] Toggle cozy lofi synth audio</span></div>
-              <div class="help-row"><span>QUICK TRAVEL</span><span>Keys [1] through [7]</span></div>
+              <div class="help-row"><span>QUICK TRAVEL</span><span>Keys [1] through [8]</span></div>
             </div>
 
             <h3 style="margin-top: 20px;">🌟 EASTER EGGS</h3>
-            <p>• <strong>Mochi the Cat:</strong> Located at coordinate X: 4180px next to the steam vent. Walk up and pet Mochi!</p>
+            <p>• <strong>Mochi the Cat:</strong> Located at the end next to the "Let's build together" pavilion! Walk up and pet Mochi!</p>
             <p>• <strong>Retro Konami Code:</strong> Press <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> anywhere on street for Cyber Rave Mode!</p>
           </div>
         </div>
@@ -607,43 +563,8 @@ export class UIManager {
     });
   }
 
-  openKonamiModal() {
-    audio.playKonamiFanfare();
-    const modal = document.createElement("div");
-    modal.className = "crt-modal-backdrop";
-    modal.id = "active-modal";
-    modal.innerHTML = `
-      <div class="crt-terminal-frame" style="max-width: 580px; border-color: #ff00ff; box-shadow: 0 0 35px rgba(255, 0, 255, 0.6);">
-        <div class="crt-terminal-header" style="background: #2a0033;">
-          <div class="terminal-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
-          <div class="terminal-title" style="color: #00ffff;">★ SECRET UNLOCKED: CYBER RAVE 2026 ★</div>
-          <button class="terminal-close" id="btn-modal-close">✕</button>
-        </div>
-        <div class="crt-terminal-body" style="text-align: center; padding: 30px;">
-          <div style="font-size: 40px; margin-bottom: 15px;">🎆 🕹️ 🌈 🤖 🎆</div>
-          <h2 style="font-family: 'Press Start 2P'; font-size: 14px; color: #ff0077; line-height: 1.8;">
-            KONAMI CODE RECOGNIZED!
-          </h2>
-          <p style="font-size: 15px; color: #d0f0ff; margin-top: 15px; line-height: 1.6;">
-            You have unlocked the Aurora Borealis Rainbow Sky & High-Frequency Synth Arpeggios!
-          </p>
-          <div style="margin-top: 25px;">
-            <button class="terminal-action-btn primary" id="btn-rave-continue" style="background: #ff0077;">
-              LET'S RAVE!
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-    this.activeModal = modal;
-    document.getElementById("btn-modal-close").addEventListener("click", () => this.closeModal());
-    document.getElementById("btn-rave-continue").addEventListener("click", () => this.closeModal());
-  }
-
   bindModalInteractions(landmark) {
-    // Project dossier tabs
+    // Tab switching in project dossier
     const tabs = document.querySelectorAll(".dossier-tab");
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
@@ -659,7 +580,7 @@ export class UIManager {
       });
     });
 
-    // CRT Blueprint Carousel Slider handlers
+    // Carousel slides in Tab 4
     if (landmark.project && landmark.project.slides) {
       let curSlide = 0;
       const slides = landmark.project.slides;
@@ -691,24 +612,21 @@ export class UIManager {
       }
     }
 
-    // Launch Live Demo button simulation
-    const btnDemo = document.getElementById("btn-live-demo");
-    if (btnDemo) {
-      btnDemo.addEventListener("click", (e) => {
-        e.preventDefault();
-        audio.playClick(1.5);
-        btnDemo.textContent = "⚡ CONNECTING SANDBOX...";
+    // Copy Git Clone command in feed header
+    const btnClone = document.getElementById("btn-copy-clone");
+    if (btnClone) {
+      btnClone.addEventListener("click", () => {
+        audio.playClick(1.4);
+        const cmd = btnClone.getAttribute("data-cmd");
+        navigator.clipboard.writeText(cmd);
+        btnClone.textContent = "✅ CLONE COMMAND COPIED!";
         setTimeout(() => {
-          audio.playClick(2.0);
-          btnDemo.textContent = "🟢 SANDBOX ONLINE (PORT 8080)";
-          setTimeout(() => {
-            btnDemo.textContent = "🚀 LAUNCH LIVE DEMO";
-          }, 2400);
-        }, 900);
+          btnClone.textContent = `📋 ${cmd}`;
+        }, 2200);
       });
     }
 
-    // Copy project link
+    // Copy Project Link
     const btnCopyLink = document.getElementById("btn-copy-link");
     if (btnCopyLink) {
       btnCopyLink.addEventListener("click", () => {
@@ -719,40 +637,51 @@ export class UIManager {
       });
     }
 
-    // Pet Mochi Again button
-    const btnPet = document.getElementById("btn-pet-again");
-    if (btnPet) {
-      btnPet.addEventListener("click", () => {
-        audio.playCatMeow();
-        btnPet.textContent = "🐾 MOCHI PURRED HAPPILY!";
-        setTimeout(() => { btnPet.textContent = "💖 PET MOCHI AGAIN"; }, 1800);
-      });
-    }
-
-    // Contact Form submission
-    const contactForm = document.getElementById("contact-form");
-    if (contactForm) {
-      contactForm.addEventListener("submit", (e) => {
+    // Launch Live Demo button simulation
+    const btnDemo = document.getElementById("btn-live-demo");
+    if (btnDemo) {
+      btnDemo.addEventListener("click", (e) => {
         e.preventDefault();
-        audio.playClick(1.6);
-        const statusEl = document.getElementById("dispatch-status");
-        statusEl.innerHTML = `<span style="color: #00ffcc;">[TRANSMITTING PACKET VIA RETRO TELE-POST...]</span>`;
+        audio.playClick(1.5);
+        btnDemo.textContent = "⚡ CONNECTING CLOUD RUNTIME...";
         setTimeout(() => {
           audio.playClick(2.0);
-          statusEl.innerHTML = `<span style="color: #00ff88;">✅ DISPATCH DELIVERED! Syed will transmit back shortly.</span>`;
-          contactForm.reset();
-        }, 1200);
+          btnDemo.textContent = "🟢 SOTA INFERENCE CONTAINER ONLINE";
+          setTimeout(() => {
+            btnDemo.textContent = "🚀 LAUNCH LIVE BENCHMARK";
+          }, 2400);
+        }, 800);
       });
     }
 
-    // Copy Email button
-    const btnCopyEmail = document.getElementById("btn-copy-email");
-    if (btnCopyEmail) {
-      btnCopyEmail.addEventListener("click", () => {
+    // Start Board Copy Gmail
+    const btnCopyGmail = document.getElementById("btn-copy-gmail-dir");
+    if (btnCopyGmail) {
+      btnCopyGmail.addEventListener("click", () => {
         audio.playClick(1.4);
-        navigator.clipboard.writeText(landmark.contactData.email);
-        btnCopyEmail.textContent = "✅ COPIED TO CLIPBOARD!";
-        setTimeout(() => { btnCopyEmail.textContent = "📋 COPY EMAIL"; }, 2000);
+        navigator.clipboard.writeText(DEVELOPER_PROFILE.email);
+        btnCopyGmail.textContent = "✅ COPIED!";
+        setTimeout(() => { btnCopyGmail.textContent = "COPY EMAIL"; }, 2000);
+      });
+    }
+
+    // Finale Board Copy Email
+    const btnFinaleCopy = document.getElementById("btn-finale-copy");
+    if (btnFinaleCopy) {
+      btnFinaleCopy.addEventListener("click", () => {
+        audio.playClick(1.4);
+        navigator.clipboard.writeText(DEVELOPER_PROFILE.email);
+        btnFinaleCopy.textContent = "✅ Copied!";
+        setTimeout(() => { btnFinaleCopy.textContent = "Copy Email"; }, 2000);
+      });
+    }
+
+    // Finale Board CV Download
+    const btnFinaleCv = document.getElementById("btn-finale-cv");
+    if (btnFinaleCv) {
+      btnFinaleCv.addEventListener("click", () => {
+        audio.playClick(1.6);
+        this.showToast("✅ DOWNLOADING SYED_AYYAN_CV.PDF");
       });
     }
   }

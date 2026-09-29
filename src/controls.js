@@ -94,6 +94,7 @@ export class Controls {
         case "Digit5":
         case "Digit6":
         case "Digit7":
+        case "Digit8":
           const idx = parseInt(e.key, 10) - 1;
           if (this.onQuickTravel) this.onQuickTravel(idx);
           break;

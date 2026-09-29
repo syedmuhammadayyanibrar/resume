@@ -241,6 +241,45 @@ html, body {
   color: var(--color-neon-cyan);
 }
 
+/* Constant Glowing Top Download CV Button */
+.hud-cv-btn {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  border: 2px solid #38bdf8 !important;
+  color: #ffffff !important;
+  font-family: var(--font-retro) !important;
+  font-size: 9px !important;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45) !important;
+}
+
+.hud-cv-btn:hover {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+  box-shadow: 0 0 20px #38bdf8 !important;
+  transform: translateY(-2px);
+}
+
+/* Floating Notification Toast */
+.hud-toast {
+  position: fixed;
+  top: 75px;
+  right: 24px;
+  z-index: 200;
+  background: var(--color-neon-cyan);
+  color: #090d15;
+  font-family: var(--font-retro);
+  font-size: 10px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  box-shadow: 0 0 18px var(--color-neon-cyan);
+  animation: toast-in 0.25s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .hud-btn-square {
   padding: 8px 12px;
   font-family: var(--font-retro);
@@ -524,6 +563,68 @@ html, body {
   padding: 22px;
   overflow-y: auto;
   color: #e2e8f0;
+}
+
+/* Repository Link Ingress Banner at Start of Project Feed */
+.repo-ingress-feed-banner {
+  background: #090e18;
+  border: 2px solid var(--color-neon-cyan);
+  box-shadow: 0 0 16px rgba(0, 255, 204, 0.25);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.repo-feed-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.repo-feed-badge {
+  background: var(--color-neon-cyan);
+  color: #090e18;
+  font-family: var(--font-retro);
+  font-size: 8px;
+  padding: 4px 6px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.repo-feed-link {
+  color: #ffffff;
+  font-family: var(--font-retro);
+  font-size: 9px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.repo-feed-link:hover {
+  color: var(--color-neon-cyan);
+  text-decoration: underline;
+}
+
+.repo-clone-btn {
+  background: #141d2e;
+  border: 1px solid #2d3b55;
+  color: #94a3b8;
+  font-family: var(--font-terminal);
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.repo-clone-btn:hover {
+  background: #1e2c45;
+  color: #fff;
+  border-color: var(--color-neon-cyan);
 }
 
 /* ==========================================================================
@@ -1362,4 +1463,298 @@ html, body {
   font-size: 10px;
   padding: 4px 10px;
   border-radius: 3px;
+}
+
+/* ==========================================================================
+   START BOARD: 3-PANEL DIRECTORY MODAL
+   ========================================================================== */
+.start-board-modal {
+  padding: 10px;
+}
+
+.start-board-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.start-board-header h2 {
+  font-family: var(--font-retro);
+  font-size: 13px;
+  color: var(--color-neon-cyan);
+  margin-bottom: 8px;
+}
+
+.start-board-header p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.three-panels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .three-panels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.directory-card {
+  background: #111827;
+  border: 2px solid #23314d;
+  border-radius: 6px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.directory-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.directory-card.github {
+  border-color: #ffffff;
+}
+.directory-card.github:hover {
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+}
+
+.directory-card.gmail {
+  border-color: #ff4444;
+}
+.directory-card.gmail:hover {
+  box-shadow: 0 0 16px rgba(255, 68, 68, 0.4);
+}
+
+.directory-card.linkedin {
+  border-color: #0088ff;
+}
+.directory-card.linkedin:hover {
+  box-shadow: 0 0 16px rgba(0, 136, 255, 0.4);
+}
+
+.dir-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.directory-card h3 {
+  font-family: var(--font-retro);
+  font-size: 9px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.directory-card p {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #94a3b8;
+  flex-grow: 1;
+  margin-bottom: 14px;
+}
+
+.dir-handle {
+  font-family: var(--font-terminal);
+  font-size: 15px;
+  color: var(--color-neon-amber);
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+.dir-btn-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.dir-btn {
+  width: 100%;
+  padding: 10px;
+  font-family: var(--font-retro);
+  font-size: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-btn {
+  background: #ffffff;
+  color: #000000;
+}
+.github-btn:hover {
+  background: #cbd5e1;
+}
+
+.gmail-btn {
+  background: #ff4444;
+  color: #ffffff;
+}
+.gmail-btn:hover {
+  background: #ff6666;
+}
+
+.linkedin-btn {
+  background: #0088ff;
+  color: #ffffff;
+}
+.linkedin-btn:hover {
+  background: #33a3ff;
+}
+
+.copy-btn {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+}
+.copy-btn:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   FINALE BOARD: "LET'S BUILD TOGETHER" (Matching Uploaded Image)
+   ========================================================================== */
+.connect-pavilion-modal {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.finale-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 44px 38px 32px;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  color: #0f172a;
+}
+
+.finale-eyebrow {
+  color: #0284c7;
+  font-family: 'Silkscreen', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  margin-bottom: 12px;
+}
+
+.finale-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  color: #090e17;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.finale-desc {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #334155;
+  max-width: 500px;
+  margin: 0 auto 28px;
+}
+
+.finale-buttons-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 34px;
+  flex-wrap: wrap;
+}
+
+.btn-finale {
+  padding: 12px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+
+.btn-finale.send-email {
+  background: #0f172a;
+  color: #ffffff;
+}
+.btn-finale.send-email:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.btn-finale.download-cv {
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1.5px solid #bae6fd;
+}
+.btn-finale.download-cv:hover {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.btn-finale.copy-email {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+.btn-finale.copy-email:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.finale-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+  font-size: 13px;
+  color: #475569;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+  flex-wrap: wrap;
+}
+
+.finale-foot-link {
+  color: #334155;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+
+.finale-foot-link:hover {
+  color: #0284c7;
+}
+
+.dot-sep {
+  color: #cbd5e1;
+}
+
+.finale-foot-email {
+  font-family: var(--font-terminal);
+  font-size: 16px;
+  color: #1e293b;
 }
