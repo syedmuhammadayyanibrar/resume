@@ -3,7 +3,7 @@
 class SoundController {
   constructor() {
     this.ctx = null;
-    this.isMuted = true;
+    this.isMuted = false; // Sound ON by default
     this.masterGain = null;
     this.bgmGain = null;
     this.sfxGain = null;

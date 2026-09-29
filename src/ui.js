@@ -27,7 +27,11 @@ export class UIManager {
           <img src="${DEVELOPER_PROFILE.photoUrl || '/profile.jpg'}" alt="${DEVELOPER_PROFILE.name}" class="hud-avatar-img" />
         </div>
         <div class="hud-bio">
-          <div class="hud-name">${DEVELOPER_PROFILE.name} <span class="hud-tag">AI/ML</span></div>
+          <div class="hud-name">
+            <span class="hud-name-full">${DEVELOPER_PROFILE.name}</span>
+            <span class="hud-name-short">Syed Ayyan</span>
+            <span class="hud-tag">AI/ML</span>
+          </div>
           <div class="hud-title">${DEVELOPER_PROFILE.title}</div>
           <div class="hud-telemetry">
             <span class="hud-status-dot"></span>
@@ -59,10 +63,10 @@ export class UIManager {
           <span class="hud-btn-text">CRT: OFF</span>
         </button>
 
-        <!-- Audio Music & SFX Toggle -->
-        <button id="btn-audio" class="hud-btn" title="Toggle 8-Bit Lofi Music & SFX (Key: M)">
-          <span class="hud-icon" id="audio-icon">🔇</span>
-          <span class="hud-btn-text" id="audio-text">Audio: OFF</span>
+        <!-- Audio Music & SFX Toggle (Sound ON by default) -->
+        <button id="btn-audio" class="hud-btn active" title="Toggle 8-Bit Lofi Music & SFX (Key: M)">
+          <span class="hud-icon" id="audio-icon">🔊</span>
+          <span class="hud-btn-text" id="audio-text">Audio: ON</span>
           <div class="hud-audio-bars" id="audio-visualizer">
             <div class="bar"></div><div class="bar"></div><div class="bar"></div>
             <div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -346,134 +350,81 @@ export class UIManager {
     `;
   }
 
-  // 2. Project Dossier (With Repository Link prominently at start of feed!)
+  // 2. Project Dossier (Minimal, high-impact, single clean view)
   getProjectHtml(landmark) {
     const p = landmark.project;
     return `
-      <div class="project-dossier">
-        <!-- PROMINENT REPOSITORY LINK AT THE START OF FEED -->
-        <div class="repo-ingress-feed-banner">
-          <div class="repo-feed-left">
-            <span class="repo-feed-badge">📦 GITHUB REPO</span>
-            <a href="${p.repoUrl}" target="_blank" class="repo-feed-link">
-              ${p.repoUrl.replace("https://", "")} ↗
+      <div class="project-dossier-minimal">
+        <!-- Minimal Top Header: Title, Category Badge & Direct Repo Link -->
+        <div class="mini-header">
+          <div class="mini-title-row">
+            <div class="mini-title-group">
+              <h2 class="mini-title">${p.name}</h2>
+              <span class="mini-badge">${landmark.badge || 'AI SYSTEM'}</span>
+            </div>
+            <a href="${p.repoUrl}" target="_blank" class="mini-repo-btn" title="View Source Code on GitHub">
+              <span>🐙 GITHUB</span> ↗
             </a>
           </div>
-          <div class="repo-feed-right">
-            <button class="repo-clone-btn" id="btn-copy-clone" data-cmd="${p.cloneCmd}">
-              📋 ${p.cloneCmd}
-            </button>
-          </div>
+          <p class="mini-tagline">${p.tagline}</p>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="dossier-nav">
-          <button class="dossier-tab active" data-tab="0">1. OVERVIEW & PROBLEM</button>
-          <button class="dossier-tab" data-tab="1">2. SYSTEM ARCHITECTURE</button>
-          <button class="dossier-tab" data-tab="2">3. PERFORMANCE METRICS</button>
-          <button class="dossier-tab" data-tab="3">4. CRT BLUEPRINT CAROUSEL</button>
-        </div>
-
-        <!-- Tab 0: Overview & Problem -->
-        <div class="dossier-page active" id="dossier-page-0">
-          <div class="dossier-hero">
-            <h2 class="project-title">${p.name}</h2>
-            <div class="project-subtitle">${p.subtitle}</div>
-            <div class="project-tagline">${p.tagline}</div>
-          </div>
-
-          <div class="dossier-grid">
-            <div class="dossier-card challenge">
-              <h3>⚠️ PROBLEM STATEMENT</h3>
-              <p>${p.problem}</p>
+        <!-- Key Highlight Metrics -->
+        <div class="mini-metrics-strip">
+          ${p.metrics.map(m => `
+            <div class="mini-metric-cell">
+              <div class="mini-metric-val">${m.value}</div>
+              <div class="mini-metric-lbl">${m.label}</div>
             </div>
-            <div class="dossier-card solution">
-              <h3>🛡️ ENGINEERED SOLUTION</h3>
-              <p>${p.solution}</p>
-            </div>
-          </div>
+          `).join("")}
+        </div>
 
-          <div class="metrics-row">
-            ${p.metrics.map(m => `
-              <div class="metric-box">
-                <div class="metric-val">${m.value}</div>
-                <div class="metric-lbl">${m.label}</div>
-                <div class="metric-sub">${m.rating}</div>
-              </div>
-            `).join("")}
+        <!-- Problem & Solution (Side-by-side cards) -->
+        <div class="mini-core-grid">
+          <div class="mini-card problem-card">
+            <div class="mini-card-head">
+              <span class="mini-card-icon">🎯</span>
+              <span class="mini-card-label">PROBLEM STATEMENT</span>
+            </div>
+            <p class="mini-card-body">${p.problem}</p>
+          </div>
+          <div class="mini-card solution-card">
+            <div class="mini-card-head">
+              <span class="mini-card-icon">⚡</span>
+              <span class="mini-card-label">ENGINEERED SOLUTION</span>
+            </div>
+            <p class="mini-card-body">${p.solution}</p>
           </div>
         </div>
 
-        <!-- Tab 1: Architecture & Stack -->
-        <div class="dossier-page" id="dossier-page-1">
-          <h3>DETERMINISTIC DATAFLOW PIPELINE</h3>
-          <div class="architecture-flow">
+        <!-- Core Engineering Pipeline -->
+        <div class="mini-pipeline-box">
+          <div class="mini-sec-heading">CORE DATAFLOW PIPELINE</div>
+          <div class="mini-steps-list">
             ${p.architecture.map((step, idx) => `
-              <div class="arch-step">
-                <span class="step-num">[STAGE 0${idx + 1}]</span>
-                <span class="step-text">${step}</span>
+              <div class="mini-step-item">
+                <span class="mini-step-num">0${idx + 1}</span>
+                <span class="mini-step-text">${step}</span>
               </div>
             `).join("")}
           </div>
+        </div>
 
-          <h3 style="margin-top: 18px;">TECHNOLOGY STACK</h3>
-          <div class="tech-radar-grid">
+        <!-- Tech Stack Pills -->
+        <div class="mini-tech-wrap">
+          <span class="mini-tech-label">STACK:</span>
+          <div class="mini-pills">
             ${p.stack.map(s => `<span class="tech-pill">${s}</span>`).join("")}
           </div>
         </div>
 
-        <!-- Tab 2: Performance Telemetry -->
-        <div class="dossier-page" id="dossier-page-2">
-          <h3>PRODUCTION BENCHMARKS & RELIABILITY</h3>
-          <div class="telemetry-grid">
-            <div class="telemetry-gauge">
-              <div class="gauge-title">INFERENCE SLA AVAILABILITY</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 100%;"></div></div>
-              <div class="gauge-value">99.99% ZERO DOWNTIME</div>
-            </div>
-            <div class="telemetry-gauge">
-              <div class="gauge-title">DETERMINISTIC TEST PASS RATIO</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 98%;"></div></div>
-              <div class="gauge-value">98.9% REGRESSION VERIFIED</div>
-            </div>
-            <div class="telemetry-gauge">
-              <div class="gauge-title">P99 LATENCY JITTER PROFILE</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 92%;"></div></div>
-              <div class="gauge-value">&lt; 0.8ms JITTER VARIANCE</div>
-            </div>
-            <div class="telemetry-gauge">
-              <div class="gauge-title">MEMORY EFFICIENCY / LEAK DETECTION</div>
-              <div class="gauge-bar-outer"><div class="gauge-bar-fill" style="width: 96%;"></div></div>
-              <div class="gauge-value">ZERO LEAKS DETECTED (VALGRIND)</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 3: CRT Blueprint Carousel -->
-        <div class="dossier-page" id="dossier-page-3">
-          <div class="ascii-monitor">
-            <div class="ascii-monitor-topbar">
-              <span class="ascii-monitor-header" id="carousel-slide-title">${p.slides[0].title}</span>
-              <div class="carousel-nav-btns">
-                <button class="carousel-btn" id="btn-slide-prev">◀ PREV</button>
-                <span class="carousel-slide-counter" id="carousel-counter">1 / ${p.slides.length}</span>
-                <button class="carousel-btn" id="btn-slide-next">NEXT ▶</button>
-              </div>
-            </div>
-            <pre class="ascii-content" id="carousel-slide-content">${p.slides[0].content}</pre>
-          </div>
-        </div>
-
-        <!-- Action Footer -->
-        <div class="dossier-footer">
-          <a href="${p.repoUrl}" target="_blank" class="terminal-action-btn primary">
-            📦 VIEW GITHUB REPOSITORY
+        <!-- Minimal Action Footer -->
+        <div class="mini-actions">
+          <a href="${p.repoUrl}" target="_blank" class="mini-btn-primary">
+            📦 VIEW SOURCE REPOSITORY ↗
           </a>
-          <a href="${p.liveDemoUrl}" target="_blank" class="terminal-action-btn secondary" id="btn-live-demo">
-            🚀 LAUNCH LIVE BENCHMARK
-          </a>
-          <button class="terminal-action-btn tertiary" id="btn-copy-link">
-            🔗 COPY PROJECT LINK
+          <button class="mini-btn-secondary" id="btn-copy-clone" data-cmd="${p.cloneCmd}">
+            📋 COPY CLONE CMD
           </button>
         </div>
       </div>

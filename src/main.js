@@ -84,6 +84,19 @@ class App {
       this.renderer.resize();
     });
 
+    // Auto-start sound on first user gesture (touch, click, key) to satisfy browser autoplay policy
+    const startAudioOnFirstGesture = () => {
+      audio.ensureContext();
+      if (!audio.isMuted && !audio.isBgmPlaying) {
+        audio.startLofiBgm();
+      }
+      this.ui.updateAudioButton(!audio.isMuted);
+    };
+    window.addEventListener("pointerdown", startAudioOnFirstGesture, { once: true });
+    window.addEventListener("touchstart", startAudioOnFirstGesture, { once: true });
+    window.addEventListener("keydown", startAudioOnFirstGesture, { once: true });
+    window.addEventListener("click", startAudioOnFirstGesture, { once: true });
+
     // Start 60FPS Game Loop
     this.lastTime = performance.now();
     requestAnimationFrame((t) => this.gameLoop(t));
