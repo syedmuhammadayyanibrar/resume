@@ -8,8 +8,8 @@ export const DEVELOPER_PROFILE = {
   location: "Lahore, Pakistan (Open to Remote Worldwide)",
   phone: "+92 322 0621975",
   email: "syedmuhammadayyanibrar@gmail.com",
-  cvUrl: "/Syed_Ayyan_CV.pdf",
-  photoUrl: "/profile.jpg",
+  cvUrl: "./Syed_Ayyan_CV.pdf",
+  photoUrl: "./profile.jpg",
   status: "🟢 OPEN TO OPPORTUNITIES // AI SYSTEMS & AGENTIC ARCHITECTURES",
   stats: {
     experience: "Freelance AI Engineer",
@@ -462,14 +462,29 @@ export const LANDMARKS = [
       title: "Let's build together",
       description: "Looking for an AI/ML Engineer to build reliable data pipelines, deterministic multi-agent systems, or architect edge multimodal systems? Reach out directly or grab my resume:",
       email: "syedmuhammadayyanibrar@gmail.com",
-      cvUrl: "/Syed_Ayyan_CV.pdf",
-      photoUrl: "/profile.jpg",
+      cvUrl: "./Syed_Ayyan_CV.pdf",
+      photoUrl: "./profile.jpg",
       socials: [
         { name: "GitHub", url: "https://github.com/syedmuhammadayyanibrar" },
         { name: "LinkedIn", url: "https://linkedin.com/in/ayyan-ibrar" },
         { name: "Email", url: "mailto:syedmuhammadayyanibrar@gmail.com", label: "syedmuhammadayyanibrar@gmail.com" },
       ]
     }
+  },
+
+  // 7. Companion: Mochi the Street Cat (Perched beside the Finale Pavilion)
+  {
+    id: "mochi_cat",
+    type: "cat",
+    x: 4470,
+    width: 60,
+    height: 50,
+    label: "MOCHI THE CAT // COMPANION",
+    category: "Companion",
+    interactionPrompt: "[E] PET MOCHI",
+    badge: "PET",
+    signColor: "#ff0077",
+    summary: "A cozy calico cat perched on the street fence beside the finale pavilion.",
   }
 ];
 

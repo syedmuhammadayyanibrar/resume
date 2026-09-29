@@ -45,17 +45,28 @@ export class Controls {
         return;
       }
 
-      // Check Konami Code
-      const keyNormalized = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      const expectedKey = this.konamiSequence[this.konamiProgress].toLowerCase();
-      if (keyNormalized === expectedKey) {
+      // Check Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A (or W W S S A D A D B A)
+      const konamiValidators = [
+        (e) => e.code === "ArrowUp" || e.code === "KeyW" || e.key === "ArrowUp" || e.key === "w" || e.key === "W",
+        (e) => e.code === "ArrowUp" || e.code === "KeyW" || e.key === "ArrowUp" || e.key === "w" || e.key === "W",
+        (e) => e.code === "ArrowDown" || e.code === "KeyS" || e.key === "ArrowDown" || e.key === "s" || e.key === "S",
+        (e) => e.code === "ArrowDown" || e.code === "KeyS" || e.key === "ArrowDown" || e.key === "s" || e.key === "S",
+        (e) => e.code === "ArrowLeft" || e.code === "KeyA" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A",
+        (e) => e.code === "ArrowRight" || e.code === "KeyD" || e.key === "ArrowRight" || e.key === "d" || e.key === "D",
+        (e) => e.code === "ArrowLeft" || e.code === "KeyA" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A",
+        (e) => e.code === "ArrowRight" || e.code === "KeyD" || e.key === "ArrowRight" || e.key === "d" || e.key === "D",
+        (e) => e.code === "KeyB" || (e.key && e.key.toLowerCase() === "b"),
+        (e) => e.code === "KeyA" || (e.key && e.key.toLowerCase() === "a"),
+      ];
+
+      if (konamiValidators[this.konamiProgress](e)) {
         this.konamiProgress++;
-        if (this.konamiProgress === this.konamiSequence.length) {
+        if (this.konamiProgress === konamiValidators.length) {
           this.konamiProgress = 0;
           if (this.onKonami) this.onKonami();
         }
       } else {
-        this.konamiProgress = 0;
+        this.konamiProgress = konamiValidators[0](e) ? 1 : 0;
       }
 
       switch (e.code) {
@@ -141,6 +152,18 @@ export class Controls {
         detail: { clickX, clickY }
       });
       window.dispatchEvent(clickEvent);
+    });
+
+    this.canvas.addEventListener("pointermove", (e) => {
+      if (e.target !== this.canvas) return;
+      const rect = this.canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const moveEvent = new CustomEvent("streetmousemove", {
+        detail: { mouseX, mouseY }
+      });
+      window.dispatchEvent(moveEvent);
     });
   }
 

@@ -335,19 +335,28 @@ export class WorldRenderer {
     }
   }
 
-  triggerRaveMode() {
-    this.isRaveMode = true;
-    for (let i = 0; i < 80; i++) {
-      this.raveParticles.push({
-        x: Math.random() * this.width,
-        y: Math.random() * this.height,
-        vx: (Math.random() - 0.5) * 5,
-        vy: (Math.random() - 0.5) * 5,
-        size: 3 + Math.random() * 4,
-        hue: Math.random() * 360,
-        alpha: 1,
-      });
+  toggleRaveMode() {
+    this.isRaveMode = !this.isRaveMode;
+    if (this.isRaveMode) {
+      for (let i = 0; i < 80; i++) {
+        this.raveParticles.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          size: 3 + Math.random() * 4,
+          hue: Math.random() * 360,
+          alpha: 1,
+        });
+      }
+    } else {
+      this.raveParticles = [];
     }
+    return this.isRaveMode;
+  }
+
+  triggerRaveMode() {
+    return this.toggleRaveMode();
   }
 
   // 1. Far Sky & Moon
@@ -664,7 +673,7 @@ export class WorldRenderer {
 
       switch (lm.id) {
         case "start_board":
-          drawStartBoard(ctx, lm, this.groundY, time);
+          drawStartBoard(ctx, lm, this.groundY, time, this.hoverWorldX, this.hoverWorldY);
           break;
         case "cas":
           drawCAS(ctx, lm, this.groundY, time);
@@ -679,10 +688,13 @@ export class WorldRenderer {
           drawAuraSight(ctx, lm, this.groundY, time);
           break;
         case "connect_pavilion":
-          drawConnectPavilion(ctx, lm, this.groundY, time);
-          // Draw Mochi the cat perched right beside the connect pavilion
-          drawCat(ctx, lm.x + lm.width + 45, this.groundY, time * 0.06);
+          drawConnectPavilion(ctx, lm, this.groundY, time, this.hoverWorldX, this.hoverWorldY);
           break;
+        case "mochi_cat": {
+          const isNear = this.player ? Math.abs(this.player.x - (lm.x + 25)) < 75 : false;
+          drawCat(ctx, lm.x + 25, this.groundY, time * 0.06, isNear, this.mochiPetTimer || 0);
+          break;
+        }
       }
       ctx.restore();
     }
@@ -848,15 +860,20 @@ export class WorldRenderer {
     ctx.restore();
   }
 
-  // 12. Floating Prompt: [E] INSPECT ...
+  // 12. Floating Prompt: [E] INSPECT ... (TAP: on mobile)
   drawInteractionPrompt(promptText, charScreenX, charScreenY, time) {
     const ctx = this.ctx;
+    const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+    let displayText = promptText;
+    if (isMobile) {
+      displayText = displayText.replace(/\[E\]\s*/gi, "TAP: ");
+    }
     const bounce = Math.sin(time * 0.008) * 3;
     const py = charScreenY - 60 + bounce;
 
     ctx.save();
     ctx.font = "bold 9px 'Press Start 2P', monospace";
-    const textWidth = ctx.measureText(promptText).width;
+    const textWidth = ctx.measureText(displayText).width;
     const padX = 12;
     const boxW = textWidth + padX * 2;
     const boxH = 24;
@@ -881,7 +898,7 @@ export class WorldRenderer {
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(promptText, charScreenX, py + boxH / 2 + 1);
+    ctx.fillText(displayText, charScreenX, py + boxH / 2 + 1);
 
     ctx.restore();
   }
@@ -939,6 +956,10 @@ export class WorldRenderer {
   }
 
   render(player, cameraX, activeLandmark, time) {
+    this.player = player;
+    if (this.mochiPetTimer > 0) {
+      this.mochiPetTimer--;
+    }
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     this.drawSky(time);

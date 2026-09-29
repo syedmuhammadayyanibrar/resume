@@ -7,9 +7,7 @@ export class UIManager {
   constructor(appContainer, callbacks) {
     this.container = appContainer;
     this.callbacks = callbacks;
-    this.activeModal = null;
-    this.activeTab = 0;
-    this.isCrtEnabled = false; // CRT scanlines off by default as requested
+    this.isCrtEnabled = false; // CRT scanlines OFF by default as explicitly requested
 
     this.renderHUD();
     this.renderStartTutorialOverlay();
@@ -478,6 +476,17 @@ export class UIManager {
     audio.playOpenModal();
     const modal = document.createElement("div");
     modal.className = "crt-modal-backdrop";
+    const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+    const inspectDesc = isMobile
+      ? 'Tap "TAP TO OPEN" or tap the building / board directly'
+      : '[E] or [ENTER] when prompt appears';
+    const cvDesc = isMobile
+      ? 'Top "⬇ CV" button or tap "Download CV" on street board'
+      : 'Top HUD Button or [E] on Finale Board';
+    const walkDesc = isMobile
+      ? 'Tap [◀] [▶] buttons or tap anywhere on street'
+      : '[A] / [D] or [←] / [→] or CLICK ANYWHERE';
+
     modal.id = "active-modal";
     modal.innerHTML = `
       <div class="crt-terminal-frame" style="max-width: 620px;">
@@ -490,10 +499,10 @@ export class UIManager {
           <div class="help-manual">
             <h3>🕹️ NAVIGATION & CONTROLS</h3>
             <div class="help-table">
-              <div class="help-row"><span>WALK HORIZONTALLY</span><span>[A] / [D] or [←] / [→] or CLICK ANYWHERE</span></div>
+              <div class="help-row"><span>WALK HORIZONTALLY</span><span>${walkDesc}</span></div>
               <div class="help-row"><span>JUMP OVER SNOW</span><span>[SPACE] or [W] or [↑]</span></div>
-              <div class="help-row"><span>INSPECT PROJECT / BOARD</span><span>[E] or [ENTER] when prompt appears</span></div>
-              <div class="help-row"><span>DOWNLOAD CV</span><span>Top HUD Button or [E] on Finale Board</span></div>
+              <div class="help-row"><span>INSPECT PROJECT / BOARD</span><span>${inspectDesc}</span></div>
+              <div class="help-row"><span>DOWNLOAD CV</span><span>${cvDesc}</span></div>
               <div class="help-row"><span>WEATHER / TIME</span><span>[T] (Snowy Dusk / Midnight Cyber / Fog)</span></div>
               <div class="help-row"><span>CRT SCANLINES</span><span>[C] Toggle retro screen overlay</span></div>
               <div class="help-row"><span>8-BIT SYNTH MUSIC</span><span>[M] Toggle cozy lofi synth audio</span></div>
@@ -501,8 +510,8 @@ export class UIManager {
             </div>
 
             <h3 style="margin-top: 20px;">🌟 EASTER EGGS</h3>
-            <p>• <strong>Mochi the Cat:</strong> Located at the end next to the "Let's build together" pavilion! Walk up and pet Mochi!</p>
-            <p>• <strong>Retro Konami Code:</strong> Press <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> anywhere on street for Cyber Rave Mode!</p>
+            <p>• <strong>Mochi the Cat:</strong> Located at the end next to the "Let's build together" pavilion! Tap or walk up and pet Mochi!</p>
+            <p>• <strong>Retro Konami Code:</strong> Press <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> anywhere on street for Cyber Rave Mode (Enter again to turn OFF)!</p>
           </div>
         </div>
       </div>

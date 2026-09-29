@@ -70,13 +70,31 @@ class App {
       () => this.handleKonamiCode()
     );
 
-    // Listen for custom click-to-move events from canvas
+    // Listen for custom click-to-move & board button clicks from canvas
     window.addEventListener("streetclick", (e) => {
       const clickX = e.detail.clickX;
+      const clickY = e.detail.clickY;
       const worldX = Math.max(40, Math.min(STREET_TOTAL_WIDTH - 60, this.cameraX + clickX));
-      this.controls.setTargetX(worldX);
-      this.renderer.destinationMarker = { x: worldX, timer: 75 };
-      audio.playClick(0.9);
+
+      // 1. Check if user clicked directly on any board buttons, links, Mochi, or buildings!
+      const handled = this.handleCanvasClick(worldX, clickY);
+      if (!handled) {
+        // Otherwise, move player to clicked street spot
+        this.controls.setTargetX(worldX);
+        this.renderer.destinationMarker = { x: worldX, timer: 75 };
+        audio.playClick(0.9);
+      }
+    });
+
+    // Listen for mousemove on canvas to update pointer cursor & board hover states
+    window.addEventListener("streetmousemove", (e) => {
+      const worldX = this.cameraX + e.detail.mouseX;
+      const worldY = e.detail.mouseY;
+      this.renderer.hoverWorldX = worldX;
+      this.renderer.hoverWorldY = worldY;
+
+      const isInteractive = this.isInteractiveTarget(worldX, worldY);
+      this.canvas.style.cursor = isInteractive ? "pointer" : "crosshair";
     });
 
     // Window Resize listener
@@ -109,6 +127,164 @@ class App {
     `;
   }
 
+  downloadCvDirect() {
+    const link = document.createElement("a");
+    link.href = "./Syed_Ayyan_CV.pdf";
+    link.download = "Syed_Ayyan_CV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  isInteractiveTarget(worldX, worldY) {
+    const groundY = this.renderer.groundY;
+
+    // 1. Start Board panels
+    if (worldY >= groundY - 135 && worldY <= groundY - 25) {
+      if ((worldX >= 256 && worldX <= 338) ||
+          (worldX >= 344 && worldX <= 426) ||
+          (worldX >= 432 && worldX <= 514)) {
+        return true;
+      }
+    }
+
+    // 2. Connect Pavilion Buttons
+    if (worldY >= groundY - 130 && worldY <= groundY - 80) {
+      if ((worldX >= 4075 && worldX <= 4180) ||
+          (worldX >= 4185 && worldX <= 4320) ||
+          (worldX >= 4325 && worldX <= 4420)) {
+        return true;
+      }
+    }
+
+    // Connect Pavilion Footer Links
+    if (worldY >= groundY - 45 && worldY <= groundY - 10) {
+      if (worldX >= 4070 && worldX <= 4430) {
+        return true;
+      }
+    }
+
+    // 3. Mochi the Cat
+    if (worldX >= 4455 && worldX <= 4535 && worldY >= groundY - 60 && worldY <= groundY + 10) {
+      return true;
+    }
+
+    // 4. Any Landmark Building upper body
+    for (const lm of LANDMARKS) {
+      if (worldX >= lm.x && worldX <= lm.x + lm.width &&
+          worldY >= groundY - lm.height && worldY < groundY - 15) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  handleCanvasClick(worldX, clickY) {
+    const groundY = this.renderer.groundY;
+
+    // 1. Start Board Panels (Directly Clickable Links!)
+    if (clickY >= groundY - 135 && clickY <= groundY - 25) {
+      // Panel 1: GitHub
+      if (worldX >= 256 && worldX <= 338) {
+        audio.playClick(1.4);
+        window.open("https://github.com/syedmuhammadayyanibrar", "_blank");
+        this.ui.showToast("🚀 OPENING GITHUB: syedmuhammadayyanibrar");
+        return true;
+      }
+      // Panel 2: Gmail
+      if (worldX >= 344 && worldX <= 426) {
+        audio.playClick(1.4);
+        window.location.href = "mailto:syedmuhammadayyanibrar@gmail.com";
+        this.ui.showToast("✉️ OPENING EMAIL COMPOSER");
+        return true;
+      }
+      // Panel 3: LinkedIn
+      if (worldX >= 432 && worldX <= 514) {
+        audio.playClick(1.4);
+        window.open("https://linkedin.com/in/ayyan-ibrar", "_blank");
+        this.ui.showToast("💼 OPENING LINKEDIN: ayyan-ibrar");
+        return true;
+      }
+    }
+
+    // 2. Connect Pavilion Buttons (Directly Clickable Links & CV Download!)
+    if (clickY >= groundY - 130 && clickY <= groundY - 80) {
+      // Button 1: Send Email
+      if (worldX >= 4075 && worldX <= 4180) {
+        audio.playClick(1.4);
+        window.location.href = "mailto:syedmuhammadayyanibrar@gmail.com";
+        this.ui.showToast("✉️ OPENING EMAIL COMPOSER");
+        return true;
+      }
+      // Button 2: Download CV
+      if (worldX >= 4185 && worldX <= 4320) {
+        audio.playClick(1.4);
+        this.downloadCvDirect();
+        this.ui.showToast("⬇ DOWNLOADING SYED_AYYAN_CV.PDF");
+        return true;
+      }
+      // Button 3: Copy Email
+      if (worldX >= 4325 && worldX <= 4420) {
+        audio.playClick(1.4);
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText("syedmuhammadayyanibrar@gmail.com");
+        }
+        this.ui.showToast("📋 COPIED: syedmuhammadayyanibrar@gmail.com");
+        return true;
+      }
+    }
+
+    // Connect Pavilion Footer Links
+    if (clickY >= groundY - 45 && clickY <= groundY - 10) {
+      if (worldX >= 4070 && worldX < 4185) {
+        audio.playClick(1.4);
+        window.open("https://github.com/syedmuhammadayyanibrar", "_blank");
+        this.ui.showToast("🚀 OPENING GITHUB: syedmuhammadayyanibrar");
+        return true;
+      }
+      if (worldX >= 4185 && worldX < 4290) {
+        audio.playClick(1.4);
+        window.open("https://linkedin.com/in/ayyan-ibrar", "_blank");
+        this.ui.showToast("💼 OPENING LINKEDIN: ayyan-ibrar");
+        return true;
+      }
+      if (worldX >= 4290 && worldX <= 4430) {
+        audio.playClick(1.4);
+        window.location.href = "mailto:syedmuhammadayyanibrar@gmail.com";
+        this.ui.showToast("✉️ OPENING EMAIL COMPOSER");
+        return true;
+      }
+    }
+
+    // 3. Mochi the Cat (Direct Petting via Canvas Click/Tap!)
+    if (worldX >= 4455 && worldX <= 4535 && clickY >= groundY - 60 && clickY <= groundY + 10) {
+      audio.playCatMeow();
+      this.renderer.mochiPetTimer = 120;
+      this.ui.showToast("🐱 MOCHI: *PURR* MEOW! ❤️ (PETTED)");
+      return true;
+    }
+
+    // 4. Click directly on any Landmark Building upper body -> Open inspect modal
+    for (const lm of LANDMARKS) {
+      if (worldX >= lm.x && worldX <= lm.x + lm.width &&
+          clickY >= groundY - lm.height && clickY < groundY - 15) {
+        audio.playClick(1.3);
+        if (lm.id === "mochi_cat") {
+          audio.playCatMeow();
+          this.renderer.mochiPetTimer = 120;
+          this.ui.showToast("🐱 MOCHI: *PURR* MEOW! ❤️ (PETTED)");
+        } else {
+          this.ui.openLandmarkModal(lm);
+        }
+        return true;
+      }
+    }
+
+    // 5. Normal street / sidewalk click -> Player walks there
+    return false;
+  }
+
   cycleTheme() {
     this.themeIndex = (this.themeIndex + 1) % this.themes.length;
     const current = this.themes[this.themeIndex];
@@ -137,20 +313,28 @@ class App {
       return;
     }
     if (this.activeLandmark) {
-      if (this.activeLandmark.type === "cat") {
+      if (this.activeLandmark.id === "mochi_cat") {
         audio.playCatMeow();
+        this.renderer.mochiPetTimer = 120;
+        this.ui.showToast("🐱 MOCHI: *PURR* MEOW! ❤️ (PETTED)");
+        return;
       }
       this.ui.openLandmarkModal(this.activeLandmark);
     }
   }
 
   handleKonamiCode() {
-    this.renderer.triggerRaveMode();
-    this.ui.openKonamiModal();
+    const isRave = this.renderer.toggleRaveMode();
+    if (isRave) {
+      this.ui.openKonamiModal();
+    } else {
+      audio.playClick(0.8);
+      this.ui.showToast("🌙 CYBER RAVE MODE: DEACTIVATED");
+    }
   }
 
   updatePhysics(dt) {
-    const moveSpeed = 4.4;
+    const moveSpeed = 5.8;
     const p = this.player;
 
     // 1. Horizontal Movement (Keyboard or Click-to-Move)

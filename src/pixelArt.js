@@ -323,7 +323,7 @@ export function drawNPC(ctx, npc, groundY, time) {
 /**
  * 3-Panel Street Board (At Very Start: GitHub, Gmail, LinkedIn)
  */
-export function drawStartBoard(ctx, lm, groundY, time) {
+export function drawStartBoard(ctx, lm, groundY, time, hoverX = null, hoverY = null) {
   const x = lm.x;
   const y = groundY - lm.height;
   const w = lm.width;
@@ -342,6 +342,7 @@ export function drawStartBoard(ctx, lm, groundY, time) {
   ctx.shadowColor = "#00ffcc";
   ctx.shadowBlur = 10;
   ctx.strokeRect(x + 5, y + 25, w - 10, h - 25);
+  ctx.shadowBlur = 0;
 
   // Overhead Spotlight Lamps
   for (let s = 0; s < 3; s++) {
@@ -370,40 +371,61 @@ export function drawStartBoard(ctx, lm, groundY, time) {
   ctx.textAlign = "center";
   ctx.fillText("DEV DIRECTORY & SOCIALS", x + w / 2, y + 42);
 
-  // Three Distinct Vertical Panels
+  // Three Distinct Vertical Panels (Directly Clickable from the Street Board!)
   const panelW = 82;
   const panelH = 100;
   const panels = [
-    { title: "GITHUB", icon: "🐙", desc: "REPOS", color: "#ffffff" },
-    { title: "GMAIL", icon: "✉️", desc: "CONTACT", color: "#ff4444" },
-    { title: "LINKEDIN", icon: "💼", desc: "PROFILE", color: "#0088ff" }
+    { title: "GITHUB", icon: "🐙", desc: "REPOS", color: "#ffffff", actionText: "OPEN ↗" },
+    { title: "GMAIL", icon: "✉️", desc: "CONTACT", color: "#ff4444", actionText: "EMAIL ↗" },
+    { title: "LINKEDIN", icon: "💼", desc: "PROFILE", color: "#0088ff", actionText: "CONNECT ↗" }
   ];
 
   panels.forEach((p, idx) => {
     const px = x + 16 + idx * 88;
     const py = y + 54;
 
-    ctx.fillStyle = "#141c2b";
+    const isHovered = hoverX !== null && hoverY !== null &&
+      hoverX >= px && hoverX <= px + panelW &&
+      hoverY >= py && hoverY <= py + panelH;
+
+    ctx.fillStyle = isHovered ? "#192438" : "#141c2b";
     ctx.fillRect(px, py, panelW, panelH);
-    ctx.strokeStyle = p.color;
-    ctx.lineWidth = 1.5;
+
+    ctx.strokeStyle = isHovered ? "#00ffcc" : p.color;
+    ctx.lineWidth = isHovered ? 2.5 : 1.5;
+    if (isHovered) {
+      ctx.shadowColor = "#00ffcc";
+      ctx.shadowBlur = 12;
+    }
     ctx.strokeRect(px, py, panelW, panelH);
+    ctx.shadowBlur = 0;
 
     ctx.font = "20px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(p.icon, px + panelW / 2, py + 34);
 
-    ctx.fillStyle = p.color;
+    ctx.fillStyle = isHovered ? "#00ffcc" : p.color;
     ctx.font = "bold 8px 'Press Start 2P', monospace";
     ctx.fillText(p.title, px + panelW / 2, py + 56);
 
-    ctx.fillStyle = "#cbd5e1";
+    ctx.fillStyle = isHovered ? "#ffffff" : "#cbd5e1";
     ctx.font = "8px 'Silkscreen', monospace";
     ctx.fillText(p.desc, px + panelW / 2, py + 74);
 
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = "7px 'Press Start 2P', monospace";
-    ctx.fillText("[OPEN]", px + panelW / 2, py + 90);
+    // Clickable button badge at bottom of panel
+    const btnBoxW = panelW - 12;
+    const btnBoxH = 16;
+    const btnBoxX = px + 6;
+    const btnBoxY = py + 79;
+    ctx.fillStyle = isHovered ? "#00ffcc" : "rgba(0, 255, 204, 0.15)";
+    ctx.fillRect(btnBoxX, btnBoxY, btnBoxW, btnBoxH);
+    ctx.strokeStyle = "#00ffcc";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(btnBoxX, btnBoxY, btnBoxW, btnBoxH);
+
+    ctx.fillStyle = isHovered ? "#0a0f18" : "#00ffcc";
+    ctx.font = "bold 7px 'Press Start 2P', monospace";
+    ctx.fillText(isHovered ? "CLICK ↗" : p.actionText, px + panelW / 2, btnBoxY + 11);
   });
 
   ctx.fillStyle = "#edf3fa";
@@ -865,7 +887,7 @@ export function drawAuraSight(ctx, lm, groundY, time) {
 /**
  * 5. Finale Pavilion: "Let's build together" (Matching Uploaded Image)
  */
-export function drawConnectPavilion(ctx, lm, groundY, time) {
+export function drawConnectPavilion(ctx, lm, groundY, time, hoverX = null, hoverY = null) {
   const x = lm.x;
   const y = groundY - lm.height;
   const w = lm.width;
@@ -903,40 +925,85 @@ export function drawConnectPavilion(ctx, lm, groundY, time) {
   ctx.font = "9px 'Silkscreen', sans-serif";
   ctx.fillText("AI/ML Engineer • Multi-Agent Federations • Edge AI", cardX + cardW / 2, cardY + 95);
 
-  // 3 Action Buttons Replica
+  // 3 Action Buttons Replica (Directly Clickable from the Street Board!)
   const btnY = cardY + 115;
+  const btnH = 36;
+
   // Button 1: Send Email
-  ctx.fillStyle = "#0f172a";
+  const btn1X = cardX + 16;
+  const btn1W = 100;
+  const isBtn1Hov = hoverX !== null && hoverY !== null &&
+    hoverX >= btn1X && hoverX <= btn1X + btn1W && hoverY >= btnY && hoverY <= btnY + btnH;
+
+  ctx.fillStyle = isBtn1Hov ? "#1e293b" : "#0f172a";
   ctx.beginPath();
-  ctx.roundRect(cardX + 16, btnY, 100, 36, 8);
+  ctx.roundRect(btn1X, btnY, btn1W, btnH, 8);
   ctx.fill();
-  ctx.fillStyle = "#ffffff";
+  if (isBtn1Hov) {
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.fillStyle = isBtn1Hov ? "#38bdf8" : "#ffffff";
   ctx.font = "bold 8px 'Silkscreen', monospace";
-  ctx.fillText("Send Email ✉", cardX + 16 + 50, btnY + 22);
+  ctx.fillText(isBtn1Hov ? "Compose ✉" : "Send Email ✉", btn1X + btn1W / 2, btnY + 22);
 
   // Button 2: Download CV (PDF)
-  ctx.fillStyle = "#e0f2fe";
+  const btn2X = cardX + 126;
+  const btn2W = 130;
+  const isBtn2Hov = hoverX !== null && hoverY !== null &&
+    hoverX >= btn2X && hoverX <= btn2X + btn2W && hoverY >= btnY && hoverY <= btnY + btnH;
+
+  ctx.fillStyle = isBtn2Hov ? "#bae6fd" : "#e0f2fe";
   ctx.beginPath();
-  ctx.roundRect(cardX + 126, btnY, 130, 36, 8);
+  ctx.roundRect(btn2X, btnY, btn2W, btnH, 8);
   ctx.fill();
-  ctx.strokeStyle = "#38bdf8";
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = isBtn2Hov ? "#0284c7" : "#38bdf8";
+  ctx.lineWidth = isBtn2Hov ? 2.5 : 1.5;
+  if (isBtn2Hov) {
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 10;
+  }
   ctx.stroke();
-  ctx.fillStyle = "#0284c7";
-  ctx.fillText("⬇ Download CV", cardX + 126 + 65, btnY + 22);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = isBtn2Hov ? "#0369a1" : "#0284c7";
+  ctx.fillText(isBtn2Hov ? "⬇ Get PDF CV" : "⬇ Download CV", btn2X + btn2W / 2, btnY + 22);
 
   // Button 3: Copy Email
-  ctx.fillStyle = "#f1f5f9";
+  const btn3X = cardX + 266;
+  const btn3W = 90;
+  const isBtn3Hov = hoverX !== null && hoverY !== null &&
+    hoverX >= btn3X && hoverX <= btn3X + btn3W && hoverY >= btnY && hoverY <= btnY + btnH;
+
+  ctx.fillStyle = isBtn3Hov ? "#e2e8f0" : "#f1f5f9";
   ctx.beginPath();
-  ctx.roundRect(cardX + 266, btnY, 90, 36, 8);
+  ctx.roundRect(btn3X, btnY, btn3W, btnH, 8);
   ctx.fill();
-  ctx.fillStyle = "#334155";
-  ctx.fillText("Copy Email", cardX + 266 + 45, btnY + 22);
+  if (isBtn3Hov) {
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.fillStyle = isBtn3Hov ? "#0f172a" : "#334155";
+  ctx.fillText(isBtn3Hov ? "Copy 📋" : "Copy Email", btn3X + btn3W / 2, btnY + 22);
 
   // Footer: GitHub • LinkedIn • syedmuhammadayyanibrar@gmail.com
-  ctx.fillStyle = "#475569";
+  const footY = cardY + cardH - 18;
+  const isFootGh = hoverX !== null && hoverY !== null && hoverX >= cardX + 40 && hoverX <= cardX + 115 && Math.abs(hoverY - footY) < 14;
+  const isFootLi = hoverX !== null && hoverY !== null && hoverX >= cardX + 130 && hoverX <= cardX + 220 && Math.abs(hoverY - footY) < 14;
+  const isFootEm = hoverX !== null && hoverY !== null && hoverX >= cardX + 230 && hoverX <= cardX + 365 && Math.abs(hoverY - footY) < 14;
+
   ctx.font = "8px 'Silkscreen', monospace";
-  ctx.fillText("GitHub   •   LinkedIn   •   syedmuhammadayyanibrar@gmail.com", cardX + cardW / 2, cardY + cardH - 18);
+  ctx.fillStyle = isFootGh ? "#0284c7" : "#475569";
+  ctx.fillText("GitHub", cardX + 75, footY);
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("•", cardX + 118, footY);
+  ctx.fillStyle = isFootLi ? "#0284c7" : "#475569";
+  ctx.fillText("LinkedIn", cardX + 165, footY);
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("•", cardX + 210, footY);
+  ctx.fillStyle = isFootEm ? "#0284c7" : "#475569";
+  ctx.fillText("syedmuhammadayyanibrar@gmail.com", cardX + 295, footY);
 
   ctx.fillStyle = "#edf3fa";
   ctx.fillRect(x - 4, y + 6, w + 8, 8);
@@ -945,44 +1012,234 @@ export function drawConnectPavilion(ctx, lm, groundY, time) {
 }
 
 /**
- * Stray Cat (Mochi) on Fence
+ * Stray Cat (Mochi) on Fence with Detailed Animations, Paw Licking, & Meow Bubble
  */
-export function drawCat(ctx, x, y, frameTick) {
+export function drawCat(ctx, x, y, frameTick, isPlayerNear = false, petTimer = 0) {
   ctx.save();
-  ctx.translate(Math.round(x), Math.round(y));
+  const t = frameTick;
 
-  const tailWag = Math.sin(frameTick * 0.05) * 3;
-  const breathe = Math.sin(frameTick * 0.03) > 0.5 ? -1 : 0;
+  // Purr vibration when being petted
+  const purrVibe = petTimer > 0 ? Math.sin(t * 0.9) * 0.8 : 0;
+  ctx.translate(Math.round(x), Math.round(y + purrVibe));
 
+  // Dynamic Tail Wag: faster & more excited when player is near or being petted
+  const isExcited = isPlayerNear || petTimer > 0;
+  const tailSpeed = isExcited ? 0.12 : 0.05;
+  const tailAmp = isExcited ? 5.5 : 3.2;
+  const tailWag = Math.sin(t * tailSpeed) * tailAmp;
+  const breathe = Math.sin(t * 0.04) > 0.3 ? -1 : 0;
+
+  // Licking paw cycle: happens every ~10 seconds (lasts ~3 seconds)
+  const lickCycle = (t * 0.025) % 16;
+  const isLicking = lickCycle > 6 && lickCycle < 11 && petTimer <= 0;
+  const lickLick = Math.sin(t * 0.28);
+
+  // Blinking: blink every ~4 seconds for brief moment
+  const blinkCycle = (t * 0.03) % 12;
+  const isBlinking = (blinkCycle > 5.7 && blinkCycle < 6.0) || petTimer > 0;
+
+  // Ear twitch: twitches occasionally
+  const earTwitch = Math.sin(t * 0.05) > 0.85 ? -1 : 0;
+
+  // 1. Wooden Fence Perch underneath Mochi
   ctx.fillStyle = "#3d2817";
-  ctx.fillRect(-20, 0, 40, 6);
+  ctx.fillRect(-22, 0, 46, 6);
   ctx.fillStyle = "#27190e";
-  ctx.fillRect(-18, 6, 6, 25);
-  ctx.fillRect(12, 6, 6, 25);
+  ctx.fillRect(-20, 6, 6, 26);
+  ctx.fillRect(14, 6, 6, 26);
+  // Snow caps on fence posts
+  ctx.fillStyle = "rgba(240, 245, 255, 0.95)";
+  ctx.fillRect(-23, -2, 12, 3);
+  ctx.fillRect(13, -2, 12, 3);
 
+  // 2. Multi-joint Swishing Tail
+  const tailBaseX = -10;
+  const tailBaseY = -6 + breathe;
   ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(-10, -12 + breathe, 16, 12);
+  ctx.fillRect(tailBaseX - 3, tailBaseY - 2, 4, 6);
+  ctx.fillRect(tailBaseX - 6 + tailWag * 0.4, tailBaseY - 7, 4, 6);
+  ctx.fillStyle = "#e07a38"; // Calico orange tail patch
+  ctx.fillRect(tailBaseX - 9 + tailWag * 0.8, tailBaseY - 12, 4, 6);
+  ctx.fillStyle = "#ffffff"; // White tail tip
+  ctx.fillRect(tailBaseX - 11 + tailWag * 1.2, tailBaseY - 16, 4, 5);
+
+  // 3. Cat Body (Calico: dark charcoal, warm orange, soft white)
+  // Back & Haunches
+  ctx.fillStyle = "#1e1e24";
+  ctx.fillRect(-12, -14 + breathe, 18, 14);
+  // Calico orange patch on back
   ctx.fillStyle = "#e07a38";
-  ctx.fillRect(-7, -12 + breathe, 6, 7);
+  ctx.fillRect(-8, -14 + breathe, 8, 9);
+  // White fluffy chest & belly
   ctx.fillStyle = "#f5f5f5";
-  ctx.fillRect(-2, -6 + breathe, 6, 6);
+  ctx.fillRect(-3, -8 + breathe, 9, 8);
 
+  // 4. Back Paws & Front Paws
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(-10, 0, 6, 3); // Left rear paw
+  ctx.fillRect(-2, 0, 6, 3);  // Right rear paw
+
+  if (isLicking) {
+    // Left Front Paw: Lifted up to mouth / face to lick & clean face!
+    const pawLickX = 3 + Math.cos(t * 0.3) * 1.5;
+    const pawLickY = -15 + breathe + (lickLick > 0 ? -2 : 1);
+
+    ctx.fillStyle = "#e07a38";
+    ctx.fillRect(pawLickX - 2, pawLickY + 3, 3, 5); // Forearm
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(pawLickX, pawLickY, 4, 4); // Paw at cheek
+
+    // Cute pink toe bean pad on the bottom of the lifted paw!
+    ctx.fillStyle = "#ff88aa";
+    ctx.fillRect(pawLickX + 1, pawLickY + 1, 2, 2);
+
+    // Little pink tongue licking!
+    if (lickLick > 0.15) {
+      ctx.fillStyle = "#ff5588";
+      ctx.fillRect(5, -16 + breathe, 2, 3);
+    }
+    // Right Front Paw: Resting calmly on fence
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(6, 0, 6, 3);
+  } else {
+    // Both front paws resting forward on the fence with cute little toe lines
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(4, 0, 5, 3);
+    ctx.fillRect(10, 0, 5, 3);
+    ctx.fillStyle = "#cbd5e1";
+    ctx.fillRect(6, 1, 1, 2);
+    ctx.fillRect(12, 1, 1, 2);
+  }
+
+  // 5. Cat Head
+  const headTilt = isLicking ? (lickLick > 0 ? 1 : 0) : 0;
+  const headX = 4 + (isLicking ? -1 : 0);
+  const headY = -20 + breathe + headTilt;
+
+  // Head base (Dark Charcoal)
   ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(3, -19 + breathe, 10, 9);
+  ctx.fillRect(headX, headY, 12, 11);
+  // Calico orange face marking (right side)
   ctx.fillStyle = "#e07a38";
-  ctx.fillRect(6, -19 + breathe, 4, 5);
-  ctx.fillStyle = "#ffdd44";
-  ctx.fillRect(8, -16 + breathe, 2, 2);
+  ctx.fillRect(headX + 5, headY, 7, 8);
+  // White muzzle
+  ctx.fillStyle = "#f8fafc";
+  ctx.fillRect(headX + 2, headY + 5, 7, 5);
 
-  ctx.fillStyle = "#ff2244";
-  ctx.fillRect(2, -10 + breathe, 3, 2);
-
+  // Ears (Pointy cat ears with pink inner ear)
+  // Left ear
   ctx.fillStyle = "#1e1e24";
-  ctx.fillRect(-16, -15 + breathe + tailWag, 4, 6);
+  ctx.fillRect(headX + 1, headY - 4 + earTwitch, 4, 4);
+  ctx.fillStyle = "#ff99bb";
+  ctx.fillRect(headX + 2, headY - 2 + earTwitch, 2, 2);
+  // Right ear
+  ctx.fillStyle = "#e07a38";
+  ctx.fillRect(headX + 8, headY - 4, 4, 4);
+  ctx.fillStyle = "#ff99bb";
+  ctx.fillRect(headX + 9, headY - 2, 2, 2);
 
-  ctx.fillStyle = "rgba(240, 245, 255, 0.9)";
-  ctx.fillRect(-22, -2, 12, 3);
-  ctx.fillRect(14, -2, 10, 3);
+  // Pink nose
+  ctx.fillStyle = "#ff5577";
+  ctx.fillRect(headX + 5, headY + 6, 2, 2);
+
+  // Whiskers (Delicate white pixel lines)
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(headX - 3, headY + 6, 4, 1);
+  ctx.fillRect(headX - 3, headY + 8, 4, 1);
+  ctx.fillRect(headX + 10, headY + 6, 4, 1);
+  ctx.fillRect(headX + 10, headY + 8, 4, 1);
+
+  // Eyes
+  if (isBlinking || petTimer > 0) {
+    // Happy squinting eyes: `^  ^`
+    ctx.fillStyle = "#1e1e24";
+    ctx.fillRect(headX + 2, headY + 3, 3, 1);
+    ctx.fillRect(headX + 7, headY + 3, 3, 1);
+    ctx.fillRect(headX + 3, headY + 2, 1, 1);
+    ctx.fillRect(headX + 8, headY + 2, 1, 1);
+  } else {
+    // Cute big emerald green feline eyes with dark slit pupils and reflections!
+    ctx.fillStyle = "#00e699"; // Emerald green iris
+    ctx.fillRect(headX + 2, headY + 2, 3, 3);
+    ctx.fillRect(headX + 7, headY + 2, 3, 3);
+    ctx.fillStyle = "#0a1017"; // Black slit pupil
+    ctx.fillRect(headX + 3, headY + 2, 1, 3);
+    ctx.fillRect(headX + 8, headY + 2, 1, 3);
+    ctx.fillStyle = "#ffffff"; // Eye shine reflection
+    ctx.fillRect(headX + 2, headY + 2, 1, 1);
+    ctx.fillRect(headX + 7, headY + 2, 1, 1);
+  }
+
+  // Red Collar with golden bell
+  ctx.fillStyle = "#ff2244";
+  ctx.fillRect(headX + 1, headY + 10, 10, 2);
+  ctx.fillStyle = "#ffcc00";
+  ctx.fillRect(headX + 5, headY + 11, 2, 2);
+  // Periodic golden bell sparkle
+  if (Math.sin(t * 0.08) > 0.8) {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(headX + 5, headY + 11, 1, 1);
+  }
+
+  // 6. Cute Pixel Speech Bubble: "MEOW!", "SLURP~", or "PURR~"
+  const bubbleBob = Math.sin(t * 0.06) * 2;
+  const bubbleY = headY - 26 + bubbleBob;
+  let bubbleText = "MEOW!";
+  if (petTimer > 0) {
+    bubbleText = "PURR~ ❤️";
+  } else if (isLicking) {
+    bubbleText = "SLURP~ 🐾";
+  } else if (isPlayerNear) {
+    bubbleText = "MEOW! 🐾";
+  }
+  const bubbleColor = petTimer > 0 ? "#ff0077" : (isLicking ? "#ffaa00" : "#00ffcc");
+
+  ctx.font = "bold 8px 'Press Start 2P', monospace";
+  const bTextW = ctx.measureText(bubbleText).width;
+  const bW = Math.max(48, bTextW + 12);
+  const bH = 17;
+  const bX = headX + 6 - bW / 2;
+
+  // Bubble border & fill
+  ctx.fillStyle = "#0b101c";
+  ctx.fillRect(bX - 1, bubbleY - 1, bW + 2, bH + 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(bX, bubbleY, bW, bH);
+  ctx.strokeStyle = bubbleColor;
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(bX, bubbleY, bW, bH);
+
+  // Speech bubble pointer down to Mochi's head
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.moveTo(headX + 4, bubbleY + bH);
+  ctx.lineTo(headX + 10, bubbleY + bH);
+  ctx.lineTo(headX + 7, bubbleY + bH + 5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Speech bubble text
+  ctx.fillStyle = petTimer > 0 ? "#ff0077" : "#0f172a";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(bubbleText, bX + bW / 2, bubbleY + bH / 2 + 1);
+
+  // If petting, draw multiple floating hearts drifting up gracefully!
+  if (petTimer > 0) {
+    for (let h = 0; h < 4; h++) {
+      const hProgress = ((t * 0.04 + h * 0.25) % 1);
+      const hX = -6 + h * 9 + Math.sin(t * 0.09 + h * 1.5) * 5;
+      const hY = headY - 18 - hProgress * 32;
+      const hAlpha = 1 - hProgress;
+
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 0, 119, ${hAlpha})`;
+      ctx.font = "12px sans-serif";
+      ctx.fillText("❤️", hX, hY);
+      ctx.restore();
+    }
+  }
 
   ctx.restore();
 }
