@@ -162,14 +162,43 @@ export class UIManager {
     banner.id = "start-tutorial-banner";
     banner.className = "start-tutorial-banner";
     banner.innerHTML = `
-      <div class="tutorial-arrow">👉</div>
-      <div class="tutorial-content">
-        <div class="tutorial-text desktop-tutorial">PRESS [D] OR [→] TO MOVE FORWARD</div>
-        <div class="tutorial-text mobile-tutorial">TAP [▶] OR TAP STREET TO WALK</div>
-        <div class="tutorial-sub">(OR CLICK ANYWHERE ON THE STREET AHEAD)</div>
+      <div class="tutorial-header-row">
+        <div class="tutorial-badge">
+          <span class="tutorial-badge-icon">🕹️</span>
+          <span>CITY GUIDE // HOW TO EXPLORE</span>
+        </div>
+        <button id="btn-close-tutorial" class="tutorial-close-btn" title="Dismiss Guide">✕</button>
+      </div>
+
+      <div class="tutorial-content-wrap">
+        <div class="tutorial-row">
+          <span class="tutorial-icon">👉</span>
+          <div class="tutorial-msg">
+            <span class="desktop-tutorial">Press <strong>[→]</strong> or <strong>[D]</strong> to move forward <span class="tutorial-sub">(or [B] / click street)</span></span>
+            <span class="mobile-tutorial">Tap <strong>[▶]</strong> or tap street to walk forward</span>
+          </div>
+        </div>
+
+        <div class="tutorial-row">
+          <span class="tutorial-icon">🏢</span>
+          <div class="tutorial-msg">
+            <span class="desktop-tutorial">Each building is a project — <strong>click on it</strong> or press <strong>[E]</strong> to see details</span>
+            <span class="mobile-tutorial">Each building is a project — <strong>tap on it</strong> to see details</span>
+          </div>
+        </div>
       </div>
     `;
     this.container.appendChild(banner);
+
+    const closeBtn = document.getElementById("btn-close-tutorial");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        audio.playClick(0.9);
+        banner.classList.add("hidden");
+        this.tutorialDismissed = true;
+      });
+    }
   }
 
   renderMobileDpad() {
@@ -210,8 +239,8 @@ export class UIManager {
 
     // Toggle start tutorial overlay based on player progress
     const tutorialBanner = document.getElementById("start-tutorial-banner");
-    if (tutorialBanner) {
-      if (playerX > 400) {
+    if (tutorialBanner && !this.tutorialDismissed) {
+      if (playerX > 450) {
         tutorialBanner.classList.add("hidden");
       } else {
         tutorialBanner.classList.remove("hidden");

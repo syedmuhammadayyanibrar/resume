@@ -77,6 +77,7 @@ export class Controls {
           break;
         case "KeyD":
         case "ArrowRight":
+        case "KeyB":
           this.right = true;
           this.targetX = null;
           break;
@@ -123,6 +124,7 @@ export class Controls {
           break;
         case "KeyD":
         case "ArrowRight":
+        case "KeyB":
           this.right = false;
           break;
         case "KeyW":

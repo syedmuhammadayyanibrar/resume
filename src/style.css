@@ -326,25 +326,27 @@ html, body {
 }
 
 /* ==========================================================================
-   START WALK GUIDANCE BANNER (Bottom Center Prompt)
+   START WALK & EXPLORE GUIDANCE BANNER
    ========================================================================== */
 .start-tutorial-banner {
   position: absolute;
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10, 15, 26, 0.94);
+  background: rgba(10, 16, 28, 0.96);
   border: 2px solid var(--color-neon-cyan);
-  box-shadow: 0 0 24px rgba(0, 255, 204, 0.45), inset 0 0 12px rgba(0, 255, 204, 0.15);
-  border-radius: 6px;
-  padding: 12px 24px;
+  box-shadow: 0 0 26px rgba(0, 255, 204, 0.45), inset 0 0 12px rgba(0, 255, 204, 0.15);
+  border-radius: 8px;
+  padding: 12px 18px;
   display: flex;
-  align-items: center;
-  gap: 14px;
-  z-index: 60;
-  pointer-events: none;
-  backdrop-filter: blur(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 85;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  min-width: 380px;
+  max-width: 90vw;
 }
 
 .start-tutorial-banner.hidden {
@@ -353,29 +355,94 @@ html, body {
   pointer-events: none;
 }
 
-.tutorial-arrow {
-  font-size: 22px;
+.tutorial-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+}
+
+.tutorial-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: #00ffcc;
+  letter-spacing: 0.5px;
+}
+
+.tutorial-badge-icon {
+  font-size: 12px;
+}
+
+.tutorial-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: var(--font-retro);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.tutorial-close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tutorial-content-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tutorial-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-retro);
+  font-size: 9.5px;
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+
+.tutorial-icon {
+  font-size: 15px;
+  flex-shrink: 0;
   animation: arrow-bounce 0.8s infinite alternate ease-in-out;
 }
 
 @keyframes arrow-bounce {
   from { transform: translateX(0); }
-  to { transform: translateX(10px); }
+  to { transform: translateX(5px); }
 }
 
-.tutorial-text {
-  font-family: var(--font-retro);
-  font-size: 11px;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+.tutorial-msg {
+  flex: 1;
+}
+
+.tutorial-msg strong {
+  color: #00ffcc;
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6);
 }
 
 .tutorial-sub {
   font-family: var(--font-pixel);
-  font-size: 11px;
+  font-size: 9.5px;
   color: #94a3b8;
-  margin-top: 4px;
+  margin-left: 4px;
+}
+
+.mobile-tutorial {
+  display: none;
+}
+.desktop-tutorial {
+  display: inline;
 }
 
 /* ==========================================================================
@@ -685,12 +752,14 @@ html, body {
   /* Start Tutorial Guidance Banner on Mobile: Fixed above bottom buttons */
   .start-tutorial-banner {
     position: fixed !important;
-    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    padding: 8px 14px !important;
-    gap: 8px !important;
-    max-width: 90vw !important;
+    padding: 10px 14px !important;
+    gap: 6px !important;
+    width: calc(100vw - 28px) !important;
+    min-width: auto !important;
+    max-width: 440px !important;
     z-index: 90 !important;
   }
 
@@ -699,16 +768,21 @@ html, body {
   }
 
   .mobile-tutorial {
-    display: block !important;
-    font-size: 8.5px !important;
+    display: inline !important;
+    font-size: 8px !important;
   }
 
-  .tutorial-arrow {
-    font-size: 16px !important;
+  .tutorial-row {
+    font-size: 8px !important;
+    gap: 7px !important;
   }
 
-  .tutorial-sub {
-    display: none !important;
+  .tutorial-icon {
+    font-size: 13px !important;
+  }
+
+  .tutorial-badge {
+    font-size: 7px !important;
   }
 }
 
